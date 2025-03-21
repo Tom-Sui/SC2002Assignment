@@ -1,8 +1,8 @@
 <h1>===Upload code===</h1>
 
 <h2>Initialize</h2>
-```
-Inline 'git init'
+```ruby
+git init
 ```
 <h2>Download Code</h2>
 ```

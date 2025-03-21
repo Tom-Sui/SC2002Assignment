@@ -4,6 +4,11 @@
 ```ruby
    git init
 ```
+```
+git status
+git add
+git commit
+```
 <h2>Download Code</h2>
 ```
 git clone "replace with git http URL"

@@ -2,7 +2,7 @@
 
 <h2>Initialize</h2>
 ```ruby
-git init
+   git init
 ```
 <h2>Download Code</h2>
 ```

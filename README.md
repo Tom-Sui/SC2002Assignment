@@ -20,7 +20,6 @@ cd SC2002Assignment
 
 <h3>If update already downloaded code</h3>
 Make sure update code before you make any changes
-Changes will be overwrite if commit "git pull"
 
 ```
 cd your SC2002Assignment root folder

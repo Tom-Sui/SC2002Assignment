@@ -1,6 +1,7 @@
 <h1>===Upload code===</h1>
 
 <h2>Initialize</h2>
+|```--use_gpu```|
 ```
    git init
 ```

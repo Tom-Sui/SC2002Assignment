@@ -1,37 +1,56 @@
-<h1>===Upload code===</h1>
-
-<h2>Initialize</h2>
-
-```
-   git init
-```
-
-```
-git status
-git add
-git commit
-```
+<h1>How to use cmd to update/download code</h1>
 
 <h2>Download Code</h2>
+
+<h3>If first time download the code</h3>
+
 ```
 git clone "replace with git http URL"
 ```
 
-To update ur existing code
+```
+cd SC2002Assignment
+```
+
+<h3>If update already downloaded code</h3>
+
+```
+cd your SC2002Assignment root folder
+```
+
+```
+git pull
+```
 
 <h2>Switch to existing or new branch</h2>
+
+New branch:
 ```
-git checkout -b "Branch Name"
+git checkout -b Branch Name
 ```
-<h2>Update git</h2>
+
+Existing branch:
+```
+git checkout Branch Name
+```
+* Name branch as (example): Update/Function
+
+<h2>Update your changes in local</h2>
+
 ```
 git add .
 ```
+
 <h2>Add comment</h2>
+
+Add comment before upload so people could know what has been modified
 ```
 git commit -m "Your Comment"
 ```
-<h2>Upload</h2>
+
+<h2>Upload your code to github</h2>
+
 ```
 git push
 ```
+* Make sure select correct branch, you will be able to see the changes in the github page

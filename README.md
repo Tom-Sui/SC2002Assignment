@@ -57,8 +57,11 @@ git commit -m "Your Comment"
 ```
 
 <h2>Upload your code to github</h2>
+Do note that do not direct push your work to the main branch, the main branch is leave for finalized parts.
+Update your new changes to a different branch and merge that branch to main if finalized
 
 ```
 git push
 ```
+
 * Make sure select correct branch, you will be able to see the changes in the github page

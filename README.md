@@ -1,15 +1,17 @@
 <h1>===Upload code===</h1>
 
 <h2>Initialize</h2>
-|```--use_gpu```|
+
 ```
    git init
 ```
+
 ```
 git status
 git add
 git commit
 ```
+
 <h2>Download Code</h2>
 ```
 git clone "replace with git http URL"

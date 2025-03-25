@@ -1,7 +1,7 @@
 <h1>===Upload code===</h1>
-```command```
+
 <h2>Initialize</h2>
-```ruby
+```
    git init
 ```
 ```

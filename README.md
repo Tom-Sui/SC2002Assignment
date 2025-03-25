@@ -1,4 +1,10 @@
 <h1>How to use cmd to update/download code</h1>
+To download git:
+
+```
+https://git-scm.com/downloads
+```
+First time using git may require login, just follow cmd prompt instructions
 
 <h2>Download Code</h2>
 

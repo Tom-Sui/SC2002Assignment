@@ -13,7 +13,7 @@ public class Project {
     private Applicant[] applicants;
     private HDBOfficer[] hdbOfficers;
     private Enquiry[] enquiry;
-    private MaritialStauts maritialStauts;
+    private MaritialStatus maritialStauts;
 
     //Wasn't stated in the UML diagram
     private FlateType flateType;

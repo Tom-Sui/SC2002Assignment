@@ -197,7 +197,7 @@ public class App {
                     System.out.println("\n!!!Wrong input!!!\n");
                     break;
             }
-            System.out.print("Enter cmd: ");
+            System.out.print("Enter instruction: ");
             userInput = scanner.nextLine();
         }
         scanner.close();

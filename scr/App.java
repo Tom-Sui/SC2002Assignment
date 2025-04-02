@@ -35,7 +35,7 @@ public class App {
 
         //return helpinfo (cmds)
         helpInfo();
-        System.out.print("Enter cmd: ");
+        System.out.print("Enter instruction: ");
         userInput = scanner.nextLine();
 
         //Porbably more ideal login function are module
@@ -53,14 +53,14 @@ public class App {
                     }
 
                     System.out.println("===User type===");
-                    System.out.println("1. HDB Manger");
-                    System.out.println("2. HDB Officier");
+                    System.out.println("1. HDB Manager");
+                    System.out.println("2. HDB Officer");
                     System.out.println("3. Applicant");
                     System.out.println("===============");
                     userType = "NULL";
                     while(true){
                         if(userType.equals("hdb manager") || 
-                        userType.equals("hdb officier") || 
+                        userType.equals("hdb officer") || 
                         userType.equals("applicant")){
                             break;
                         }else{
@@ -69,9 +69,9 @@ public class App {
                         }
                     }
 
-                    System.out.print("Enter username: ");
+                    System.out.print("Enter username (case-sensitive): ");
                     String userName = scanner.nextLine();
-                    System.out.print("Enter password: ");
+                    System.out.print("Enter password (case-sensitive): ");
                     String userPassword = scanner.nextLine();
 
                     //There should be a more efficient way to achieve login function
@@ -84,9 +84,9 @@ public class App {
                                 System.out.println("============Login failed============");
                                 System.out.println("Incorrect password or incorrect ID");
                                 System.out.println("====================================");
-                                System.out.print("Enter username: ");
+                                System.out.print("Enter username (case-sensitive): ");
                                 userName = scanner.nextLine();
-                                System.out.print("Enter password: ");
+                                System.out.print("Enter password (case-sensitive): ");
                                 userPassword = scanner.nextLine();
                                 i = 0;
                             }
@@ -102,15 +102,15 @@ public class App {
                         }
                             break;
 
-                        case "hdb officier":
+                        case "hdb officer":
                         for(int i = 0; i < hdbOfficers.length + 1; i++){
                             if(i == hdbOfficers.length){
                                 System.out.println("============Login failed============");
                                 System.out.println("Incorrect password or incorrect ID");
                                 System.out.println("====================================");
-                                System.out.print("Enter username: ");
+                                System.out.print("Enter username (case-sensitive): ");
                                 userName = scanner.nextLine();
-                                System.out.print("Enter password: ");
+                                System.out.print("Enter password (case-sensitive): ");
                                 userPassword = scanner.nextLine();
                                 i = 0;
                             }
@@ -132,9 +132,9 @@ public class App {
                                     System.out.println("============Login failed============");
                                     System.out.println("Incorrect password or incorrect ID");
                                     System.out.println("====================================");
-                                    System.out.print("Enter username: ");
+                                    System.out.print("Enter username (case-sensitive): ");
                                     userName = scanner.nextLine();
-                                    System.out.print("Enter password: ");
+                                    System.out.print("Enter password (case-sensitive): ");
                                     userPassword = scanner.nextLine();
                                     i = 0;
                                 }
@@ -173,14 +173,14 @@ public class App {
                         
                         switch (userType) {
                             case "hdb manager":
-                                hdbManagers[userPos].changePassword(newPassword,"./Data/ManagerList.txt");
+                                hdbManagers[userPos].changePassword(newPassword,"./scr/Data/ManagerList.txt");
                                 break;
                             case "hdb officer":
-                                hdbOfficers[userPos].changePassword(newPassword, "./Data/OfficerList.txt");
+                                hdbOfficers[userPos].changePassword(newPassword, "./scr/Data/OfficerList.txt");
                                 break;
                             case "applicant":
                                 System.out.println(userPos);
-                                applicant[userPos].changePassword(newPassword, "./Data/ApplicantList.txt");
+                                applicant[userPos].changePassword(newPassword, "./scr/Data/ApplicantList.txt");
                                 break;
                             default:
                                 System.out.println("Error occured == could not find user type");

@@ -7,7 +7,7 @@ public class Init {
         int size;
         int count = 0;
 
-        File applicantFile = new File("./Data/ApplicantList.txt");
+        File applicantFile = new File("./scr/Data/ApplicantList.txt");
         Applicant[] applicant;
 
         try{
@@ -50,7 +50,7 @@ public class Init {
         int size;
         int count = 0;
 
-        File managerFile = new File("./Data/ManagerList.txt");
+        File managerFile = new File("./scr/Data/ManagerList.txt");
         HDBManager[] hdbManagers;
 
         try{
@@ -88,7 +88,7 @@ public class Init {
         int size;
         int count = 0;
 
-        File officerFile = new File("./Data/OfficerList.txt");
+        File officerFile = new File("./scr/Data/OfficerList.txt");
         HDBOfficer[] hdbOfficer;
 
         try{

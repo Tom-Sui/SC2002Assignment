@@ -1,15 +1,16 @@
 import java.util.Scanner;
+import java.util.concurrent.ForkJoinPool.ManagedBlocker;
 
 public class App {
     //To keep track who is loged in
+    private static boolean logedIn = false;
+    private static String currentUserId = "NULL";
+    private static String userType = "NULL";
+    private static int userPos = -1;
+    
 
     public static void main(String[] args) {
         String userInput;
-        boolean logedIn = false;
-        String currentUserId = "NULL";
-        String userType = "NULL";
-        int userPos = -1;
-
         Scanner scanner = new Scanner(System.in);
 
         //Only run when there is new user are manually added in
@@ -20,7 +21,7 @@ public class App {
         
         //Initialize all user info into objects
         Init init = new Init();
-
+        // System.exit(0);
         //Initialize Applicant info int Applicant class
         Applicant[] applicant;
         applicant = init.LoadUserInfo();
@@ -33,9 +34,22 @@ public class App {
         HDBOfficer[] hdbOfficers;
         hdbOfficers = init.LoadOfficerInfo();
 
+        //Initialize projects info into Project class
+        Project[] projects;
+        projects = init.LoadProjectInfo(hdbManagers, hdbOfficers);
+
+        // projects = hdbManagers[0].createProject("projects",projects,hdbManagers,hdbOfficers);
+        // System.out.println(projects[1].getAvailableOfficerSlots());
+        
+
+        //Initialize manager managed projects
+        hdbManagers = init.setManagerManagedProjects(hdbManagers,projects);
+        // System.out.println(hdbManagers[1].getProject()[1].getProjectName());
+        // System.exit(0);
+
         //return helpinfo (cmds)
         helpInfo();
-        System.out.print("Enter instruction: ");
+        System.out.print("Enter cmd: ");
         userInput = scanner.nextLine();
 
         //Porbably more ideal login function are module
@@ -53,14 +67,14 @@ public class App {
                     }
 
                     System.out.println("===User type===");
-                    System.out.println("1. HDB Manager");
-                    System.out.println("2. HDB Officer");
+                    System.out.println("1. HDB Manger");
+                    System.out.println("2. HDB Officier");
                     System.out.println("3. Applicant");
                     System.out.println("===============");
                     userType = "NULL";
                     while(true){
                         if(userType.equals("hdb manager") || 
-                        userType.equals("hdb officer") || 
+                        userType.equals("hdb officier") || 
                         userType.equals("applicant")){
                             break;
                         }else{
@@ -69,118 +83,121 @@ public class App {
                         }
                     }
 
-                    System.out.print("Enter username (case-sensitive): ");
+                    System.out.print("Enter username: ");
                     String userName = scanner.nextLine();
-                    System.out.print("Enter password (case-sensitive): ");
+                    System.out.print("Enter password: ");
                     String userPassword = scanner.nextLine();
 
                     //There should be a more efficient way to achieve login function
                     //Will update this method later on
 
-                    switch (userType.toLowerCase()) {
-                        case "hdb manager":
-                        for(int i = 0; i < hdbManagers.length + 1; i++){
-                            if(i == hdbManagers.length){
-                                System.out.println("============Login failed============");
-                                System.out.println("Incorrect password or incorrect ID");
-                                System.out.println("====================================");
-                                System.out.print("Enter username (case-sensitive): ");
-                                userName = scanner.nextLine();
-                                System.out.print("Enter password (case-sensitive): ");
-                                userPassword = scanner.nextLine();
-                                i = 0;
-                            }
-                            if(hdbManagers[i].login(userName, userPassword)){
-                                System.out.println("===Login success===");
-                                System.out.println("Welcome " + hdbManagers[i].getName());
-                                System.out.println("===================\n");
-                                userPos = i;
-                                currentUserId = userName;
-                                logedIn = true;
-                                break;
-                            }
-                        }
-                            break;
-
+                    switch (userType.toLowerCase()){
                         case "hdb officer":
-                        for(int i = 0; i < hdbOfficers.length + 1; i++){
-                            if(i == hdbOfficers.length){
-                                System.out.println("============Login failed============");
-                                System.out.println("Incorrect password or incorrect ID");
-                                System.out.println("====================================");
-                                System.out.print("Enter username (case-sensitive): ");
-                                userName = scanner.nextLine();
-                                System.out.print("Enter password (case-sensitive): ");
-                                userPassword = scanner.nextLine();
-                                i = 0;
+                            for(int i = 0; i < hdbManagers.length; i++){
+                                if(hdbManagers[i].getName().equals(userName) || hdbManagers[i].getNRIC().equals(userName)){
+                                    if(hdbManagers[i].login(userPassword)){
+                                        System.out.println("===Login success===");
+                                        System.out.println("Welcome " + hdbManagers[i].getName());
+                                        System.out.println("===================\n");
+                                        userPos = i;
+                                        currentUserId = userName;
+                                        logedIn = true;
+                                        break;
+                                    }else{
+                                        if(!logedIn){
+                                            System.out.println("============Login failed============");
+                                            System.out.println("Incorrect password or incorrect ID");
+                                            System.out.println("====================================");
+                                        }
+                                    }
+                                }
                             }
-                            if(hdbOfficers[i].login(userName, userPassword)){
-                                System.out.println("===Login success===");
-                                System.out.println("Welcome " + hdbOfficers[i].getName());
-                                System.out.println("===================\n");
-                                userPos = i;
-                                currentUserId = userName;
-                                logedIn = true;
-                                break;
+
+                        case "hdb officier":
+                            for(int i = 0; i < hdbOfficers.length; i++){
+                                if(hdbOfficers[i].getName().equals(userName) || hdbOfficers[i].getNRIC().equals(userName)){
+                                    if(hdbOfficers[i].login(userPassword)){
+                                        System.out.println("===Login success===");
+                                        System.out.println("Welcome " + hdbOfficers[i].getName());
+                                        System.out.println("===================\n");
+                                        userPos = i;
+                                        currentUserId = userName;
+                                        logedIn = true;
+                                        break;
+                                    }else{
+                                        if(!logedIn){
+                                            System.out.println("============Login failed============");
+                                            System.out.println("Incorrect password or incorrect ID");
+                                            System.out.println("====================================");
+                                        }
+                                    }
+                                }
                             }
-                        }
-                            break;
 
                         case "applicant":
-                            for(int i = 0; i < applicant.length + 1; i++){
-                                if(i == applicant.length){
-                                    System.out.println("============Login failed============");
-                                    System.out.println("Incorrect password or incorrect ID");
-                                    System.out.println("====================================");
-                                    System.out.print("Enter username (case-sensitive): ");
-                                    userName = scanner.nextLine();
-                                    System.out.print("Enter password (case-sensitive): ");
-                                    userPassword = scanner.nextLine();
-                                    i = 0;
-                                }
-                                if(applicant[i].login(userName, userPassword)){
-                                    System.out.println("===Login success===");
-                                    System.out.println("Welcome " + applicant[i].getName());
-                                    System.out.println("===================\n");
-                                    userPos = i;
-                                    currentUserId = userName;
-                                    logedIn = true;
-                                    break;
+                            for(int i = 0; i < applicant.length; i++){
+                                if(applicant[i].getName().equals(userName) || applicant[i].getNRIC().equals(userName)){
+                                    if(applicant[i].login(userPassword)){
+                                        System.out.println("===Login success===");
+                                        System.out.println("Welcome " + applicant[i].getName());
+                                        System.out.println("===================\n");
+                                        userPos = i;
+                                        currentUserId = userName;
+                                        logedIn = true;
+                                        break;
+                                    }else{
+                                        if(!logedIn){
+                                            System.out.println("============Login failed============");
+                                            System.out.println("Incorrect password or incorrect ID");
+                                            System.out.println("====================================");
+                                        }
+                                    }
                                 }
                             }
+
+
+                            // logedIn = false;
+                            // userType = "NULL";
+                            // userName = "NULL";
+                            // userPos = -1;
                             break;
                         default:
                             break;
                     }
                     break;
-                case "change password":
+                case "edit profile","3":
                         if(!logedIn){
                             System.out.println("You have to login first");
                             break;
                         }
                         //for now will be calling direct from User class
-                        System.out.println("Enter new password ");
-                        String newPassword = scanner.nextLine();
-                        System.out.println("Enter new password again: ");
-                        while (!newPassword.equals(scanner.nextLine())) {
-                            System.out.println("!!!Wrong password!!!");
-                            System.out.println("Enter new password ");
-                            newPassword = scanner.nextLine();
-                            System.out.println("Enter new password again: ");
-                        }
-
-                        System.out.println(userType);
-                        
-                        switch (userType) {
+                        // System.out.println("Enter new password ");
+                        // String newPassword = scanner.nextLine();
+                        // System.out.println("Enter new password again: ");
+                        // while (!newPassword.equals(scanner.nextLine())) {
+                        //     System.out.println("!!!Wrong password!!!");
+                        //     System.out.println("Enter new password ");
+                        //     newPassword = scanner.nextLine();
+                        //     System.out.println("Enter new password again: ");
+                        // }
+                        System.out.println("======Instructions======");
+                        System.out.println("1. password");
+                        System.out.println("2. name");
+                        System.out.println("3. NRIC");
+                        System.out.println("4. age");
+                        System.out.println("5. marritialStatus(singale/married)");
+                        System.out.println("========================");
+                        String changeTarget = scanner.nextLine();
+                        System.out.println("Enter content:");
+                        switch (userType){
                             case "hdb manager":
-                                hdbManagers[userPos].changePassword(newPassword,"./scr/Data/ManagerList.txt");
+                                hdbManagers[userPos].changeContent(scanner.nextLine(),"./Data/ManagerList.txt",changeTarget);
                                 break;
                             case "hdb officer":
-                                hdbOfficers[userPos].changePassword(newPassword, "./scr/Data/OfficerList.txt");
+                                hdbOfficers[userPos].changeContent(scanner.nextLine(),"./Data/OfficerList.txt",changeTarget);
                                 break;
                             case "applicant":
-                                System.out.println(userPos);
-                                applicant[userPos].changePassword(newPassword, "./scr/Data/ApplicantList.txt");
+                                applicant[userPos].changeContent(scanner.nextLine(),"./Data/ApplicantList.txt",changeTarget);
                                 break;
                             default:
                                 System.out.println("Error occured == could not find user type");
@@ -197,7 +214,7 @@ public class App {
                     System.out.println("\n!!!Wrong input!!!\n");
                     break;
             }
-            System.out.print("Enter instruction: ");
+            System.out.print("Enter cmd: ");
             userInput = scanner.nextLine();
         }
         scanner.close();
@@ -209,7 +226,7 @@ public class App {
         System.out.println("======Instructions======");
         System.out.println("1. help");
         System.out.println("2. login");
-        System.out.println("3. change password");
+        System.out.println("3. edit profile");
         System.out.println("4. logout");
         System.out.println("9. quit");
         System.out.println("========================");

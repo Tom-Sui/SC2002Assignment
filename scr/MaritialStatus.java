@@ -1,5 +1,5 @@
 public class MaritialStatus {
-    public enum maritalStatus{
+    public enum maritialStatus{
         SINGLE,MARRIED
     }
 }

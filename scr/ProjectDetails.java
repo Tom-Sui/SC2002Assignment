@@ -23,7 +23,10 @@ public class ProjectDetails {
         this.threeRoomUnits = threeRoomUnits;
     }
     public void setApplicationOpeningDate(Date applicationOpeningDate){
-        this.applicationClosingDate = applicationOpeningDate;
+        this.applicationOpeningDate = applicationOpeningDate;
+    }
+    public void applicationClosingDate(Date applicationClosingDate){
+        this.applicationClosingDate = applicationClosingDate;
     }
     public void setAvailableOfficerSlots(int availableOfficerSlots){
         this.availableOfficerSlots = availableOfficerSlots;

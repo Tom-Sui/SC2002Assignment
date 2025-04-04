@@ -23,6 +23,7 @@ public class Project {
     public boolean isApplicationOpen(){
         return true;
     }
+    // update who applied (depends on number of slots)
     public void addApplicant(Applicant applicant){
 
     }

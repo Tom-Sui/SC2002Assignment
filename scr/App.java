@@ -1,4 +1,5 @@
 import java.util.Scanner;
+import java.sql.Date;
 
 public class App {
     //To keep track who is loged in
@@ -32,7 +33,7 @@ public class App {
         //Initialize HDB manager info into HDBManager class
         HDBOfficer[] hdbOfficers;
         hdbOfficers = init.LoadOfficerInfo();
-
+        
         //return helpinfo (cmds)
         helpInfo();
         System.out.print("Enter instruction: ");
@@ -97,7 +98,11 @@ public class App {
                                 userPos = i;
                                 currentUserId = userName;
                                 logedIn = true;
-                                break;
+                                
+                                ManagerInput manager = new ManagerInput();
+                                manager.switchFunction(currentUserId);
+                                
+                                break; // log out manager
                             }
                         }
                             break;
@@ -197,6 +202,8 @@ public class App {
                     System.out.println("\n!!!Wrong input!!!\n");
                     break;
             }
+            
+            helpInfo();
             System.out.print("Enter instruction: ");
             userInput = scanner.nextLine();
         }

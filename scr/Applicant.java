@@ -44,9 +44,23 @@ public class Applicant extends User{
     	
         
     }
-    public void applyForProject(Project project){
+    
+    /*
+    * @param project - Project object
+    * @return void
+    * @throws Exception - If applicant is not eligible to apply for the project    
+    * @description - This function checks and allows the applicant to apply for a project, (checks if the applicant is single and the project is not a 3 room flat)   */
 
+    public void applyForProject(Project project){
+        int eligible = this.getMaritalStatus() == MaritalStatus.SINGLE ? 1 : 0 ;
+        if (eligible == 1 && project.getFlateType() == FlateType.flateType.ThreeRoom){
+            System.out.println("Cannot apply for project, applicant is single: " + project.getProjectName());
+            return;
+        }
+        appliedProject = project;
+        System.out.println("Applied for project: " + project.getProjectName());
     }
+
     public ApplicationStatus viewApplicationStatus(){
         ApplicationStatus applicationStatus = new ApplicationStatus();
         return applicationStatus;

@@ -34,6 +34,17 @@ public class ApplicantApp {
 			if (choice == 1) {
 				applicant.viewAvailableProjects(projectList);
 			}
+			else if (choice == 2) {
+				applicant.viewAppliedProjects(projectList);
+				System.out.printf("Enter the project number to apply for: ");	
+				int projectNumber = sc.nextInt();
+				if (applicant.getAppliedProject() == null){
+					applicant.applyForProject(projectList.get(projectNumber-1));
+				}
+				else{
+					System.out.println("Cannot apply for project, already applied for a project: " + applicant.getAppliedProject().getProjectName());
+				}
+			}
 			
 		} while (choice != -1);
 

@@ -155,6 +155,7 @@ public class Init {
     }
 
     public Project setProject(String[] data,HDBManager[] hdbManager, HDBOfficer[] hdbOfficer){
+        General general = new General();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         Project project = new Project();
         project.setProjectName(data[0]);
@@ -176,7 +177,7 @@ public class Init {
 
 
         //Assuming that there can only can be one manager per project
-        project.setHDBManager(findPerson(hdbManager, data[data.length - 3]));
+        project.setHDBManager(general.findPerson(hdbManager, data[data.length - 3]));
 
         //set available officer slots
         project.setAvailableOfficerSlots(Integer.parseInt(data[data.length - 2]));
@@ -188,7 +189,7 @@ public class Init {
         
         for(int i = 0; i < officerName.length; i++){
             tempHDBOfficers[i] = new HDBOfficer();
-            tempHDBOfficers[i] = findPerson(hdbOfficer,officerName[i]);
+            tempHDBOfficers[i] = general.findPerson(hdbOfficer,officerName[i]);
         }
         project.setHDBOfficer(tempHDBOfficers);
         return project;
@@ -236,8 +237,13 @@ public class Init {
             for(int j = 0; j < projects.length; j++){
                 // System.out.println(hdbManagers[i].getName());
                 // System.out.println(projects.length);
-                if(hdbManagers[i].getName().equals(projects[j].getHDBManager().getName())){
-                    hdbManagers[i].setManagedProjects(projects[j]);
+                //Ensure that the managerlist.txt manager names matches with those in the ManagerList.txt
+                try{
+                    if(hdbManagers[i].getName().equals(projects[j].getHDBManager().getName())){
+                        hdbManagers[i].setManagedProjects(projects[j]);
+                    }
+                }catch(NullPointerException e){
+                    System.out.println("Manager " + projects[j].getHDBManager().getName() + " is not registered manager");
                 }
             }
         }
@@ -247,22 +253,4 @@ public class Init {
     // public void setManagedProjects(HDBManager hdbManager, Project project){
     //     hdbManager.setManagedProjects(project);
     // }
-
-
-    private HDBManager findPerson(HDBManager[] hdbManager,String name){
-        for(HDBManager i : hdbManager){
-            if(name.equals(i.getName())){
-                return i;
-            }
-        }
-        return null;
-    }
-    private HDBOfficer findPerson(HDBOfficer[] hdbOfficer,String name){
-        for(HDBOfficer i : hdbOfficer){
-            if(name.equals(i.getName())){
-                return i;
-            }
-        }
-        return null;
-    }
 }

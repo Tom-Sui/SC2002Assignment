@@ -37,17 +37,17 @@ public class App {
         //Initialize projects info into Project class
         Project[] projects;
         projects = init.LoadProjectInfo(hdbManagers, hdbOfficers);
-        projects[0].getProjectName()
+
         // projects = hdbManagers[0].createProject("projects",projects,hdbManagers,hdbOfficers);
         // System.out.println(projects[1].getAvailableOfficerSlots());
         
 
         //Initialize manager managed projects
         hdbManagers = init.setManagerManagedProjects(hdbManagers,projects);
-        hdbManagers[1].editProject("Different name", "new name", "projectname",hdbManagers,hdbOfficers);
-        projects = init.LoadProjectInfo(hdbManagers, hdbOfficers);
 
-        System.exit(0);
+        //Example of how to edit project
+        // hdbManagers[1].editProject("Different name", "new name", "projectname",hdbManagers,hdbOfficers);
+        // projects = init.LoadProjectInfo(hdbManagers, hdbOfficers);
 
         //return helpinfo (cmds)
         helpInfo();

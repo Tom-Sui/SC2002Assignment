@@ -1,5 +1,6 @@
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Project {
     private String projectName;
@@ -57,9 +58,11 @@ public class Project {
         return this.flateType;
     }
     public LocalDate getApplicationOpeningData(){
+
         return this.applicationOpeningData;
     }
-    public LocalDate setApplicationClosingData(){
+    public LocalDate getApplicationClosingData(){
+
         return this.applicationClosingData;
     }
     public HDBManager getHDBManager(){

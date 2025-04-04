@@ -207,7 +207,6 @@ public class HDBManager extends User{
         return false;
     }
     
-    //hdbmanager[userpos].deletProject(projects[0])
     public void deletProject(Project targetProject){
         Project[] tempProject = new Project[this.managedProjects.length - 1];
         int count = 0;

@@ -3,7 +3,7 @@ public class Applicant extends User{
     private ApplicationStatus applicationStatus;
     private FlateType bookedFlateType;
 
-
+    //test
     //Absract functions
     public Enquiry createEnquiry(Project project, String message){
         Enquiry[] enquiry = new Enquiry[10];

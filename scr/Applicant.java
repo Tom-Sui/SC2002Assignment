@@ -58,6 +58,7 @@ public class Applicant extends User{
             return;
         }
         appliedProject = project;
+        appliedBookedFlateType = project.getFlateType();
         System.out.println("Applied for project: " + project.getProjectName());
     }
 

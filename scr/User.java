@@ -14,6 +14,7 @@ public abstract class User {
     private String password;
     private int age;
     private boolean maritalStatus;
+    private MaritalStatus ms; //temporay placeholde for marital status
 
     //set methods
     public void setName(String name){
@@ -35,6 +36,9 @@ public abstract class User {
         this.maritalStatus = maritalStatus;
     }
 
+    public void setMaritalStatus(MaritalStatus ms) {
+    	this.ms = ms; //temp placeholder for marital status
+    }
     //get methods
     public String getName(){
         return this.name;
@@ -45,14 +49,14 @@ public abstract class User {
     public String getUserID(){
         return this.userID;
     }
-    public String getPassword(){
-        return this.password;
-    }
-    public int getage(){
+    public int getAge(){
         return this.age;
     }
     public boolean getMatritialSatus(){
         return this.maritalStatus;
+    }
+    public MaritalStatus getMaritalStatus() {
+    	return ms;
     }
     
     //UserID is not included in excel file

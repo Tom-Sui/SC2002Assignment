@@ -1,4 +1,6 @@
 import java.util.Scanner;
+import java.util.ArrayList;
+import java.sql.Date;
 
 public class App {
     //To keep track who is loged in
@@ -142,6 +144,54 @@ public class App {
                                     System.out.println("===Login success===");
                                     System.out.println("Welcome " + applicant[i].getName());
                                     System.out.println("===================\n");
+                                    
+                                    // Dummy initialization of projects
+                                    ArrayList<Project> projectList = new ArrayList<Project>();
+                                    
+                                    
+                                    // Dummy Project 
+                                    String projectName = "Sunrise Residences";
+                                    String neighborhood = "Punggol";
+                                    int twoRoomUnits = 50;
+                                    int threeRoomUnits = 75;
+
+                                    // Use java.sql.Date for consistency with your class
+                                    Date openingDate = Date.valueOf("2025-05-01");
+                                    Date closingDate = Date.valueOf("2025-05-15");
+
+                                    // Assuming HDBManager and MaritialStatus have default constructors
+                                    HDBManager dummyManager = new HDBManager();
+                                    int officerSlots = 5;
+                                    boolean isVisible = true;
+
+                                    ArrayList<Applicant> applicants = new ArrayList<>();
+                                    ArrayList<HDBOfficer> officers = new ArrayList<>();
+                                    ArrayList<Enquiry> enquiries = new ArrayList<>();
+                                    applicant[i].setMaritalStatus(MaritalStatus.SINGLE);
+                                    
+                                    MaritalStatus maritalStatus = MaritalStatus.MARRIED;
+
+                                    Project dummyProject = new Project(
+                                        projectName,
+                                        neighborhood,
+                                        twoRoomUnits,
+                                        threeRoomUnits,
+                                        openingDate,
+                                        closingDate,
+                                        dummyManager,
+                                        officerSlots,
+                                        isVisible,
+                                        applicants,
+                                        officers,
+                                        enquiries,
+                                        maritalStatus
+                                    );
+                                    
+                                    projectList.add(dummyProject);
+                                    // Launch applicant interface
+                                    ApplicantApp applicantApp = new ApplicantApp();
+                                    applicantApp.start(applicant[i], projectList);
+                                    
                                     userPos = i;
                                     currentUserId = userName;
                                     logedIn = true;

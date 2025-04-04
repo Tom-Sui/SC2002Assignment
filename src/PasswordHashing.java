@@ -23,7 +23,6 @@ public class PasswordHashing {
     public String hashingPassword(String password){
         byte[] salt = new byte[16];
         try {
-
             salt = saltEncodeString.getBytes("UTF-8");
 
         } catch (UnsupportedEncodingException saltError) {
@@ -32,7 +31,7 @@ public class PasswordHashing {
         }
 
         try{
-            KeySpec spec = new PBEKeySpec("password".toCharArray(), salt, 65536, 128);
+            KeySpec spec = new PBEKeySpec(password.toCharArray(), salt, 65536, 128);
             SecretKeyFactory f = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA256");
             byte[] hash = f.generateSecret(spec).getEncoded();
             Base64.Encoder enc = Base64.getEncoder();

@@ -1,6 +1,8 @@
 import java.sql.Date;
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Project {
     private String projectName;
@@ -19,7 +21,7 @@ public class Project {
     private MaritalStatus maritalStatus = null;
 
     //Wasn't stated in the UML diagram
-    //private FlateType flateType;
+    // private FlateType flateType;
     
     public Project() {};
     public Project(String projectName, String neighborhood, ArrayList<FlatType> flatTypes, Date applicationOpeningDate, Date applicationClosingDate,
@@ -38,6 +40,70 @@ public class Project {
     	this.enquiries = enquiries;
     	this.maritalStatus = maritalStatus;  	
     }
+
+    //set methods
+    public void setProjectName(String projectName){
+        this.projectName = projectName;
+    }
+    public void setNeiborhood(String neighborhood){
+        this.neighborhood = neighborhood;
+    }
+    // public void setApplicationOpeningData(LocalDate applicationOpeningData){
+    //     this.applicationOpeningDate = applicationOpeningData;
+    // }
+    // public void setApplicationClosingData(LocalDate applicationClosingData){
+    //     this.applicationClosingData = applicationClosingData;
+    // }
+    public void setHDBManager(HDBManager hdbManager){
+        this.hdbManager = hdbManager;
+    }
+    public void setHDBOfficer(ArrayList<HDBOfficer> hdbOfficer){
+        this.hdbOfficers = hdbOfficer;
+    }
+    public void setAvailableOfficerSlots(int availableOfficerSlots){
+        this.availableOfficerSlots = availableOfficerSlots;
+    }
+
+    //get methods
+    public String getProjectName(){
+        return this.projectName;
+    }
+    public String getNeiborhood(){
+        return this.neighborhood;
+    }
+    // public FlateType[] setUnitType(){
+    //     return this.flateType;
+    // }
+    // public LocalDate getApplicationOpeningData(){
+
+    //     return this.applicationOpeningData;
+    // }
+    // public LocalDate getApplicationClosingData(){
+
+    //     return this.applicationClosingData;
+    // }
+    // public HDBManager getHDBManager(){
+    //     return this.hdbManager;
+    // }
+    public ArrayList<HDBOfficer> getHDBOfficer(){
+        return this.hdbOfficers;
+    }
+    public int getAvailableOfficerSlots(){
+        return this.availableOfficerSlots;
+    }
+
+    //Debug method
+    // public void debugOut(){
+    //     System.out.println(this.projectName);
+    //     System.out.println(this.neiborhood);
+    //     System.out.println(this.flateType[0].getFlateType());
+    //     System.out.println(this.applicationOpeningData);
+    //     System.out.println(this.applicationClosingData);
+    //     System.out.println(this.hdbManager.getName());
+    //     System.out.println(this.hdbOfficer[0].getName());
+    // }
+
+
     //Methods
     public boolean getVisibility(){
         return visibility;

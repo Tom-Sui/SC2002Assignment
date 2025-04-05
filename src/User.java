@@ -13,8 +13,25 @@ public abstract class User {
     private String userID;
     private String password;
     private int age;
+<<<<<<< HEAD:scr/User.java
     private boolean maritalStatus;
     private MaritalStatus ms; //temporay placeholde for marital status
+=======
+    private MaritialStatus.maritialStatus maritialStatus;
+    // private boolean maritalStatus;
+
+    public User(){
+        this("null","null","null","null",0,MaritialStatus.maritialStatus.SINGLE);
+    }
+    public User(String name, String NRIC, String userID, String password, int age, MaritialStatus.maritialStatus maritialStatus){
+        this.name = name;
+        this.NRIC = NRIC;
+        this.userID = userID;
+        this.password = password;
+        this.age = age;
+        this.maritialStatus = maritialStatus;
+    }
+>>>>>>> main:src/User.java
 
     //set methods
     public void setName(String name){
@@ -32,8 +49,8 @@ public abstract class User {
     public void setage(int age){
         this.age = age;
     }
-    public void setMatritialSatus(boolean maritalStatus){
-        this.maritalStatus = maritalStatus;
+    public void setMatritialSatus(MaritialStatus.maritialStatus maritialStatus){
+        this.maritialStatus = maritialStatus;
     }
 
     public void setMaritalStatus(MaritalStatus ms) {
@@ -52,8 +69,8 @@ public abstract class User {
     public int getAge(){
         return this.age;
     }
-    public boolean getMatritialSatus(){
-        return this.maritalStatus;
+    public MaritialStatus.maritialStatus getMatritialSatus(){
+        return this.maritialStatus;
     }
     public MaritalStatus getMaritalStatus() {
     	return ms;
@@ -61,10 +78,10 @@ public abstract class User {
     
     //UserID is not included in excel file
     //Using name as login name instead
-    public boolean login(String name, String password){
+    public boolean login(String password){
         PasswordHashing passwordHashing = new PasswordHashing();
         String hashedPassword = passwordHashing.hashingPassword(password);
-        if((this.name.equals(name) || this.NRIC.equals(name)) && this.password.equals(hashedPassword)){
+        if(this.password.equals(hashedPassword)){
             return true;
         }else{
             return false;
@@ -78,25 +95,72 @@ public abstract class User {
 
     //This function may also used for change other user info
     //Will update this later on
-    public boolean changePassword(String newPassword, String filePath){
+    public boolean changeContent(String newContent, String filePath,String target){
 
+        //To store the contents in the text file
         String fileContent = "";
+        //to store info of the person
         String[] buffer;
+
+        //
         File file = new File(filePath);
+        PasswordHashing passwordHashing = new PasswordHashing();
 
         try{
+            //use the scanner to scan through the file
             Scanner scanner = new Scanner(file);
+
             fileContent = fileContent + scanner.nextLine() + "\n";
-            System.out.println(scanner.hasNextLine());
+            // System.out.println(scanner.hasNextLine());
+
+
             while(scanner.hasNextLine()){
+
                 buffer = scanner.nextLine().split(",");
-                System.out.println(buffer[0]);
+                // System.out.println(buffer[1]);
+                // System.out.println(buffer[0]);
                 if(buffer[1].equals(this.NRIC)){
-                    buffer[4] = newPassword;
+                    switch (target.replace(" ","").toLowerCase()) {
+                        case "name":
+                            buffer[0] = newContent;
+                            this.name = newContent;
+                            break;
+                        case "NRIC":
+                            buffer[1] = newContent;
+                            this.NRIC = newContent;
+                            break;
+                        case "age":
+                            buffer[2] = newContent;
+                            this.age = Integer.parseInt(newContent);
+                            break;
+                        //userID never used
+                        // case "userID":
+                        //     if(buffer[1].equals(this.NRIC)){
+                        //         buffer[2] = passwordHashing.hashingPassword(newContent);
+                        //     }
+                        //     break;
+                        case "marritialStatus":
+                            buffer[3] = newContent;
+                            if(newContent.equals("single")){
+                                this.maritialStatus = MaritialStatus.maritialStatus.SINGLE;
+                            }else if(newContent.equals("married")){
+                                this.maritialStatus = MaritialStatus.maritialStatus.MARRIED;
+                            }
+
+                            break;
+                        case "password":
+                            buffer[4] = passwordHashing.hashingPassword(newContent);
+                            this.password = buffer[4];
+                            // Init init = new Init();
+                            // init.LoadUserInfo();
+                            break;
+                        default:
+                            break;
+                    }
                 }
 
                 for(int i = 0; i < 5; i++){
-                    System.out.println(fileContent);
+                    // System.out.println(fileContent);
                     fileContent = fileContent + buffer[i] + ",";
                 }
                 fileContent = fileContent + "\n";   
@@ -105,8 +169,6 @@ public abstract class User {
             writer.write(fileContent);
             scanner.close();
             writer.close();
-
-            this.password = newPassword;
 
             System.err.println("\n===Password change success===\n");
 

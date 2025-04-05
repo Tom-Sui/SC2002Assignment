@@ -1,8 +1,10 @@
+import java.util.ArrayList;
+
 public class Applicant extends User{
-    private Project applProject;
+    private Project appliedProject;
+    private ArrayList<Project> pastAppliedProjects = new ArrayList();
     private ApplicationStatus applicationStatus;
     private FlateType bookedFlateType;
-
 
     //Absract functions
     public Enquiry createEnquiry(Project project, String message){
@@ -24,9 +26,18 @@ public class Applicant extends User{
     }
 
     //Applicant functions
-    public Project[] viewAvailableProjects(Project[] allProjects){
-        Project[] project = new Project[10];
-        return project;
+    public void viewAvailableProjects(ArrayList<Project> projects){
+    	System.out.println("\nList of available projects:");
+		System.out.println("============================");
+    	int size = projects.size();
+    	for (int i=0; i<size; i++) {
+    		// getMaritalStatus gives attribute ms which is a temporary placeholder for marital status
+    		Project currentProject = projects.get(i);
+    		if (currentProject.getVisibility() == true) {
+    			System.out.println(projects.get(i).toString());
+    		}	
+    	} 	
+        
     }
     public void applyForProject(Project project){
 

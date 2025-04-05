@@ -34,14 +34,9 @@ public class Applicant extends User{
     		// getMaritalStatus gives attribute ms which is a temporary placeholder for marital status
     		Project currentProject = projects.get(i);
     		if (currentProject.getVisibility() == true) {
-    			if (super.getMaritalStatus() == MaritalStatus.SINGLE)
-    				System.out.println(projects.get(i).toString());
-    			else 
-    				System.out.println(projects.get(i).toString());
-    		}
-    		
-    	}
-    	
+    			System.out.println(projects.get(i).toString());
+    		}	
+    	} 	
         
     }
     

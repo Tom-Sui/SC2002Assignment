@@ -1,11 +1,13 @@
 import java.sql.Date;
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 
 public class Project {
     private String projectName;
     private String neighborhood;
-    private int twoRoomUnits;
-    private int threeRoomUnits;
+    //private int twoRoomUnits;
+    //private int threeRoomUnits;
+    private ArrayList<FlatType> flatTypes = new ArrayList<FlatType>();
     private Date applicationOpeningDate;
     private Date applicationClosingDate;
     private HDBManager hdbManager;
@@ -14,19 +16,18 @@ public class Project {
     private ArrayList<Applicant> applicants = new ArrayList<Applicant>();
     private ArrayList<HDBOfficer> hdbOfficers = new ArrayList<HDBOfficer>();
     private ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>();
-    private MaritalStatus maritalStatus;
+    private MaritalStatus maritalStatus = null;
 
     //Wasn't stated in the UML diagram
-    private FlateType flateType;
+    //private FlateType flateType;
     
     public Project() {};
-    public Project(String projectName, String neighborhood, int twoRoomUnits, int threeRoomUnits, Date applicationOpeningDate, Date applicationClosingDate,
+    public Project(String projectName, String neighborhood, ArrayList<FlatType> flatTypes, Date applicationOpeningDate, Date applicationClosingDate,
     		HDBManager hdbManager, int availableOfficerSlots, boolean visiblity, ArrayList<Applicant> applicants, ArrayList<HDBOfficer> hdbOfficers, ArrayList<Enquiry> enquiries,
     		MaritalStatus maritalStatus) {
     	this.projectName = projectName;
     	this.neighborhood = neighborhood;
-    	this.twoRoomUnits = twoRoomUnits;
-    	this.threeRoomUnits = threeRoomUnits;
+    	this.flatTypes = flatTypes;
     	this.applicationOpeningDate = applicationOpeningDate;
     	this.applicationClosingDate = applicationClosingDate;
     	this.hdbManager = hdbManager;
@@ -36,7 +37,6 @@ public class Project {
     	this.hdbOfficers = hdbOfficers;
     	this.enquiries = enquiries;
     	this.maritalStatus = maritalStatus;  	
-    	
     }
     //Methods
     public boolean getVisibility(){
@@ -46,6 +46,9 @@ public class Project {
     public MaritalStatus getMaritalStatus() {
     	return maritalStatus;
     }
+    
+    public ArrayList<FlatType> getFlatTypes(){ return flatTypes; }
+    
     public void addApplicant(Applicant applicant){
 
     }
@@ -58,15 +61,19 @@ public class Project {
     public void addEnquiry(Enquiry enquiry){
 
     }
-    public FlateType getRemainingUnits(FlateType flateType){
-        return this.flateType;
-    }
+//    public FlateType getRemainingUnits(FlateType flateType){
+//        return FlateType;
+//    }
     public void decreaseRemainingUnits(FlateType flateType){
 
     }
     
     public String toString() {
-		String projectDetails = String.format("Project Name: %s", projectName);
+    	SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
+    	String formattedOpeningDate = formatter.format(applicationOpeningDate);
+    	String formattedClosingDate = formatter.format(applicationClosingDate);
+    	String flatDetails = FlatTypeLogic.displayFlatTypes(flatTypes);
+		String projectDetails = String.format("%s, %s, %s to %s\n%s", projectName, neighborhood, formattedOpeningDate, formattedClosingDate, flatDetails);
 		return projectDetails;
     	
     }

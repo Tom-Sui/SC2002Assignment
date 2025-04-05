@@ -13,10 +13,8 @@ public abstract class User {
     private String userID;
     private String password;
     private int age;
-<<<<<<< HEAD:scr/User.java
     private boolean maritalStatus;
     private MaritalStatus ms; //temporay placeholde for marital status
-=======
     private MaritialStatus.maritialStatus maritialStatus;
     // private boolean maritalStatus;
 
@@ -31,7 +29,6 @@ public abstract class User {
         this.age = age;
         this.maritialStatus = maritialStatus;
     }
->>>>>>> main:src/User.java
 
     //set methods
     public void setName(String name){

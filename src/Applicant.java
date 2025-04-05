@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Applicant extends User{
     private Project appliedProject;
-    private ArrayList<Project> pastAppliedProjects = new ArrayList();
+    private ArrayList<Project> pastAppliedProjects = new ArrayList<>();
     private ApplicationStatus applicationStatus;
     private FlateType bookedFlateType;
 

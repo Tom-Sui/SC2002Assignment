@@ -5,10 +5,11 @@ import java.util.Scanner;
 public class ApplicantApp {
 	public void start(Applicant applicant, ArrayList<Project> projectList) {
 		Scanner sc = new Scanner(System.in);	
+		projectList = ProjectLogic.filterProjectsByMaritalStatus(projectList, applicant.getMaritalStatus());
 		// Display applicant details so that he/she can better understand the criteria they meet for the projects
 		System.out.printf("Name: %s\n", applicant.getName());
 		System.out.printf("Age: %d\n", applicant.getAge());
-		System.out.printf("Marital Status: %s\n", applicant.getMatritialSatus());
+		System.out.printf("Marital Status: %s\n", applicant.getMaritalStatus());
 		System.out.println("============================");
 		System.out.println("List of Available Features:");
 		ArrayList<String> applicantFeatures = new ArrayList<>(List.of(

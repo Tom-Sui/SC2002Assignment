@@ -9,14 +9,15 @@ public class Application {
     private Project project;
     private ApplicationStatus applicationStatus;
     private boolean isBooked;
-
+    private FlatType flatType;
     //Constructor
-    public Application(Applicant applicant, Project project) {
+    public Application(Applicant applicant, Project project, FlatType flatType) {
         Application.applicationId = applicationId++;
         this.applicant = applicant;
         this.project = project;
         this.isBooked = false;
         this.applicationStatus = ApplicationStatus.PENDING;
+        this.flatType = flatType;
     }
 
     //Getters and Setters
@@ -39,7 +40,13 @@ public class Application {
     public void setIsBooked(boolean isBooked) {
         this.isBooked = isBooked;
     }
-    
-    
-    
+
+    public FlatType getFlatType() {
+        return flatType;
+    }
+
+    public int getApplicationId() {
+        return applicationId;
+    }
+
 }

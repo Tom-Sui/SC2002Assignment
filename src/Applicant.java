@@ -33,8 +33,9 @@ public class Applicant extends User{
     		// getMaritalStatus gives attribute ms which is a temporary placeholder for marital status
     		Project currentProject = projects.get(i);
     		if (currentProject.getVisibility() == true) {
+                System.out.println("Project ID: " + (i+1));
     			System.out.println(projects.get(i).toString());
-    		}	
+        }	
     	} 	
         
     }
@@ -45,15 +46,13 @@ public class Applicant extends User{
     * @throws Exception - If applicant is not eligible to apply for the project    
     * @description - This function checks and allows the applicant to apply for a project, (checks if the applicant is single and the project is not a 3 room flat)   */
 
-    public void applyForProject(Project project){
-        int eligible = this.getMaritalStatus() == MaritalStatus.SINGLE ? 1 : 0 ;
-        if (eligible == 1 && project.getFlatType() == FlatType.ThreeRoom){
-            System.out.println("Cannot apply for project, applicant is single: " + project.getProjectName());
-            return;
-        }
+    public void applyForProject(Project project, FlatType flatType){
         appliedProject = project;
-        appliedBookedFlatType = project.getFlatType();
         System.out.println("Applied for project: " + project.getProjectName());
+        System.out.println("Flat type: " + flatType.toString());
+        Application application = new Application(this, project, flatType);
+        project.addApplication(application);
+        System.out.println("Application ID: " + application.getApplicationId());
     }
     public ApplicantStatus viewApplicationStatus(){
         // ApplicationStatus applicationStatus = new ApplicantStatus();
@@ -70,4 +69,7 @@ public class Applicant extends User{
     //     return false;
     // }
 
+    public Project getAppliedProject() {
+        return appliedProject;
+    }
 }

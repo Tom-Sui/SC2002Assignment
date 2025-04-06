@@ -34,7 +34,7 @@ public class ApplicantApp {
 			if (choice == 1) {
 				applicant.viewAvailableProjects(projectList);
 			}
-			else if (choice == 2) {
+			else if (choice == 3) {
 				/* 
 				Check if the applicant has already applied for a project
 				If yes, then print the message and continue the loop
@@ -44,10 +44,20 @@ public class ApplicantApp {
 					System.out.println("Cannot apply for project, already applied for a project: " + applicant.getAppliedProject().getProjectName());
 					continue;
 				}
-				applicant.viewAppliedProjects(projectList);
+				applicant.viewAvailableProjects(projectList);
 				System.out.printf("Enter the project number to apply for: ");	
 				int projectNumber = sc.nextInt();
-				applicant.applyForProject(projectList.get(projectNumber-1));
+				Project project = projectList.get(projectNumber-1);
+				ArrayList<FlatType> filteredFlatTypes = ProjectLogic.filterFlatTypesByMaritalStatus(project.getFlatTypes(), applicant.getMaritalStatus());
+				if (filteredFlatTypes.isEmpty()){
+					System.out.println("Cannot apply for project, applicant is single: " + project.getProjectName());
+					continue;
+				}
+				System.out.println(FlatTypeLogic.displayFlatTypesView(filteredFlatTypes)); 
+				System.out.printf("Enter the flat type number to apply for: ");
+				int flatTypeNumber = sc.nextInt();
+				FlatType flatType = filteredFlatTypes.get(flatTypeNumber-1);
+				applicant.applyForProject(project, flatType);;
 			}
 			
 		} while (choice != -1);

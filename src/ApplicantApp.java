@@ -40,8 +40,8 @@ public class ApplicantApp {
 				If yes, then print the message and continue the loop
 				Else, print the list of applied projects and ask the applicant to enter the project number to apply for
 				*/
-				if (applicant.getAppliedProject() != null){
-					System.out.println("Cannot apply for project, already applied for a project: " + applicant.getAppliedProject().getProjectName());
+				if (applicant.getCurrentApplication() != null){
+					System.out.println("Cannot apply for project, already applied for a project: " + applicant.getCurrentApplication().getProject().getProjectName());
 					continue;
 				}
 				applicant.viewAvailableProjects(projectList);

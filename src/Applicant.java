@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Applicant extends User{
-    private Project appliedProject;
+    private Application currentApplication; 
     private ArrayList<Project> pastAppliedProjects = new ArrayList<Project>();
     private ApplicantStatus applicationStatus;
     private FlatType bookedFlatType;
@@ -47,11 +47,11 @@ public class Applicant extends User{
     * @description - This function checks and allows the applicant to apply for a project, (checks if the applicant is single and the project is not a 3 room flat)   */
 
     public void applyForProject(Project project, FlatType flatType){
-        appliedProject = project;
         System.out.println("Applied for project: " + project.getProjectName());
         System.out.println("Flat type: " + flatType.toString());
         Application application = new Application(this, project, flatType);
         project.addApplication(application);
+        currentApplication = application;
         System.out.println("Application ID: " + application.getApplicationId());
     }
     public ApplicantStatus viewApplicationStatus(){
@@ -63,13 +63,17 @@ public class Applicant extends User{
     }
     public void bookFlat(){
     	if (applicationStatus == ApplicantStatus.SUCCESSFUL) {
-    		ProjectLogic.displayHDBOfficers(appliedProject);
+    		ProjectLogic.displayHDBOfficers(currentApplication.getProject());
     		
     	}
     	
     }
 
-    public Project getAppliedProject() {
-        return appliedProject;
+    public Application getCurrentApplication() {
+        return currentApplication;
+    }
+
+    public void setCurrentApplication(Application currentApplication) {
+        this.currentApplication = currentApplication;
     }
 }

@@ -5,7 +5,6 @@ public class Applicant extends User{
     private ArrayList<Project> pastAppliedProjects = new ArrayList<Project>();
     private ApplicantStatus applicationStatus;
     private FlatType bookedFlatType;
-
     //Absract functions
     public Enquiry createEnquiry(Project project, String message){
         Enquiry[] enquiry = new Enquiry[10];
@@ -48,12 +47,12 @@ public class Applicant extends User{
 
     public void applyForProject(Project project){
         int eligible = this.getMaritalStatus() == MaritalStatus.SINGLE ? 1 : 0 ;
-        if (eligible == 1 && project.getFlateType() == FlateType.flateType.ThreeRoom){
+        if (eligible == 1 && project.getFlatType() == FlatType.ThreeRoom){
             System.out.println("Cannot apply for project, applicant is single: " + project.getProjectName());
             return;
         }
         appliedProject = project;
-        appliedBookedFlateType = project.getFlateType();
+        appliedBookedFlatType = project.getFlatType();
         System.out.println("Applied for project: " + project.getProjectName());
     }
     public ApplicantStatus viewApplicationStatus(){

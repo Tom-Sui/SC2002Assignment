@@ -2,9 +2,9 @@ import java.util.ArrayList;
 
 public class Applicant extends User{
     private Project appliedProject;
-    private ArrayList<Project> pastAppliedProjects = new ArrayList();
-    private ApplicationStatus applicationStatus;
-    private FlateType bookedFlateType;
+    private ArrayList<Project> pastAppliedProjects = new ArrayList<Project>();
+    private ApplicantStatus applicationStatus;
+    private FlatType bookedFlatType;
 
     //Absract functions
     public Enquiry createEnquiry(Project project, String message){
@@ -42,14 +42,14 @@ public class Applicant extends User{
     public void applyForProject(Project project){
 
     }
-    public ApplicationStatus viewApplicationStatus(){
-        ApplicationStatus applicationStatus = new ApplicationStatus();
-        return applicationStatus;
+    public ApplicantStatus viewApplicationStatus(){
+        // ApplicationStatus applicationStatus = new ApplicantStatus();
+        return this.applicationStatus;
     }
     public void requestWithdrawal(){
 
     }
-    public void bookFlat(HDBOfficer officer, FlateType flateType){
+    public void bookFlat(HDBOfficer officer, FlatType flatType){
 
     }
     //Duplicated in UML diagram

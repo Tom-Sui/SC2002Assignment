@@ -1,4 +1,4 @@
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -48,12 +48,14 @@ public class Project {
     public void setNeiborhood(String neighborhood){
         this.neighborhood = neighborhood;
     }
-    // public void setApplicationOpeningData(LocalDate applicationOpeningData){
-    //     this.applicationOpeningDate = applicationOpeningData;
-    // }
-    // public void setApplicationClosingData(LocalDate applicationClosingData){
-    //     this.applicationClosingData = applicationClosingData;
-    // }
+
+    public void setApplicationOpeningDate(Date applicationOpeningDate){
+        this.applicationOpeningDate = applicationOpeningDate;
+    }
+    public void setApplicationClosingDate(Date applicationClosingDate){
+        this.applicationClosingDate = applicationClosingDate;
+    }
+
     public void setHDBManager(HDBManager hdbManager){
         this.hdbManager = hdbManager;
     }
@@ -63,6 +65,9 @@ public class Project {
     public void setAvailableOfficerSlots(int availableOfficerSlots){
         this.availableOfficerSlots = availableOfficerSlots;
     }
+    public void setFlatType(ArrayList<FlatType> flatType){
+        this.flatTypes = flatType;
+    }
 
     //get methods
     public String getProjectName(){
@@ -71,20 +76,16 @@ public class Project {
     public String getNeiborhood(){
         return this.neighborhood;
     }
-    // public FlateType[] setUnitType(){
-    //     return this.flateType;
-    // }
-    // public LocalDate getApplicationOpeningData(){
+    public Date getApplicationOpeningDate(){
+        return this.applicationOpeningDate;
+    }
+    public Date getApplicationClosingDate(){
+        return this.applicationClosingDate;
+    }
+    public HDBManager getHDBManager(){
+        return this.hdbManager;
+    }
 
-    //     return this.applicationOpeningData;
-    // }
-    // public LocalDate getApplicationClosingData(){
-
-    //     return this.applicationClosingData;
-    // }
-    // public HDBManager getHDBManager(){
-    //     return this.hdbManager;
-    // }
     public ArrayList<HDBOfficer> getHDBOfficer(){
         return this.hdbOfficers;
     }
@@ -130,7 +131,7 @@ public class Project {
 //    public FlateType getRemainingUnits(FlateType flateType){
 //        return FlateType;
 //    }
-    public void decreaseRemainingUnits(FlateType flateType){
+    public void decreaseRemainingUnits(FlatType flatType){
 
     }
     

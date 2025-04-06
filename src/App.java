@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.sql.Date;
 
 public class App{
     //To keep track who is loged in
@@ -144,6 +145,69 @@ public class App{
                                         System.out.println("===Login success===");
                                         System.out.println("Welcome " + applicant.get(i).getName());
                                         System.out.println("===================\n");
+                                        // Dummy initialization of projects
+                                        ArrayList<Project> projectList = new ArrayList<Project>();
+                                        
+                                        ArrayList<MaritalStatus> allowedGroupsForTwoRoom = new ArrayList<>();
+                                        allowedGroupsForTwoRoom.add(MaritalStatus.SINGLE);  // Only singles can apply
+
+                                        ArrayList<MaritalStatus> allowedGroupsForThreeRoom = new ArrayList<>();
+                                        allowedGroupsForThreeRoom.add(MaritalStatus.MARRIED);  // Only married couples can apply
+
+                                        // Create two room flats
+                                        FlatType twoRoomFlat1 = new TwoRoom(10, 200000, allowedGroupsForTwoRoom);  // 10 units, 200k price
+                                        FlatType twoRoomFlat2 = new TwoRoom(5, 180000, allowedGroupsForTwoRoom);   // 5 units, 180k price
+
+                                        // Create three room flats
+                                        FlatType threeRoomFlat1 = new ThreeRoom(8, 300000, allowedGroupsForThreeRoom);  // 8 units, 300k price
+                                        FlatType threeRoomFlat2 = new TwoRoom(4, 320000, allowedGroupsForThreeRoom);  // 4 units, 320k price
+
+                                        // Add these flats to the list
+                                        ArrayList<FlatType> flatTypes = new ArrayList<>();
+                                        flatTypes.add(twoRoomFlat1);
+                                        flatTypes.add(twoRoomFlat2);
+                                        flatTypes.add(threeRoomFlat1);
+                                        flatTypes.add(threeRoomFlat2);
+                                        
+                                        // Dummy Project 
+                                        String projectName = "Sunrise Residences";
+                                        String neighborhood = "Punggol";
+                                        // Use java.sql.Date for consistency with your class
+                                        Date openingDate = Date.valueOf("2025-05-01");
+                                        Date closingDate = Date.valueOf("2025-05-15");
+
+                                        // Assuming HDBManager and MaritialStatus have default constructors
+                                        HDBManager dummyManager = new HDBManager();
+                                        int officerSlots = 5;
+                                        boolean isVisible = true;
+
+                                        ArrayList<Applicant> applicants = new ArrayList<>();
+                                        ArrayList<HDBOfficer> officers = new ArrayList<>();
+                                        ArrayList<Enquiry> enquiries = new ArrayList<>();
+                                        applicant.get(i).setMaritalStatus(MaritalStatus.SINGLE);
+                                        
+                                        MaritalStatus maritalStatus = MaritalStatus.SINGLE;
+                                        
+                                        Project dummyProject = new Project(
+                                            projectName,
+                                            neighborhood,
+                                            flatTypes,
+                                            openingDate,
+                                            closingDate,
+                                            dummyManager,
+                                            officerSlots,
+                                            isVisible,
+                                            applicants,
+                                            officers,
+                                            enquiries,
+                                            maritalStatus
+                                        );
+                                        
+                                        projectList.add(dummyProject);
+                                        // Launch applicant interface
+                                        ApplicantApp applicantApp = new ApplicantApp();
+                                        applicantApp.start(applicant.get(i), projectList);
+                                        
                                         userPos = i;
                                         currentUserId = userName;
                                         logedIn = true;

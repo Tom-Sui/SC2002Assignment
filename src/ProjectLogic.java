@@ -13,4 +13,10 @@ public class ProjectLogic {
         }
         return filteredProjects;
     }
+    
+    public static void displayHDBOfficers(Project project) {
+    	for (HDBOfficer officer : project.getHDBOfficer()) {
+    		System.out.println(officer.toString());
+    	}
+    }
 }

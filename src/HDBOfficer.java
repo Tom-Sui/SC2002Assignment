@@ -1,4 +1,4 @@
-public class HDBOfficer extends User{
+public class HDBOfficer extends Applicant{
     private Project managedProject;
     private OfficerRegistrationStatus officerRegistrationStatus;
 
@@ -31,10 +31,17 @@ public class HDBOfficer extends User{
     public void replyToEnquiry(Enquiry enquiry, String reply){
 
     }
+    
     public void updateRemaningFlatUnits(Project project, FlatType flatType){
 
     }
     public Applicant retrieveApplicant(Applicant applicant){
         return applicant;
     }
+    
+    public String toString() {
+    	String officerDetails = String.format("%s, %d years old", super.getName(), super.getAge());
+		return officerDetails;
+    }
+    
 }

@@ -49,12 +49,12 @@ public class Applicant extends User{
     public void requestWithdrawal(){
 
     }
-    public void bookFlat(HDBOfficer officer, FlatType flatType){
-
+    public void bookFlat(){
+    	if (applicationStatus == ApplicantStatus.SUCCESSFUL) {
+    		ProjectLogic.displayHDBOfficers(appliedProject);
+    		
+    	}
+    	
     }
-    //Duplicated in UML diagram
-    // public boolean canApply(Project project){
-    //     return false;
-    // }
 
 }

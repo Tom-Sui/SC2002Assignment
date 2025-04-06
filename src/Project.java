@@ -123,6 +123,10 @@ public class Project {
     public void removeApplicant(Applicant applicant){
 
     }
+    
+    public void addHDBOfficer(HDBOfficer hdbOfficer) {
+    	hdbOfficers.add(hdbOfficer);
+    }
     public void removeHDBOfficer(HDBOfficer hdbOfficer){
 
     }

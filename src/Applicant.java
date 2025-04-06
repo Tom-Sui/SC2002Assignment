@@ -3,8 +3,18 @@ import java.util.ArrayList;
 public class Applicant extends User{
     private Project appliedProject;
     private ArrayList<Project> pastAppliedProjects = new ArrayList<Project>();
-    private ApplicantStatus applicationStatus;
+    private ApplicationStatus applicationStatus;
     private FlatType bookedFlatType;
+    
+    public Applicant() {};
+    public Applicant(String name, String NRIC, String userID, String password, int age, MaritalStatus maritalStatus, Project appliedProject,  ArrayList<Project> pastAppliedProjects, ApplicantStatus applicationStatus, FlatType bookedFlatType){
+    	super(name, NRIC, userID, password, age, maritalStatus);
+    	//TODO FILL  iN THE REST OF THE ATTRIBUTES
+    }
+    
+    public Applicant(String name, String NRIC, String userID, String password, int age, MaritalStatus maritalStatus){
+    	super(name, NRIC, userID, password, age, maritalStatus);
+    }
     //Absract functions
     public Enquiry createEnquiry(Project project, String message){
         Enquiry[] enquiry = new Enquiry[10];
@@ -30,14 +40,12 @@ public class Applicant extends User{
 		System.out.println("============================");
     	int size = projects.size();
     	for (int i=0; i<size; i++) {
-    		// getMaritalStatus gives attribute ms which is a temporary placeholder for marital status
     		Project currentProject = projects.get(i);
     		if (currentProject.getVisibility() == true) {
                 System.out.println("Project ID: " + (i+1));
     			System.out.println(projects.get(i).toString());
-        }	
-    	} 	
-        
+    		}	
+    	} 	  
     }
     
     /*
@@ -54,7 +62,7 @@ public class Applicant extends User{
         project.addApplication(application);
         System.out.println("Application ID: " + application.getApplicationId());
     }
-    public ApplicantStatus viewApplicationStatus(){
+    public ApplicationStatus viewApplicationStatus(){
         // ApplicationStatus applicationStatus = new ApplicantStatus();
         return this.applicationStatus;
     }
@@ -62,11 +70,7 @@ public class Applicant extends User{
 
     }
     public void bookFlat(){
-    	if (applicationStatus == ApplicantStatus.SUCCESSFUL) {
-    		ProjectLogic.displayHDBOfficers(appliedProject);
-    		
-    	}
-    	
+    	ProjectLogic.displayHDBOfficers(appliedProject);  	
     }
 
     public Project getAppliedProject() {

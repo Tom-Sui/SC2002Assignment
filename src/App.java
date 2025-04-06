@@ -180,7 +180,6 @@ public class App{
                                         HDBManager dummyManager = new HDBManager();
                                         int officerSlots = 5;
                                         boolean isVisible = true;
-
                                         ArrayList<Applicant> applicants = new ArrayList<>();
                                         ArrayList<HDBOfficer> officers = new ArrayList<>();
                                         ArrayList<Enquiry> enquiries = new ArrayList<>();
@@ -204,6 +203,8 @@ public class App{
                                         );
                                         
                                         projectList.add(dummyProject);
+                                        HDBOfficer dummyOfficer = new HDBOfficer("DummyOfficer", "T1234567I", "DummyOfficer", "password", 35, MaritalStatus.MARRIED, dummyProject);
+                                        dummyProject.addHDBOfficer(dummyOfficer);
                                         // Launch applicant interface
                                         ApplicantApp applicantApp = new ApplicantApp();
                                         applicantApp.start(applicant.get(i), projectList);

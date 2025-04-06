@@ -2,6 +2,11 @@ public class HDBOfficer extends Applicant{
     private Project managedProject;
     private OfficerRegistrationStatus officerRegistrationStatus;
 
+    public HDBOfficer() {};
+    public HDBOfficer(String name, String NRIC, String userID, String password, int age, MaritalStatus maritalStatus, Project managedProject){
+    	super(name, NRIC, userID, password, age, maritalStatus);
+    	this.managedProject = managedProject;
+    }
     //Abstract functions
     public Enquiry createEnquiry(Project project, String message){
         Enquiry[] enquiry = new Enquiry[10];

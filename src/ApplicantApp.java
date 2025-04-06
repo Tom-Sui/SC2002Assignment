@@ -28,11 +28,19 @@ public class ApplicantApp {
 				System.out.printf("%d. %s\n", i+1, applicantFeatures.get(i));
 			}
 			System.out.printf("-1. Exit\n");
+			System.out.println();
 			System.out.printf("Enter your choice: ");
 			choice = sc.nextInt();
 
 			if (choice == 1) {
 				applicant.viewAvailableProjects(projectList);
+			}
+			else if (choice == 2) {
+				if (applicant.getAppliedProject() != null) {
+					System.out.println("Applied Project: " + applicant.getAppliedProject().getProjectName());
+					System.out.println("Application Status: " + applicant.viewApplicationStatus());
+				}
+				
 			}
 			else if (choice == 3) {
 				/* 
@@ -57,9 +65,11 @@ public class ApplicantApp {
 				System.out.printf("Enter the flat type number to apply for: ");
 				int flatTypeNumber = sc.nextInt();
 				FlatType flatType = filteredFlatTypes.get(flatTypeNumber-1);
-				applicant.applyForProject(project, flatType);;
+				applicant.applyForProject(project, flatType);
 			}
-			
+			else if (choice == 4) {
+				applicant.bookFlat();
+			}
 		} while (choice != -1);
 
 

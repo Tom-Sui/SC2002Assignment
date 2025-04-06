@@ -15,9 +15,12 @@ public class ProjectLogic {
     }
     
     public static void displayHDBOfficers(Project project) {
-    	for (HDBOfficer officer : project.getHDBOfficer()) {
-    		System.out.println(officer.toString());
-    	}
+    	ArrayList<HDBOfficer> officers = project.getHDBOfficer();
+        for (int i = 0; i < officers.size(); i++) {
+            HDBOfficer officer = officers.get(i);
+            System.out.printf("Officer [%d]: ", i);  // index is i
+            System.out.println(officer.toString());
+        }
     }
 
     public static ArrayList<FlatType> filterFlatTypesByMaritalStatus(ArrayList<FlatType> FlatTypeList, MaritalStatus maritalStatus) {

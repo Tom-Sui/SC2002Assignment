@@ -26,6 +26,8 @@ public class App{
         //Initialize Applicant info into Applicant class
         ArrayList<Applicant> applicant = init.LoadUserInfo();
 
+        // System.out.println(applicant.get(0).login(userPassword));
+        // System.exit(0);
         //Initialize HDB officier info into HDBOfficier class
         ArrayList<HDBManager> hdbManagers;
         hdbManagers = init.LoadManagerInfo();
@@ -106,14 +108,13 @@ public class App{
                                         currentUserId = userName;
                                         logedIn = true;
                                         break;
-                                    }else{
-                                        if(!logedIn){
-                                            System.out.println("============Login failed============");
-                                            System.out.println("Incorrect password or incorrect ID");
-                                            System.out.println("====================================");
-                                        }
                                     }
                                 }
+                            }
+                            if(!logedIn){
+                                System.out.println("============Login failed============");
+                                System.out.println("Incorrect password or incorrect ID");
+                                System.out.println("====================================");
                             }
 
                         case "hdb officier":
@@ -127,14 +128,13 @@ public class App{
                                         currentUserId = userName;
                                         logedIn = true;
                                         break;
-                                    }else{
-                                        if(!logedIn){
-                                            System.out.println("============Login failed============");
-                                            System.out.println("Incorrect password or incorrect ID");
-                                            System.out.println("====================================");
-                                        }
                                     }
                                 }
+                            }
+                            if(!logedIn){
+                                System.out.println("============Login failed============");
+                                System.out.println("Incorrect password or incorrect ID");
+                                System.out.println("====================================");
                             }
 
                         case "applicant":
@@ -148,14 +148,13 @@ public class App{
                                         currentUserId = userName;
                                         logedIn = true;
                                         break;
-                                    }else{
-                                        if(!logedIn){
-                                            System.out.println("============Login failed============");
-                                            System.out.println("Incorrect password or incorrect ID");
-                                            System.out.println("====================================");
-                                        }
                                     }
                                 }
+                            }
+                            if(!logedIn){
+                                System.out.println("============Login failed============");
+                                System.out.println("Incorrect password or incorrect ID");
+                                System.out.println("====================================");
                             }
                             // logedIn = false;
                             // userType = "NULL";

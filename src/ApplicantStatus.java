@@ -1,0 +1,3 @@
+public enum ApplicantStatus{
+    PENDING,SUCCESSFUL,UNSUCCESSFUL,BOOKED
+}

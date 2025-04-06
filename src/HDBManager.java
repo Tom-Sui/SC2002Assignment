@@ -3,42 +3,19 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class HDBManager extends User{
     private String DataFilePath = "./Data";
-    private Project[] managedProjects;
+    private ArrayList<Project> managedProjects = new ArrayList<Project>();
 
     //set managed projects
     public void setManagedProjects(Project project){
-        if (managedProjects == null) {
-            Project[] temp = new Project[1];
-    
-            temp[temp.length - 1] = project;
-            System.out.println(temp.length);
-            managedProjects = temp;
-            // System.arraycopy(temp,0 , managedProjects, 0, temp.length);
-            // System.out.println(managedProjects[0].getNeiborhood());
-        }else{
-            int count = 0;
-            Project[] temp = new Project[managedProjects.length + 1];
-
-            for(Project item:managedProjects){
-                
-                temp[count] = item;
-                count += 1;
-            }
-    
-            temp[temp.length - 1] = project;
-
-            managedProjects = temp;
-            // System.arraycopy(temp,0 , managedProjects, 0, temp.length);
-            // System.out.println(managedProjects[0].getNeiborhood());
-        }
-
+        this.managedProjects.add(project);
     }
 
-    public Project[] getProject(){
+    public ArrayList<Project> getProject(){
         if (this.managedProjects == null) {
             System.out.println("Current manager has no managed projects");
             return null;
@@ -67,61 +44,66 @@ public class HDBManager extends User{
 
 
     //HDB manager functions
-    public Project[] createProject(String projectDetails, Project[] projects,HDBManager[] hdbManager, HDBOfficer[] hdbOfficer){
+    //Yet: update the program to track managed project dates
+    public ArrayList<Project> createProject(String projectDetails, ArrayList<Project> projects,ArrayList<HDBManager> hdbManager, ArrayList<HDBOfficer> hdbOfficer){
         String filecontent = "";
-        int size;
 
         File officerFile = new File(DataFilePath + "/ProjectList.txt");
+        Init init = new Init();
 
         try{
             Scanner scanner = new Scanner(officerFile);
-            Init init = new Init();
-            size = Integer.parseInt(scanner.nextLine()) + 1;
-            filecontent = filecontent + size + "\n";
 
             while(scanner.hasNextLine()){
                 filecontent = filecontent + scanner.nextLine() + "\n";
             }
             filecontent = filecontent + projectDetails;
+
             String[] buffer = projectDetails.split(",");
 
-            Project[] project = new Project[size];
-            System.arraycopy(projects,0 , project, 0, projects.length);
+            Project project = init.setProject(buffer, hdbManager, hdbOfficer);
 
-            project[project.length - 1] = init.setProject(buffer, hdbManager, hdbOfficer);
+            if(project == null){
+                scanner.close();
+                return init.LoadProjectInfo(hdbManager,hdbOfficer);
+            }
+
+            this.managedProjects.add(project);
 
             FileWriter writer = new FileWriter(DataFilePath + "/ProjectList.txt");
             writer.write(filecontent);
             writer.close();
             scanner.close();
-            return project;
+            return init.LoadProjectInfo(hdbManager,hdbOfficer);
         }catch (FileNotFoundException e){
             System.out.println("Error occured while reading ProjectList.txt");
             e.printStackTrace();
-            return projects;
+            return init.LoadProjectInfo(hdbManager,hdbOfficer);
         }catch(IOException e){
             System.out.println("Error occured while writing into ProjectList.txt");
             e.printStackTrace();
-            return projects;
+            return init.LoadProjectInfo(hdbManager,hdbOfficer);
         }
     }
 
     //If call this function
     //Do remember to run init.LoadProjectInfo() to restore the changed project info
-    public boolean editProject(String projectName, String updateContent, String target,HDBManager[] hdbManager,HDBOfficer[] hdbOfficer){
+    public boolean editProject(String projectName, String updateContent, String target,ArrayList<HDBManager> hdbManager,ArrayList<HDBOfficer> hdbOfficer){
         General general = new General();
         Scanner scanner = new Scanner(System.in);
-        
+        System.out.println("here");
+        if (managedProjects == null) {
+            System.out.println("No managed projects");
+            scanner.close();
+            return false;
+        }
         for(Project managedProject: managedProjects){
-            if (managedProject == null) {
-                System.out.println("No managed projects");
-                break;
-            }
             if(managedProject.getProjectName().equals(projectName)){
                 switch (target.replace(" ","").toLowerCase()) {
                     //note that if changing managed project name
                     //pass the new manager's name
                     case "projectname","1":
+
                         general.editFile(DataFilePath + "/ProjectList.txt", updateContent,projectName,projectName);
                         break;
                     case "neiborhood","2":
@@ -147,10 +129,10 @@ public class HDBManager extends User{
                         break;
                     case "openingdate":
                         if(general.findProject(this.managedProjects, projectName) != null){
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                            // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                             general.editFile(DataFilePath + "/ProjectList.txt", 
                                             updateContent,
-                                            general.findProject(this.managedProjects, projectName).getApplicationOpeningData().format(formatter),
+                                            general.findProject(this.managedProjects, projectName).getApplicationOpeningDate().toString(),
                                             projectName);
                             System.out.println("Opending date changed to: " + updateContent);
                             break;
@@ -159,10 +141,10 @@ public class HDBManager extends User{
                         break;
                     case "closingdate":
                         if(general.findProject(this.managedProjects, projectName) != null){
-                            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                            // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                             general.editFile(DataFilePath + "/ProjectList.txt", 
                                             updateContent,
-                                            general.findProject(this.managedProjects, projectName).getApplicationClosingData().format(formatter),
+                                            general.findProject(this.managedProjects, projectName).getApplicationClosingDate().toString(),
                                             projectName);
                             System.out.println("Closing date changed to: " + updateContent);
                             break;
@@ -172,10 +154,10 @@ public class HDBManager extends User{
                     case "manager":
                         //DONE: add the project to another manager
                         //DONE: delet project from current manager
-                        if(general.findPerson(hdbManager, updateContent)!= null){
-                            general.findPerson(hdbManager, updateContent).setManagedProjects(deletProject(projectName));
+                        if(general.findManager(hdbManager, updateContent)!= null){
+                            general.findManager(hdbManager, updateContent).setManagedProjects(this.deletProject(general.findProject(this.managedProjects,projectName)));
                         }else{
-                            System.out.println("Manager does not exist");
+                            System.out.println("New manager does not exist");
                             break;
                         }
                         //DONE: change project manager name
@@ -207,34 +189,45 @@ public class HDBManager extends User{
         return false;
     }
     
-    public void deletProject(Project targetProject){
-        Project[] tempProject = new Project[this.managedProjects.length - 1];
-        int count = 0;
-        for(Project project : this.managedProjects){
-            if(project.getProjectName().equals(targetProject.getProjectName())){
-                continue;
-            }else{
-                tempProject[count] = project;
-                count++;
-            }
+    // public void deletProject(Project targetProject){
+    //     Project[] tempProject = new Project[this.managedProjects.size() - 1];
+    //     int count = 0;
+    //     for(Project project : this.managedProjects){
+    //         if(project.getProjectName().equals(targetProject.getProjectName())){
+    //             continue;
+    //         }else{
+    //             tempProject[count] = project;
+    //             count++;
+    //         }
+    //     }
+    //     this.managedProjects = tempProject;
+    // }
+    // public Project deletProject(String targetProject){
+    //     // ArrayList<Project> tempProject = new Project[this.managedProjects.size() - 1];
+    //     Project deletedProject = new Project();
+    //     int count = 0;
+    //     for(Project project : this.managedProjects){
+    //         if(project.getProjectName().equals(targetProject)){
+    //             deletedProject = project;
+    //             continue;
+    //         }else{
+    //             tempProject[count] = project;
+    //             count++;
+    //         }
+    //     }
+    //     this.managedProjects = tempProject;
+    //     return deletedProject;
+    // }
+    public Project deletProject(Project targetProject){
+        // ArrayList<Project> tempProject = new Project[this.managedProjects.size() - 1];
+        if(this.managedProjects == null){
+            System.out.println("No project managed");
+            return targetProject;
         }
-        this.managedProjects = tempProject;
-    }
-    public Project deletProject(String targetProject){
-        Project[] tempProject = new Project[this.managedProjects.length - 1];
-        Project deletedProject = new Project();
-        int count = 0;
-        for(Project project : this.managedProjects){
-            if(project.getProjectName().equals(targetProject)){
-                deletedProject = project;
-                continue;
-            }else{
-                tempProject[count] = project;
-                count++;
-            }
-        }
-        this.managedProjects = tempProject;
-        return deletedProject;
+
+        this.managedProjects.remove(targetProject);
+        System.out.println("Project " + targetProject.getProjectName() + " removed");
+        return targetProject;
     }
     public void toggleVisibility(Project project, boolean visible){
 
@@ -263,4 +256,15 @@ public class HDBManager extends User{
     public void replyToEnquiry(Enquiry enquiry, String reply){
 
     }
+
+    // private Project findProject(String projectName){
+    //     if(this.managedProjects != null){
+    //         for(Project project: this.managedProjects){
+    //             if(project.getProjectName().equals(projectName)){
+    //                 return project;
+    //             }
+    //         }
+    //     }
+    //     return null;
+    // }
 }

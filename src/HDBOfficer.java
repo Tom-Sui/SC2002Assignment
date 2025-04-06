@@ -31,7 +31,7 @@ public class HDBOfficer extends User{
     public void replyToEnquiry(Enquiry enquiry, String reply){
 
     }
-    public void updateRemaningFlatUnits(Project project, FlateType flateType){
+    public void updateRemaningFlatUnits(Project project, FlatType flatType){
 
     }
     public Applicant retrieveApplicant(Applicant applicant){

@@ -1,147 +1,133 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Init {
-    public Applicant[] LoadUserInfo(){
-        int size;
-        int count = 0;
+    public ArrayList<Applicant> LoadUserInfo(){
+        // int count = 0;
 
         File applicantFile = new File("./Data/ApplicantList.txt");
-        Applicant[] applicant;
-
+        ArrayList<Applicant> applicants = new ArrayList<Applicant>();
+        Applicant applicant;
         try{
             Scanner scanner = new Scanner(applicantFile);
-            size = Integer.parseInt(scanner.nextLine());
-
-            applicant = new Applicant[size];
+            // int size = Integer.parseInt(scanner.nextLine());
 
             while(scanner.hasNextLine()){
-                applicant[count] = new Applicant();
+                applicant = new Applicant();
                 String[] data = scanner.nextLine().split(",");
-                applicant[count].setName(data[0]);
-                applicant[count].setNRIC(data[1]);
-                applicant[count].setage(Integer.parseInt(data[2]));
+                applicant.setName(data[0]);
+                applicant.setNRIC(data[1]);
+                applicant.setage(Integer.parseInt(data[2]));
                 if(data[3].equals("Single")){
-                    applicant[count].setMatritialSatus(MaritialStatus.maritialStatus.SINGLE);
+                    applicant.setMaritalStatus(MaritalStatus.SINGLE);
                 }else{
-                    applicant[count].setMatritialSatus(MaritialStatus.maritialStatus.MARRIED);
+                    applicant.setMaritalStatus(MaritalStatus.MARRIED);
                 }
-                
 
                 //Hash the password and store back
-                applicant[count].setPassword(data[4]);
-
-                count += 1;
+                applicant.setPassword(data[4]);
+                applicants.add(applicant);
+                // count += 1;
             }
 
             scanner.close();
         }catch (FileNotFoundException e){
             System.out.println("Error occured while reading ApplicantList.txt");
             e.printStackTrace();
-            applicant = new Applicant[0];
         }
-        return applicant;
+        return applicants;
     }
 
-    public HDBManager[] LoadManagerInfo(){
-        int size;
-        int count = 0;
+    public ArrayList<HDBManager> LoadManagerInfo(){
 
         File managerFile = new File("./Data/ManagerList.txt");
-        HDBManager[] hdbManagers;
-
+        ArrayList<HDBManager> hdbManagers = new ArrayList<HDBManager>();
+        HDBManager hdbManager;
         try{
             Scanner scanner = new Scanner(managerFile);
-            size = Integer.parseInt(scanner.nextLine());
-
-            hdbManagers = new HDBManager[size];
+            // int size = Integer.parseInt(scanner.nextLine());
 
             while(scanner.hasNextLine()){
-                hdbManagers[count] = new HDBManager();
+                hdbManager = new HDBManager();
                 String[] data = scanner.nextLine().split(",");
-                hdbManagers[count].setName(data[0]);
-                hdbManagers[count].setNRIC(data[1]);
-                hdbManagers[count].setage(Integer.parseInt(data[2]));
+                hdbManager.setName(data[0]);
+                hdbManager.setNRIC(data[1]);
+                hdbManager.setage(Integer.parseInt(data[2]));
                 if(data[3].equals("Single")){
-                    hdbManagers[count].setMatritialSatus(MaritialStatus.maritialStatus.SINGLE);
+                    hdbManager.setMaritalStatus(MaritalStatus.SINGLE);
                 }else{
-                    hdbManagers[count].setMatritialSatus(MaritialStatus.maritialStatus.MARRIED);
+                    hdbManager.setMaritalStatus(MaritalStatus.MARRIED);
                 }
-                hdbManagers[count].setPassword(data[4]);
+                hdbManager.setPassword(data[4]);
 
-                count += 1;
+                hdbManagers.add(hdbManager);
+
+                // count += 1;
             }
 
             scanner.close();
         }catch (FileNotFoundException e){
             System.out.println("Error occured while reading ManagerList.txt");
             e.printStackTrace();
-            hdbManagers = new HDBManager[0];
         }
         return hdbManagers;
     }
 
-    public HDBOfficer[] LoadOfficerInfo(){
-        int size;
-        int count = 0;
+    public ArrayList<HDBOfficer> LoadOfficerInfo(){
 
         File officerFile = new File("./Data/OfficerList.txt");
-        HDBOfficer[] hdbOfficer;
-                
+        ArrayList<HDBOfficer> hdbOfficers = new ArrayList<HDBOfficer>();
+        HDBOfficer hdbOfficer;
         try{
             Scanner scanner = new Scanner(officerFile);
-            size = Integer.parseInt(scanner.nextLine());
-
-            hdbOfficer = new HDBOfficer[size];
+            // int size = Integer.parseInt(scanner.nextLine());
 
             while(scanner.hasNextLine()){
-                hdbOfficer[count] = new HDBOfficer();
+                hdbOfficer = new HDBOfficer();
                 String[] data = scanner.nextLine().split(",");
-                hdbOfficer[count].setName(data[0]);
-                hdbOfficer[count].setNRIC(data[1]);
-                hdbOfficer[count].setage(Integer.parseInt(data[2]));
+                hdbOfficer.setName(data[0]);
+                hdbOfficer.setNRIC(data[1]);
+                hdbOfficer.setage(Integer.parseInt(data[2]));
                 if(data[3].equals("Single")){
-                    hdbOfficer[count].setMatritialSatus(MaritialStatus.maritialStatus.SINGLE);
+                    hdbOfficer.setMaritalStatus(MaritalStatus.SINGLE);
                 }else{
-                    hdbOfficer[count].setMatritialSatus(MaritialStatus.maritialStatus.MARRIED);
+                    hdbOfficer.setMaritalStatus(MaritalStatus.MARRIED);
                 }
-                hdbOfficer[count].setPassword(data[4]);
-                count += 1;
+                hdbOfficer.setPassword(data[4]);
+
+                hdbOfficers.add(hdbOfficer);
+
+                // count += 1;
             }
             scanner.close();
         }catch (FileNotFoundException e){
             System.out.println("Error occured while reading OfficerList.txt");
             e.printStackTrace();
-            hdbOfficer = new HDBOfficer[0];
         }
-        return hdbOfficer;
+        return hdbOfficers;
     }
 
 
-    public Project[] LoadProjectInfo(HDBManager[] hdbManager, HDBOfficer[] hdbOfficer){
-        int size;
-        int count = 0;
+    public ArrayList<Project> LoadProjectInfo(ArrayList<HDBManager> hdbManager, ArrayList<HDBOfficer> hdbOfficer){
         File projectFile = new File("./Data/ProjectList.txt");
-        Project[] project;
-
+        // Project[] project;
+        ArrayList<Project> projects = new ArrayList<Project>();
         try{
             Scanner scanner = new Scanner(projectFile);
-            size = Integer.parseInt(scanner.nextLine());
 
-            project = new Project[size];
-            //To format the LocalData according to txt content
-            // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-
+            Project project;
             while(scanner.hasNextLine()){
-                project[count] = new Project();
+                project = new Project();
                 String[] data = scanner.nextLine().split(",");
 
-                project[count] = setProject(data,hdbManager,hdbOfficer);
-
-                count += 1;
+                project = setProject(data,hdbManager,hdbOfficer);
+                projects.add(project);
             }
 
             scanner.close();
@@ -151,33 +137,59 @@ public class Init {
             return null;
         }
         // project[0].debugOut();
-        return project;
+        return projects;
     }
 
-    public Project setProject(String[] data,HDBManager[] hdbManager, HDBOfficer[] hdbOfficer){
+    public Project setProject(String[] data,ArrayList<HDBManager> hdbManager, ArrayList<HDBOfficer> hdbOfficer){
         General general = new General();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         Project project = new Project();
         project.setProjectName(data[0]);
         project.setNeiborhood(data[1]);
 
+        if(general.findManager(hdbManager, data[data.length - 3]) == null){
+            System.out.println("No such manager found");
+            return null;
+        }
+
         //!!!NOTE!!!
         //If there is any missing content, program may result in error
         //Set flateTypes
-        FlateType[] flateType = new FlateType[(data.length-7)/3];
-        
+        // ArrayList<flatType> flatTypes = new FlatType[(data.length-7)/3];
+        ArrayList<FlatType> flatTypes = new ArrayList<FlatType>();
+
+        TwoRoom twoRoom;
+        ThreeRoom threeRoom;
+
         for(int i = 0; i < (data.length-7)/3 - 1; i+=1){
-            flateType[i] = new FlateType(data[2+3*i],Integer.parseInt(data[3+3*i]),Integer.parseInt(data[4+3*i]));
+            if(data[2+3*i].equals("ThreeRoom")){
+                ArrayList<MaritalStatus> maritalStatus = new ArrayList<>();
+                maritalStatus.add(MaritalStatus.SINGLE);
+                twoRoom = new TwoRoom(Integer.parseInt(data[3+3*i]),Double.parseDouble(data[4+3*i]),maritalStatus);
+                flatTypes.add(twoRoom);
+            }else{
+                ArrayList<MaritalStatus> maritalStatus = new ArrayList<>();
+                maritalStatus.add(MaritalStatus.SINGLE);
+                maritalStatus.add(MaritalStatus.MARRIED);
+                threeRoom = new ThreeRoom(Integer.parseInt(data[3+3*i]),Double.parseDouble(data[4+3*i]),maritalStatus);
+                flatTypes.add(threeRoom);
+            }   
         }
-        project.setFlateType(flateType);
+        project.setFlatType(flatTypes);
 
         //Set closing and opending dates
-        project.setApplicationOpeningData(LocalDate.parse(data[data.length - 5],formatter));
-        project.setApplicationClosingData(LocalDate.parse(data[data.length - 4],formatter));
-
+        // project.setApplicationOpeningData(Date.parse(data[data.length - 5],formatter));
+        // project.setApplicationClosingData(Date.parse(data[data.length - 4],formatter));
+        try{
+            project.setApplicationOpeningDate(formatter.parse(data[data.length - 5]));
+            project.setApplicationClosingDate(formatter.parse(data[data.length - 4]));
+        }catch(ParseException e){
+            System.out.println("Error occured when parse String to Date");
+            e.printStackTrace();
+        }
 
         //Assuming that there can only can be one manager per project
-        project.setHDBManager(general.findPerson(hdbManager, data[data.length - 3]));
+        project.setHDBManager(general.findManager(hdbManager, data[data.length - 3]));
 
         //set available officer slots
         project.setAvailableOfficerSlots(Integer.parseInt(data[data.length - 2]));
@@ -185,65 +197,28 @@ public class Init {
         //Set all included HDB officers
         String[] officerName = data[data.length - 1].split("&");
         
-        HDBOfficer[] tempHDBOfficers = new HDBOfficer[officerName.length];
-        
-        for(int i = 0; i < officerName.length; i++){
-            tempHDBOfficers[i] = new HDBOfficer();
-            tempHDBOfficers[i] = general.findPerson(hdbOfficer,officerName[i]);
-        }
-        project.setHDBOfficer(tempHDBOfficers);
-        return project;
-
-
-        // project[count].setProjectName(data[0]);
-        // project[count].setNeiborhood(data[1]);
-
-        // //!!!NOTE!!!
-        // //If there is any missing content, program may result in error
-        // //Set flateTypes
-        // FlateType[] flateType = new FlateType[(data.length-7)/3];
-        
-        // for(int i = 0; i < (data.length-7)/3 - 1; i+=1){
-        //     flateType[i] = new FlateType(data[2+3*i],Integer.parseInt(data[3+3*i]),Integer.parseInt(data[4+3*i]));
-        // }
-        // project[count].setFlateType(flateType);
-
-        // //Set closing and opending dates
-        // project[count].setApplicationOpeningData(LocalDate.parse(data[data.length - 5],formatter));
-        // project[count].setApplicationClosingData(LocalDate.parse(data[data.length - 4],formatter));
-
-
-        // //Assuming that there can only can be one manager per project
-        // project[count].setHDBManager(findPerson(hdbManager, data[data.length - 3]));
-
-        // //set available officer slots
-        // project[count].setAvailableOfficerSlots(Integer.parseInt(data[data.length - 2]));
-
-        // //Set all included HDB officers
-        // String[] officerName = data[data.length - 1].split("&");
-        
+        ArrayList<HDBOfficer> hdbOfficers = new ArrayList<HDBOfficer>();
         // HDBOfficer[] tempHDBOfficers = new HDBOfficer[officerName.length];
         
-        // for(int i = 0; i < officerName.length; i++){
-        //     tempHDBOfficers[i] = new HDBOfficer();
-        //     tempHDBOfficers[i] = findPerson(hdbOfficer,officerName[i]);
-        // }
-        // project[count].setHDBOfficer(tempHDBOfficers);
+        for(int i = 0; i < officerName.length; i++){
+            HDBOfficer tempHDBOfficer = new HDBOfficer();
+            tempHDBOfficer = general.findOfficer(hdbOfficer,officerName[i]);
+            hdbOfficers.add(tempHDBOfficer);
+        }
+        project.setHDBOfficer(hdbOfficers);
+        return project;
         
     }
 
-    public HDBManager[] setManagerManagedProjects(HDBManager[] hdbManagers, Project[] projects){
-        for(int i = 0; i < hdbManagers.length; i++){
-            for(int j = 0; j < projects.length; j++){
-                // System.out.println(hdbManagers[i].getName());
-                // System.out.println(projects.length);
-                //Ensure that the managerlist.txt manager names matches with those in the ManagerList.txt
+    public ArrayList<HDBManager> setManagerManagedProjects(ArrayList<HDBManager> hdbManagers, ArrayList<Project> projects){
+        for(int i = 0; i < hdbManagers.size(); i++){
+            for(int j = 0; j < projects.size(); j++){
                 try{
-                    if(hdbManagers[i].getName().equals(projects[j].getHDBManager().getName())){
-                        hdbManagers[i].setManagedProjects(projects[j]);
+                    if(hdbManagers.get(i).getNRIC().equals(projects.get(j).getHDBManager().getNRIC())){
+                        hdbManagers.get(i).setManagedProjects(projects.get(j));
                     }
                 }catch(NullPointerException e){
-                    System.out.println("Manager " + projects[j].getHDBManager().getName() + " is not registered manager");
+                    System.out.println("Manager " + projects.get(j).getHDBManager().getName() + " is not registered manager");
                 }
             }
         }

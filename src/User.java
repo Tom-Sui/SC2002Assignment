@@ -13,21 +13,21 @@ public abstract class User {
     private String userID;
     private String password;
     private int age;
-    private boolean maritalStatus;
-    private MaritalStatus ms; //temporay placeholde for marital status
-    private MaritialStatus.maritialStatus maritialStatus;
+    // private boolean maritalStatus;
+    private MaritalStatus maritalStatus; //temporay placeholde for marital status
+    // private MaritialStatus.maritialStatus maritialStatus;
     // private boolean maritalStatus;
 
     public User(){
-        this("null","null","null","null",0,MaritialStatus.maritialStatus.SINGLE);
+        this("null","null","null","null",0,MaritalStatus.SINGLE);
     }
-    public User(String name, String NRIC, String userID, String password, int age, MaritialStatus.maritialStatus maritialStatus){
+    public User(String name, String NRIC, String userID, String password, int age, MaritalStatus maritalStatus){
         this.name = name;
         this.NRIC = NRIC;
         this.userID = userID;
         this.password = password;
         this.age = age;
-        this.maritialStatus = maritialStatus;
+        this.maritalStatus = maritalStatus;
     }
 
     //set methods
@@ -46,12 +46,12 @@ public abstract class User {
     public void setage(int age){
         this.age = age;
     }
-    public void setMatritialSatus(MaritialStatus.maritialStatus maritialStatus){
-        this.maritialStatus = maritialStatus;
-    }
+    // public void setMatritialSatus(MaritialStatus.maritialStatus maritialStatus){
+    //     this.maritialStatus = maritialStatus;
+    // }
 
-    public void setMaritalStatus(MaritalStatus ms) {
-    	this.ms = ms; //temp placeholder for marital status
+    public void setMaritalStatus(MaritalStatus maritalStatus) {
+    	this.maritalStatus = maritalStatus; //temp placeholder for marital status
     }
     //get methods
     public String getName(){
@@ -66,11 +66,8 @@ public abstract class User {
     public int getAge(){
         return this.age;
     }
-    public MaritialStatus.maritialStatus getMatritialSatus(){
-        return this.maritialStatus;
-    }
-    public MaritalStatus getMaritalStatus() {
-    	return ms;
+    public MaritalStatus getMaritalStatus(){
+        return this.maritalStatus;
     }
     
     //UserID is not included in excel file
@@ -139,9 +136,9 @@ public abstract class User {
                         case "marritialStatus":
                             buffer[3] = newContent;
                             if(newContent.equals("single")){
-                                this.maritialStatus = MaritialStatus.maritialStatus.SINGLE;
+                                this.maritalStatus = MaritalStatus.SINGLE;
                             }else if(newContent.equals("married")){
-                                this.maritialStatus = MaritialStatus.maritialStatus.MARRIED;
+                                this.maritalStatus = MaritalStatus.MARRIED;
                             }
 
                             break;

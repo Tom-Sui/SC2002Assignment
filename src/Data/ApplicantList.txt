@@ -1,4 +1,3 @@
-6
 John,S1234567A,35,Single,kJoB/TABPpEta2fFpZ+Xsg==,
 Sarah,T7654321B,40,Married,kJoB/TABPpEta2fFpZ+Xsg==,
 Grace,S9876543C,37,Married,kJoB/TABPpEta2fFpZ+Xsg==,

@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class General {
@@ -23,6 +24,7 @@ public class General {
                 buffeString = scanner.nextLine();
                 //check if search target in the String
                 if (buffeString.contains(targetRow)){
+                    System.out.println("write into file");
                     buffeString = buffeString.replace(target, newContent);
                 }
                 fileContent = fileContent + buffeString + "\n";
@@ -42,37 +44,28 @@ public class General {
         }
     }
 
-    public HDBManager findPerson(HDBManager[] hdbManager,String name){
+    public HDBManager findManager(ArrayList<HDBManager> hdbManager,String name){
         for(HDBManager i : hdbManager){
             if(name.equals(i.getName())){
                 return i;
             }
         }
-        // HDBManager hdbManagerNone = new HDBManager();
-        // hdbManagerNone.setName("none");
-        // return hdbManagerNone;
         return null;
     }
-    public HDBOfficer findPerson(HDBOfficer[] hdbOfficer,String name){
+    public HDBOfficer findOfficer(ArrayList<HDBOfficer> hdbOfficer,String name){
         for(HDBOfficer i : hdbOfficer){
             if(name.equals(i.getName())){
                 return i;
             }
         }
-        // HDBOfficer hdbOfficerReturn = new HDBOfficer();
-        // hdbOfficerReturn.setName("none");
-        // return hdbOfficerReturn;
         return null;
     }
-    public Project findProject(Project[] project,String projectName){
+    public Project findProject(ArrayList<Project> project,String projectName){
         for(Project i : project){
             if(projectName.equals(i.getProjectName())){
                 return i;
             }
         }
-        // HDBOfficer hdbOfficerReturn = new HDBOfficer();
-        // hdbOfficerReturn.setName("none");
-        // return hdbOfficerReturn;
         return null;
     }
 }

@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 public class HDBManager extends User{
-    private String DataFilePath = "./Data";
+    private String DataFilePath = "./src/Data";
     private ArrayList<Project> managedProjects = new ArrayList<Project>();
 
     //set managed projects
@@ -64,17 +64,18 @@ public class HDBManager extends User{
             Project project = init.setProject(buffer, hdbManager, hdbOfficer);
 
             if(project == null){
-                scanner.close();
+                scanner.close();                
                 return init.LoadProjectInfo(hdbManager,hdbOfficer);
             }
-
-            this.managedProjects.add(project);
-
+            
+            this.managedProjects.add(project);          
             FileWriter writer = new FileWriter(DataFilePath + "/ProjectList.txt");
             writer.write(filecontent);
             writer.close();
-            scanner.close();
+            scanner.close();            
+            
             return init.LoadProjectInfo(hdbManager,hdbOfficer);
+            
         }catch (FileNotFoundException e){
             System.out.println("Error occured while reading ProjectList.txt");
             e.printStackTrace();
@@ -229,6 +230,83 @@ public class HDBManager extends User{
         System.out.println("Project " + targetProject.getProjectName() + " removed");
         return targetProject;
     }
+ 
+    
+    // General Function: list out all the required projects (Place inside loop, with index specified)
+    public void listRequiredProjects(ArrayList<Project> currentProjects, int i) {
+    	
+		//** TO-DO: NEED CHECK FOR TOGGLE VISIBILITY
+		System.out.printf("Project Name: %s | Neighborhood: %s | Visibility: %s \n", currentProjects.get(i).getProjectName(), currentProjects.get(i).getNeiborhood(), currentProjects.get(i).getVisibility());  
+		
+		// CALL flat types
+		System.out.println("   - Flat Types: \n");
+		
+		for (int x=0; x < currentProjects.get(i).getFlatTypes().size(); x++)
+		{
+			// STILL FIXING
+			//System.out.printf("      - 2 Room | Units: %d | Price: $%.2f\n", currentProjects.get(i).getFlatTypes().get(x).getUnits(), currentProjects.get(i).getFlatTypes().get(x).getPrice());
+			//System.out.printf("      - 3 Room | Units: %d | Price: $%.2f\n", currentProjects.get(i).getFlatTypes().get(x).getUnits(), currentProjects.get(i).getFlatTypes().get(x).getPrice());
+			String flatTypes = FlatTypeLogic.displayFlatTypes(currentProjects.get(x).getFlatTypes());
+			System.out.printf("   - %s", flatTypes);
+		}
+		
+		System.out.printf("   - Application Period: %s to %s \n", currentProjects.get(i).getApplicationOpeningDate(), currentProjects.get(i).getApplicationClosingDate());
+		System.out.printf("   - HDB Manager: %s \n", currentProjects.get(i).getHDBManager().getName());
+		System.out.printf("   - Available HDB Officer Slots: %s \n", currentProjects.get(i).getAvailableOfficerSlots());
+		
+		// Officer in ArrayList, need a loop to get each name
+		System.out.print("   - HDB Officer In-Charge:");
+		for (int k=0; k < currentProjects.get(i).getHDBOfficer().size(); k++)
+		{
+			if (currentProjects.get(i).getHDBOfficer().get(k) != null)
+			{
+				System.out.printf(" %s ", currentProjects.get(i).getHDBOfficer().get(k).getName());  		    					
+			}
+			else
+			{
+				System.out.print(" Not set");
+				break;
+			}
+		}    			   			
+		System.out.println("\n");    		
+    }
+    
+    
+    // list out all the existing projects
+    public void listAllExistingProjects(ArrayList<Project> currentProjects) {
+    	
+    	System.out.println("=== List of All Existing Projects ===\n");
+    	for (int i=0; i<currentProjects.size(); i++)
+    	{
+    		this.listRequiredProjects(currentProjects, i);
+    	}
+    	
+    	System.out.printf("Total Projects: %d\n", currentProjects.size());
+    	System.out.println("=============================== \n");
+    }
+    
+    
+    // list out only manager-in-charge projects
+    public void listSpecificProjects(ArrayList<Project> currentProjects, String username)
+    {
+    	int count=0;
+    	System.out.println("=== List of All Your Existing Projects ===\n");
+    	
+    	for (int i=0; i<currentProjects.size(); i++)
+    	{
+    		// to check for current userName and print out only their projects
+    		if (currentProjects.get(i).getHDBManager().getName().equals(username))
+    		{
+    			this.listRequiredProjects(currentProjects, i);
+    			count += 1;
+    		}
+    	}
+    	
+		System.out.printf("Total Projects: %d\n", count);
+		System.out.println("=============================== \n");
+    }
+
+    // return boolean visibility to check for Applicant & HDB Manager
     public void toggleVisibility(Project project, boolean visible){
 
     }

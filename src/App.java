@@ -46,9 +46,9 @@ public class App{
         // Return null if there is maching manager found
         // projects = hdbManagers.get(0).createProject("aNOTHER NAME,TESTING TESTING name,2-Room,2,350000,3-Room,3,450000,12/12/2343,12/12/2343,tom,3,Daniel&Emily",projects,hdbManagers,hdbOfficers);
 
-
         //Initialize manager managed projects
         hdbManagers = init.setManagerManagedProjects(hdbManagers,projects);
+
 
         //Example of how to edit project
         // hdbManagers.get(1).editProject("new name", "different name", "projectname",hdbManagers,hdbOfficers);
@@ -73,7 +73,7 @@ public class App{
                     }
 
                     System.out.println("===User type===");
-                    System.out.println("1. HDB Manger");
+                    System.out.println("1. HDB Manager");
                     System.out.println("2. HDB Officier");
                     System.out.println("3. Applicant");
                     System.out.println("===============");
@@ -98,16 +98,20 @@ public class App{
                     //Will update this method later on
 
                     switch (userType.toLowerCase()){
-                        case "hdb officer":
+                        case "hdb manager":
                             for(int i = 0; i < hdbManagers.size(); i++){
                                 if(hdbManagers.get(i).getName().equals(userName) || hdbManagers.get(i).getNRIC().equals(userName)){
                                     if(hdbManagers.get(i).login(userPassword)){
                                         System.out.println("===Login success===");
                                         System.out.println("Welcome " + hdbManagers.get(i).getName());
-                                        System.out.println("===================\n");
+                                        System.out.println("===================");
                                         userPos = i;
                                         currentUserId = userName;
                                         logedIn = true;
+                                        
+                                        ManagerInput managerInput = new ManagerInput();
+                                        managerInput.switchFunction(userName, projects, hdbManagers, hdbOfficers);
+                                        
                                         break;
                                     }
                                 }

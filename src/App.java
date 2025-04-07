@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 import java.sql.Date;
 
@@ -63,14 +64,15 @@ public class App{
 
         while(!userInput.equals("quit")){
             switch (userInput) {
-                case "help":
+                case "1":
                     helpInfo();
                     break;
-                case "login":
+                case "2":
                     if(logedIn){
                         System.out.println("Already login as: " + currentUserId);
                         break;
                     }
+
 
                     System.out.println("===User type===");
                     System.out.println("1. HDB Manger");
@@ -78,10 +80,9 @@ public class App{
                     System.out.println("3. Applicant");
                     System.out.println("===============");
                     userType = "NULL";
+                    ArrayList<String> userList = new ArrayList<>(Arrays.asList("1", "2", "3"));
                     while(true){
-                        if(userType.equals("hdb manager") || 
-                        userType.equals("hdb officier") || 
-                        userType.equals("applicant")){
+                        if(userList.contains(userType)){
                             break;
                         }else{
                             System.out.print("User type: ");
@@ -98,7 +99,7 @@ public class App{
                     //Will update this method later on
 
                     switch (userType.toLowerCase()){
-                        case "hdb officer":
+                        case "hdb officer","2":
                             for(int i = 0; i < hdbManagers.size(); i++){
                                 if(hdbManagers.get(i).getName().equals(userName) || hdbManagers.get(i).getNRIC().equals(userName)){
                                     if(hdbManagers.get(i).login(userPassword)){
@@ -138,7 +139,7 @@ public class App{
                                 System.out.println("====================================");
                             }
 
-                        case "applicant":
+                        case "applicant","3":
                             for(int i = 0; i < applicant.size(); i++){
                                 if(applicant.get(i).getName().equals(userName) || applicant.get(i).getNRIC().equals(userName)){
                                     if(applicant.get(i).login(userPassword)){
@@ -269,7 +270,7 @@ public class App{
                                 break;
                         }
                     break;
-                case "logout":
+                case "4":
                     logedIn = false;
                     userType = "NULL";
                     userName = "NULL";

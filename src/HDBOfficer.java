@@ -1,6 +1,9 @@
+import java.util.ArrayList;
+
 public class HDBOfficer extends Applicant{
     private Project managedProject;
     private OfficerRegistrationStatus officerRegistrationStatus;
+    private ArrayList<Application> managedApplications = new ArrayList<Application>();
 
     public HDBOfficer() {};
     public HDBOfficer(String name, String NRIC, String userID, String password, int age, MaritalStatus maritalStatus, Project managedProject){
@@ -42,6 +45,10 @@ public class HDBOfficer extends Applicant{
     }
     public Applicant retrieveApplicant(Applicant applicant){
         return applicant;
+    }
+    
+    public void receiveBookFlatRequest(Application application) {
+    	managedApplications.add(application);
     }
     
     public String toString() {

@@ -35,9 +35,10 @@ public class Applicant extends User{
     }
 
     //Applicant functions
+    
+    /* Display projects that are available to the applicants
+     */
     public void viewAvailableProjects(ArrayList<Project> projects){
-    	System.out.println("\nList of available projects:");
-		System.out.println("============================");
     	int size = projects.size();
     	for (int i=0; i<size; i++) {
     		Project currentProject = projects.get(i);
@@ -64,17 +65,14 @@ public class Applicant extends User{
     }
     public ApplicationStatus viewApplicationStatus(){
         // ApplicationStatus applicationStatus = new ApplicantStatus();
-        return this.applicationStatus;
+        return currentApplication.getApplicationStatus();
     }
     public void requestWithdrawal(){
 
     }
-    public void bookFlat(){
-    	if (this.applicationStatus == ApplicationStatus.SUCCESSFUL) {
-    		ProjectLogic.displayHDBOfficers(currentApplication.getProject());
-    		
-    	}
-    	
+    public void bookFlat(HDBOfficer officer) {
+    	currentApplication.setBookingRequested(true);
+    	officer.receiveBookFlatRequest(currentApplication);
     }
 
     public Application getCurrentApplication() {

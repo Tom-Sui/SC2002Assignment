@@ -14,14 +14,16 @@ public class ProjectLogic {
         return filteredProjects;
     }
     
-    public static void displayHDBOfficers(Project project) {
-    	ArrayList<HDBOfficer> officers = project.getHDBOfficer();
+    public static void displayHDBOfficers(ArrayList<HDBOfficer> officers) {
         for (int i = 0; i < officers.size(); i++) {
             HDBOfficer officer = officers.get(i);
-            System.out.printf("Officer [%d]: ", i);  // index is i
+            System.out.println("Officer ID: " + (i+1));  // index is i
             System.out.println(officer.toString());
         }
+        System.out.println();
     }
+    
+    
 
     public static ArrayList<FlatType> filterFlatTypesByMaritalStatus(ArrayList<FlatType> FlatTypeList, MaritalStatus maritalStatus) {
         ArrayList<FlatType> filteredFlatTypes = new ArrayList<>();

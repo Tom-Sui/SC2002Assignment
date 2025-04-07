@@ -9,6 +9,7 @@ public class Application {
     private Project project;
     private ApplicationStatus applicationStatus;
     private boolean isBooked;
+    private boolean bookingRequested;
     private FlatType flatType;
     //Constructor
     public Application(Applicant applicant, Project project, FlatType flatType) {
@@ -16,6 +17,7 @@ public class Application {
         this.applicant = applicant;
         this.project = project;
         this.isBooked = false;
+        this.bookingRequested = false;
         this.applicationStatus = ApplicationStatus.SUCCESSFUL; //SHOULD BE PENDING. CHANGED TO SUCCESSFUL TO TEST OTHER FEATURES
         this.flatType = flatType;
     }
@@ -24,7 +26,7 @@ public class Application {
     public Applicant getApplicant() {
         return applicant;
     }
-
+    
     public Project getProject() {
         return project;
     }
@@ -36,11 +38,18 @@ public class Application {
     public boolean getIsBooked() {
         return isBooked;
     }
-
+    
+    public boolean getBookingRequested() {
+    	return bookingRequested;
+    }
+    
     public void setIsBooked(boolean isBooked) {
         this.isBooked = isBooked;
     }
 
+    public void setBookingRequested(boolean bookingRequested) {
+    	this.bookingRequested = bookingRequested;
+    }
     public FlatType getFlatType() {
         return flatType;
     }

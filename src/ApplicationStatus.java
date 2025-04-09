@@ -3,5 +3,6 @@ public enum ApplicationStatus {
     PENDINGWITHDRAWAL,
     SUCCESSFUL,
     UNSUCCESSFUL,
-    BOOKED
+    BOOKED,
+    WITHDRAWN
 }

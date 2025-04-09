@@ -12,11 +12,19 @@ public class OfficerApp {
 			    "Help applicants book flat",
 			    "Generate flat selection receipt"
 		));	
+
+		// Displaying managing officer details (if he is a managing officer for a project)
+		ArrayList<String> managingOfficerFeatures = new ArrayList<>(List.of(
+			    "View Project Details" 
+		));	
 		int choice;
 		do {
 			// Display the list of features available
 			System.out.println("============================");
 			System.out.println("List of Available Features:");
+			if (officer.isManagingOfficer()) {
+				officerFeatures.addAll(managingOfficerFeatures);
+			}
 			int noOfFeatures = officerFeatures.size();
 			for (int i=0; i<noOfFeatures; i++) {
 				System.out.printf("%d. %s\n", i+1, officerFeatures.get(i));
@@ -54,6 +62,12 @@ public class OfficerApp {
 		    	System.out.println("\nGenerate flat selection receipt:");
 				System.out.println("============================");
 				ApplicationLogic.displayApplications(filteredApplications);
+			}
+			else if (choice == 6){ 
+				// View project details
+				System.out.println("\nView Project Details:");
+				System.out.println("============================");
+				officer.viewProjectDetails(); 
 			}
 			
 		} while (choice != -1);

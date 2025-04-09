@@ -4,6 +4,7 @@ public class HDBOfficer extends Applicant{
     private Project managedProject;
     private OfficerRegistrationStatus officerRegistrationStatus = OfficerRegistrationStatus.PENDING;
     private ArrayList<Application> managedApplications = new ArrayList<Application>();
+    private boolean isManagingOfficer = false;
 
     public HDBOfficer() {};
     public HDBOfficer(String name, String NRIC, String userID, String password, int age, MaritalStatus maritalStatus, Project managedProject){
@@ -36,7 +37,10 @@ public class HDBOfficer extends Applicant{
     public void registerForProject(Project project){
 
     }
-    public void viewProjectDetails(Project project){
+    public void viewProjectDetails(){
+        // System.out.println(managedProject.toString()); to string the hdb manager
+        System.out.println(managedProject.toString());
+
 
     }
     public OfficerRegistrationStatus getOfficerRegistrationStatus() {
@@ -85,7 +89,23 @@ public class HDBOfficer extends Applicant{
     public void generateFlatReceipt(Application application) {
     	System.out.println(application.toString());
     }
-    
+
+    //Getters and Setters
+    /*      
+     * @return if the officer is managing a Project 
+     */
+    public boolean isManagingOfficer() {
+    	return isManagingOfficer;
+    }
+
+    /*
+     * @param isManagingOfficer if the officer is managing a Project
+     */
+
+    public void setManagingOfficer(boolean isManagingOfficer) {
+    	this.isManagingOfficer = isManagingOfficer;
+    }
+
     public String toString() {
     	String officerDetails = String.format("%s, %d years old", super.getName(), super.getAge());
 		return officerDetails;

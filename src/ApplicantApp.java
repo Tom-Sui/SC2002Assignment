@@ -89,9 +89,5 @@ public class ApplicantApp {
 			}
 		} while (choice != -1);
 
-
-		
-		
-		
 	}
 }

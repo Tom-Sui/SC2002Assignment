@@ -10,7 +10,7 @@ public class Application {
     private ApplicationStatus applicationStatus;
     private boolean isBooked;
     private boolean bookingRequested;
-    private FlatType flatType;
+    private FlatType appliedflatType;
     //Constructor
     public Application(Applicant applicant, Project project, FlatType flatType) {
         Application.applicationId = applicationId++;
@@ -19,7 +19,7 @@ public class Application {
         this.isBooked = false;
         this.bookingRequested = false;
         this.applicationStatus = ApplicationStatus.SUCCESSFUL; //SHOULD BE PENDING. CHANGED TO SUCCESSFUL TO TEST OTHER FEATURES
-        this.flatType = flatType;
+        this.appliedflatType = flatType;
     }
 
     //Getters and Setters
@@ -50,12 +50,20 @@ public class Application {
     public void setBookingRequested(boolean bookingRequested) {
     	this.bookingRequested = bookingRequested;
     }
+    public void setApplicationStatus(ApplicationStatus status) {
+    	applicationStatus = status;
+    }
     public FlatType getFlatType() {
-        return flatType;
+        return appliedflatType;
     }
 
     public int getApplicationId() {
         return applicationId;
+    }
+    
+    public String toString() {
+		String applicationDetails = String.format("%s, %s, %d, %s, %s", applicant.getName(), applicant.getNRIC(), applicant.getAge(), applicant.getMaritalStatus(), appliedflatType);
+		return applicationDetails;
     }
 
 }

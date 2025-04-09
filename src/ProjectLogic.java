@@ -22,8 +22,6 @@ public class ProjectLogic {
         }
         System.out.println();
     }
-    
-    
 
     public static ArrayList<FlatType> filterFlatTypesByMaritalStatus(ArrayList<FlatType> FlatTypeList, MaritalStatus maritalStatus) {
         ArrayList<FlatType> filteredFlatTypes = new ArrayList<>();

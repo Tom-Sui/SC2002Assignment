@@ -33,7 +33,13 @@ public class Applicant extends User{
     public boolean canApply(Project project){
         return false;
     }
-
+    public void setFlatType(FlatType flatType) {
+    	bookedFlatType = flatType;
+    }
+    
+    public FlatType getFlatType() {
+    	return bookedFlatType;
+    }
     //Applicant functions
     
     /* Display projects that are available to the applicants
@@ -82,4 +88,6 @@ public class Applicant extends User{
     public void setCurrentApplication(Application currentApplication) {
         this.currentApplication = currentApplication;
     }
+    
+    
 }

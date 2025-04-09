@@ -80,7 +80,7 @@ public class App{
                     userType = "NULL";
                     while(true){
                         if(userType.equals("hdb manager") || 
-                        userType.equals("hdb officier") || 
+                        userType.equals("hdb officer") || 
                         userType.equals("applicant")){
                             break;
                         }else{
@@ -98,7 +98,7 @@ public class App{
                     //Will update this method later on
 
                     switch (userType.toLowerCase()){
-                        case "hdb officer":
+                        case "hdb manager":
                             for(int i = 0; i < hdbManagers.size(); i++){
                                 if(hdbManagers.get(i).getName().equals(userName) || hdbManagers.get(i).getNRIC().equals(userName)){
                                     if(hdbManagers.get(i).login(userPassword)){
@@ -118,13 +118,98 @@ public class App{
                                 System.out.println("====================================");
                             }
 
-                        case "hdb officier":
+                        case "hdb officer":
                             for(int i = 0; i < hdbOfficers.size(); i++){
                                 if(hdbOfficers.get(i).getName().equals(userName) || hdbOfficers.get(i).getNRIC().equals(userName)){
                                     if(hdbOfficers.get(i).login(userPassword)){
                                         System.out.println("===Login success===");
                                         System.out.println("Welcome " + hdbOfficers.get(i).getName());
                                         System.out.println("===================\n");
+                                        // Dummy initialization of projects
+                                        ArrayList<Project> projectList = new ArrayList<Project>();
+                                        
+                                        ArrayList<MaritalStatus> allowedGroupsForTwoRoom = new ArrayList<>();
+                                        allowedGroupsForTwoRoom.add(MaritalStatus.SINGLE);  // Only singles can apply
+
+                                        ArrayList<MaritalStatus> allowedGroupsForThreeRoom = new ArrayList<>();
+                                        allowedGroupsForThreeRoom.add(MaritalStatus.MARRIED);  // Only married couples can apply
+
+                                        // Create two room flats
+                                        FlatType twoRoomFlat1 = new TwoRoom(10, 200000, allowedGroupsForTwoRoom);  // 10 units, 200k price
+                                        FlatType twoRoomFlat2 = new TwoRoom(5, 180000, allowedGroupsForTwoRoom);   // 5 units, 180k price
+
+                                        // Create three room flats
+                                        FlatType threeRoomFlat1 = new ThreeRoom(8, 300000, allowedGroupsForThreeRoom);  // 8 units, 300k price
+                                        FlatType threeRoomFlat2 = new TwoRoom(4, 320000, allowedGroupsForThreeRoom);  // 4 units, 320k price
+
+                                        // Add these flats to the list
+                                        ArrayList<FlatType> flatTypes = new ArrayList<>();
+                                        flatTypes.add(twoRoomFlat1);
+                                        flatTypes.add(twoRoomFlat2);
+                                        flatTypes.add(threeRoomFlat1);
+                                        flatTypes.add(threeRoomFlat2);
+                                        
+                                        // Dummy Project 
+                                        String projectName = "Sunrise Residences";
+                                        String neighborhood = "Punggol";
+                                        // Use java.sql.Date for consistency with your class
+                                        Date openingDate = Date.valueOf("2025-05-01");
+                                        Date closingDate = Date.valueOf("2025-05-15");
+
+                                        // Assuming HDBManager and MaritialStatus have default constructors
+                                        HDBManager dummyManager = new HDBManager();
+                                        int officerSlots = 5;
+                                        boolean isVisible = true;
+                                        ArrayList<Applicant> applicants = new ArrayList<>();
+                                        ArrayList<HDBOfficer> officers = new ArrayList<>();
+                                        ArrayList<Enquiry> enquiries = new ArrayList<>();
+                                        applicant.get(i).setMaritalStatus(MaritalStatus.SINGLE);
+                                        
+                                        MaritalStatus maritalStatus = MaritalStatus.SINGLE;
+                                        
+                                        Project dummyProject = new Project(
+                                            projectName,
+                                            neighborhood,
+                                            flatTypes,
+                                            openingDate,
+                                            closingDate,
+                                            dummyManager,
+                                            officerSlots,
+                                            isVisible,
+                                            applicants,
+                                            officers,
+                                            enquiries,
+                                            maritalStatus
+                                        );
+                                        
+                                        projectList.add(dummyProject);
+                                        dummyProject.addHDBOfficer(hdbOfficers.get(i));
+                                        Applicant applicant1 = new Applicant(
+                                        	    "Alice Tan", 
+                                        	    "S1234567A", 
+                                        	    "aliceT", 
+                                        	    "password1", 
+                                        	    28, 
+                                        	    MaritalStatus.SINGLE
+                                        	);
+
+                                        	Applicant applicant2 = new Applicant(
+                                        	    "Bob Lim", 
+                                        	    "S7654321B", 
+                                        	    "bobL", 
+                                        	    "password2", 
+                                        	    35, 
+                                        	    MaritalStatus.MARRIED
+                                        	);
+                                        Application app1 = new Application(applicant1, dummyProject, twoRoomFlat1);
+                                        Application app2 = new Application(applicant2, dummyProject, threeRoomFlat1);
+
+                                        applicant1.applyForProject(dummyProject, twoRoomFlat1);
+                                        applicant2.applyForProject(dummyProject, threeRoomFlat1);
+                                        applicant1.bookFlat(hdbOfficers.get(i));
+                                        applicant2.bookFlat(hdbOfficers.get(i));
+                                        hdbOfficers.get(i).setManagedProject(dummyProject);
+                                        OfficerApp.start(hdbOfficers.get(i));
                                         userPos = i;
                                         currentUserId = userName;
                                         logedIn = true;

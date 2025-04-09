@@ -32,5 +32,23 @@ public class FlatTypeLogic {
         }
         return flatDetails.toString();
     }
+    
+    // might need to check if flat exist
+    public static int returnFilteredFlatTypeUnits(ArrayList<FlatType> flatTypes, FlatType type) {
+    	for (FlatType flat : flatTypes) {
+    		if (flat.equals(type)) {
+    			return flat.getUnits();
+    		}
+    	}
+    	return 0;
+    }
+    
+    public static void updateFilteredFlatTypeUnits(ArrayList<FlatType> flatTypes, FlatType type) {
+    	for (FlatType flat : flatTypes) {
+    		if (flat.equals(type)) {
+    			flat.setUnits(flat.getUnits()-1);
+    		}
+    	}
+    }
 
 }

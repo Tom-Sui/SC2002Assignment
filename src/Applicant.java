@@ -74,7 +74,7 @@ public class Applicant extends User{
         return currentApplication.getApplicationStatus();
     }
     public void requestWithdrawal(){
-
+        currentApplication.setApplicationStatus(ApplicationStatus.PENDINGWITHDRAWAL);
     }
     public void bookFlat(HDBOfficer officer) {
     	currentApplication.setBookingRequested(true);

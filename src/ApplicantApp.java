@@ -87,6 +87,15 @@ public class ApplicantApp {
 					System.out.println(chosenOfficer.toString());
 				}		
 			}
+			else if (choice == 5){ 
+				Application currentApplication = applicant.getCurrentApplication();
+				if (currentApplication == null) { 
+					System.out.println("No application found.");
+					continue;
+				} 
+				applicant.requestWithdrawal();
+				System.out.println("Withdrawal request is sent.");
+			}
 		} while (choice != -1);
 
 	}

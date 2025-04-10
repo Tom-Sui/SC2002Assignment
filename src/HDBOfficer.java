@@ -38,11 +38,10 @@ public class HDBOfficer extends Applicant{
 
     }
     public void viewProjectDetails(){
-        // System.out.println(managedProject.toString()); to string the hdb manager
+        System.out.println("Manager Name: " + managedProject.getHDBManager().getName());
         System.out.println(managedProject.toString());
-
-
     }
+
     public OfficerRegistrationStatus getOfficerRegistrationStatus() {
     	return officerRegistrationStatus;
     }

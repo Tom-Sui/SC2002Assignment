@@ -2,9 +2,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+// extends application app
+
 public class OfficerApp {
+
 	public static void start(HDBOfficer officer) {
+		
+		// Displaying officer details
+
 		Scanner sc = new Scanner(System.in);
+
 		ArrayList<String> officerFeatures = new ArrayList<>(List.of(
 			    "View Project Registration Status", 
 			    "Register for Project", 
@@ -14,9 +21,11 @@ public class OfficerApp {
 		));	
 
 		// Displaying managing officer details (if he is a managing officer for a project)
+
 		ArrayList<String> managingOfficerFeatures = new ArrayList<>(List.of(
 			    "View Project Details" 
 		));	
+		
 		int choice;
 		do {
 			// Display the list of features available

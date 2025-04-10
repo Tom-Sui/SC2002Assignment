@@ -245,6 +245,13 @@ public class HDBManager extends User{
 
     }
     public void approveWithdrawal(Applicant applicant, Project project){
+        // filter for applicant PENDINGWITHDRAWAL application 
+        // set application status to WITHDRAWN
+        // remove application from applicant
+        // remove application from project
+        // check if bookedflat 
+        // minus from available units 
+
 
     }
     public void rejectWithdrawal(Applicant applicant, Project project){

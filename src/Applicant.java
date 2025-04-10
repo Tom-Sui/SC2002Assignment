@@ -1,11 +1,20 @@
 import java.util.ArrayList;
 
 public class Applicant extends User{
-    private Project appliedProject;
+    private Application currentApplication; 
     private ArrayList<Project> pastAppliedProjects = new ArrayList<Project>();
-    private ApplicantStatus applicationStatus;
+    private ApplicationStatus applicationStatus;
     private FlatType bookedFlatType;
-
+    
+    public Applicant() {};
+    public Applicant(String name, String NRIC, String userID, String password, int age, MaritalStatus maritalStatus, Project appliedProject,  ArrayList<Project> pastAppliedProjects, ApplicantStatus applicationStatus, FlatType bookedFlatType){
+    	super(name, NRIC, userID, password, age, maritalStatus);
+    	//TODO FILL  iN THE REST OF THE ATTRIBUTES
+    }
+    
+    public Applicant(String name, String NRIC, String userID, String password, int age, MaritalStatus maritalStatus){
+    	super(name, NRIC, userID, password, age, maritalStatus);
+    }
     //Absract functions
     public Enquiry createEnquiry(Project project, String message){
         Enquiry[] enquiry = new Enquiry[10];
@@ -24,37 +33,61 @@ public class Applicant extends User{
     public boolean canApply(Project project){
         return false;
     }
-
+    public void setFlatType(FlatType flatType) {
+    	bookedFlatType = flatType;
+    }
+    
+    public FlatType getFlatType() {
+    	return bookedFlatType;
+    }
     //Applicant functions
+    
+    /* Display projects that are available to the applicants
+     */
     public void viewAvailableProjects(ArrayList<Project> projects){
-    	System.out.println("\nList of available projects:");
-		System.out.println("============================");
     	int size = projects.size();
     	for (int i=0; i<size; i++) {
-    		// getMaritalStatus gives attribute ms which is a temporary placeholder for marital status
     		Project currentProject = projects.get(i);
     		if (currentProject.getVisibility() == true) {
+                System.out.println("Project ID: " + (i+1));
     			System.out.println(projects.get(i).toString());
     		}	
-    	} 	
-        
+    	} 	  
     }
-    public void applyForProject(Project project){
+    
+    /*
+    * @param project - Project object
+    * @return void
+    * @throws Exception - If applicant is not eligible to apply for the project    
+    * @description - This function checks and allows the applicant to apply for a project, (checks if the applicant is single and the project is not a 3 room flat)   */
 
+    public void applyForProject(Project project, FlatType flatType){
+        System.out.println("Applied for project: " + project.getProjectName());
+        System.out.println("Flat type: " + flatType.toString());
+        Application application = new Application(this, project, flatType);
+        project.addApplication(application);
+        currentApplication = application;
+        System.out.println("Application ID: " + application.getApplicationId());
     }
-    public ApplicantStatus viewApplicationStatus(){
+    public ApplicationStatus viewApplicationStatus(){
         // ApplicationStatus applicationStatus = new ApplicantStatus();
-        return this.applicationStatus;
+        return currentApplication.getApplicationStatus();
     }
     public void requestWithdrawal(){
-
+        currentApplication.setApplicationStatus(ApplicationStatus.PENDINGWITHDRAWAL);
     }
-    public void bookFlat(HDBOfficer officer, FlatType flatType){
-
+    public void bookFlat(HDBOfficer officer) {
+    	currentApplication.setBookingRequested(true);
+    	officer.receiveBookFlatRequest(currentApplication);
     }
-    //Duplicated in UML diagram
-    // public boolean canApply(Project project){
-    //     return false;
-    // }
 
+    public Application getCurrentApplication() {
+        return currentApplication;
+    }
+
+    public void setCurrentApplication(Application currentApplication) {
+        this.currentApplication = currentApplication;
+    }
+    
+    
 }

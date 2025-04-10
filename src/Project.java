@@ -18,6 +18,7 @@ public class Project {
     private ArrayList<Applicant> applicants = new ArrayList<Applicant>();
     private ArrayList<HDBOfficer> hdbOfficers = new ArrayList<HDBOfficer>();
     private ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>();
+    private ArrayList<Application> applications = new ArrayList<Application>();
     private MaritalStatus maritalStatus = null;
 
     //Wasn't stated in the UML diagram
@@ -122,6 +123,10 @@ public class Project {
     public void removeApplicant(Applicant applicant){
 
     }
+    
+    public void addHDBOfficer(HDBOfficer hdbOfficer) {
+    	hdbOfficers.add(hdbOfficer);
+    }
     public void removeHDBOfficer(HDBOfficer hdbOfficer){
 
     }
@@ -145,6 +150,17 @@ public class Project {
     	
     }
 
+    public void addApplication(Application application){
+        applications.add(application);
+    }
+
+    public ArrayList<Application> getApplications(){
+        return applications;
+    }
+
+    public ArrayList<FlatType> getFlatTypeList(){
+        return flatTypes;
+    }
     
 
 }

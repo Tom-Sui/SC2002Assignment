@@ -20,7 +20,7 @@ public class ManagerInput {
             System.out.println("3. Delete a BTO Project");
             System.out.println("4. Toggle Project Visibility");
             System.out.println("5. View All Created Projects");
-            System.out.println("6. Filter and View Personal Projects");
+            System.out.println("6. View Personal Projects");
             System.out.println("7. View Pending and Approved HDB Officer Registrations");
             System.out.println("8. Approve or Reject HDB Officer Registrations");
             System.out.println("9. Approve or Reject Applicant’s BTO Application");
@@ -66,7 +66,11 @@ public class ManagerInput {
             	String endingDate = scanner.nextLine();
             	
             	System.out.println("Set Available HDB Officer Slots (Max 10): ");
-            	String slots = scanner.nextLine();            	
+            	String slots = scanner.nextLine();       
+            	
+            	//System.out.println("Set visibility of project ( "true" to on, "false" to off"): );
+            	//boolean visibility = scanner.nextBoolean();
+            	
             	
             	// Convert inputs to a string to 
             	String createProjectString = String.join(",", projectName, neighborhood, "2-Room", unitType1, sellPriceType1, "3-Room", unitType2, sellPriceType2, openingDate, endingDate, userName, slots," ");
@@ -275,9 +279,19 @@ public class ManagerInput {
             	break;
             	
             // Toggle Project Visibility
-            case 4:            	   
+            case 4: 
+            	
+            	// call all the project only the manager is handling
+            	manager.listSpecificProjects(projects, userName);
+            	
+            	
             	System.out.println("Enter Project Name to Toggle: ");
             	String toggleProject = scanner.nextLine();  
+            	
+            	
+            	manager.toggleVisibility(projects, toggleProject);
+            	
+            	
 
             	// TO-DO:
             	// FIND THE PROJECT TO TOGGLE
@@ -285,7 +299,7 @@ public class ManagerInput {
             	// from index, we get the current toggle
             	// **TO COMPLETE..
             	
-            	int checkB = 0;
+            	/*int checkB = 0;
     			
     			do
     			{
@@ -311,8 +325,9 @@ public class ManagerInput {
     				
     			}while (checkB != 1);
   			            	
-            	break;
             	
+            	*/
+            	break;
             // View All Created Projects
             case 5:            	
             	
@@ -324,10 +339,12 @@ public class ManagerInput {
             	
             // View Pending and Approved HDB Officer Registrations
             case 7:            	
+            	System.out.println("_________Pending Officer Registration______");
+            	//Might need to create a txt file for officer registration 
             	break;
             	
             // Approve or Reject HDB Officer Registrations
-            case 8:            	
+            case 8:            		
             	break;
             	
             // Approve or Reject Applicant’s BTO Application

@@ -1,4 +1,5 @@
 import java.io.File;
+import java.util.*;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -307,31 +308,99 @@ public class HDBManager extends User{
     }
 
     // return boolean visibility to check for Applicant & HDB Manager
-    public void toggleVisibility(Project project, boolean visible){
+    public void toggleVisibility(ArrayList<Project> currentProjects, String projectName){
+    	
+    	//We are only toggling the visibility of the project that the manager wants to toggle
+    	for (int i=0; i<currentProjects.size(); i++) {
+    		if(currentProjects.get(i).getProjectName().equals(projectName)) {
+    			if(currentProjects.get(i).getVisibility()) {
+    				currentProjects.get(i).setVisibility(false);
+    				System.out.printf("Visibility of project %s has been toggled off", currentProjects.get(i).getProjectName());
+    			} else {
+    				currentProjects.get(i).setVisibility(true);
+    				System.out.printf("Visibility of project %s has been toggled on", currentProjects.get(i).getProjectName());
+    			}
+    			
+    			
+    		}
+    	}
+    	
+    	//PROBLEM: Are we toggling every project or a specific project?
+    	
+    	
+    }
+    public void approveOrRejectOfficerRegistration(HDBOfficer officer, Project project){
+    	//Ask others where they storing
+    	//Get officerName and projectName (as a String) from officer/manager?/read from a possible created file of officer registration?
+    	//Should this be in the manager UI?
+    	/*
+    	 * Check if they(current logged in manager) are managing that project
+    	 * 	If no, print out saying manager not managing the project
+    	 * 	If approving a certain officer, go through applicant list to check if they apply as an applicant
+    	 * 		If yes, then reject
+    	 * 		If no, check if they are handling another project within the date
+    	 * 			If yes, reject
+    	 * 			If no, check the slot of the project ( Since we using & to split when writing in, I was thinking
+    	 * 			can use that to count and +1 will be the number of officers
+    	 * 				If no slot, reject
+    	 * 				If yes slot, approve and add in officer to project(using edit file(edit project)/ update number of available slots
+    	 */
 
     }
-    public void approveOfficerRegistration(HDBOfficer officer, Project project){
+   // public void rejectOfficerRegistration(HDBOfficer officer, Project project){
+
+    //}
+    public void approveOrRejectApplication(Applicant applicant, Project project){
+    	
+    	/*
+    	 * Get applicant name and projectName (as a String) from applicant/manager??
+    	 * 
+    	 * Check if they have applied for other projects
+    	 * 		If yes, reject
+    	 * 		If no, Check applicant age, marital status and room type they apply for
+    	 * 			If no, reject
+    	 * 			If yes, check slot of the room type for that project,
+    	 * 				If no slot, reject
+    	 * 				If yes slot, approve and update application status to successful
+    	 */
 
     }
-    public void rejectOfficerRegistration(HDBOfficer officer, Project project){
+    //public void rejectApplication(Applicant applicant, Project project){
+
+   // }
+    public void approveOrRejectWithdrawal(Applicant applicant, Project project){
+    	
+    	//Usually successful
 
     }
-    public void approveApplication(Applicant applicant, Project project){
+    //public void rejectWithdrawal(Applicant applicant, Project project){
 
-    }
-    public void rejectApplication(Applicant applicant, Project project){
-
-    }
-    public void approveWithdrawal(Applicant applicant, Project project){
-
-    }
-    public void rejectWithdrawal(Applicant applicant, Project project){
-
-    }
+    //}
     public String generateApplicantReport(ReportFilter filters){
+    	
+    	/*
+    	 * Get the category they want to filter
+    	 * Do I print out everything in the filter order or just print out the filter?
+    	 * Eg. If they say they want married people, do I also print out single people?
+    	 * 
+    	 * Get category and do switch case maybe
+    	 */
         return "report";
     }
+    
+    public void viewAllEnquiries(Enquiry enquiry) {
+    	
+    	//Print each enquiry
+    	
+    }
     public void replyToEnquiry(Enquiry enquiry, String reply){
+    	
+    	/*
+    	 * Get specific enquiry and then in this function ask for the reply, then return the reply and
+    	 * then in the manager UI, save the string to a variable and update it to the enquiry.
+    	 * 
+    	 * Need check if manager is managing the project
+    	 */
 
     }
 

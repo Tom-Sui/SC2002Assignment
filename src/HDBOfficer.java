@@ -37,6 +37,7 @@ public class HDBOfficer extends Applicant{
     public void registerForProject(Project project){
 
     }
+    /
     public void viewProjectDetails(){
         System.out.println("Manager Name: " + managedProject.getHDBManager().getName());
         System.out.println(managedProject.toString());

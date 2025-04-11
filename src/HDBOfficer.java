@@ -7,7 +7,7 @@ public class HDBOfficer extends Applicant{
     private boolean isManagingOfficer = false;
 
     public HDBOfficer() {};
-    public HDBOfficer(String name, String NRIC, String userID, String password, int age, MaritalStatus maritalStatus, Project managedProject){
+    public HDBOfficer(String name, String NRIC, int userID, String password, int age, MaritalStatus maritalStatus, Project managedProject){
     	super(name, NRIC, userID, password, age, maritalStatus);
     	this.managedProject = managedProject;
     }

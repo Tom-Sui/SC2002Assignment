@@ -70,6 +70,10 @@ public class Project {
         this.flatTypes = flatType;
     }
 
+    public void setVisibility(boolean visibility){
+        this.visibility = visibility;
+    }
+
     //get methods
     public String getProjectName(){
         return this.projectName;

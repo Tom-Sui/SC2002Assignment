@@ -50,11 +50,14 @@ public class App{
 
         //Initialize manager managed projects
         hdbManagers = init.setManagerManagedProjects(hdbManagers,projects);
+
+
         // System.out.println(hdbManagers.get(0).getName());
         // hdbManagers.get(0).deletProject(projects.get(0));
+        // hdbManagers.get(1).editProject("different name", "new name", choice2,hdbManagers,hdbOfficers);
         // System.exit(0);
         //Example of how to edit project
-        // hdbManagers.get(1).editProject("new name", "different name", "projectname",hdbManagers,hdbOfficers);
+
 
         //return helpinfo (cmds)
         helpInfo();

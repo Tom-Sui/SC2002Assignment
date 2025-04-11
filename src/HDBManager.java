@@ -91,7 +91,6 @@ public class HDBManager extends User{
     public boolean editProject(String projectName, String updateContent, String target,ArrayList<HDBManager> hdbManager,ArrayList<HDBOfficer> hdbOfficer){
         General general = new General();
         Scanner scanner = new Scanner(System.in);
-        System.out.println("here");
         if (managedProjects == null) {
             System.out.println("No managed projects");
             scanner.close();
@@ -103,7 +102,6 @@ public class HDBManager extends User{
                     //note that if changing managed project name
                     //pass the new manager's name
                     case "projectname","1":
-
                         general.editFile(DataFilePath + "/ProjectList.txt", updateContent,projectName,projectName);
                         break;
                     case "neiborhood","2":
@@ -117,7 +115,7 @@ public class HDBManager extends User{
                         }
                         System.out.println("Not within managed projects");
                         break;
-                    case "flatetype":
+                    case "flatetype","3":
 
 
                         //YET
@@ -127,7 +125,7 @@ public class HDBManager extends User{
 
 
                         break;
-                    case "openingdate":
+                    case "openingdate","4":
                         if(general.findProject(this.managedProjects, projectName) != null){
                             // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                             general.editFile(DataFilePath + "/ProjectList.txt", 
@@ -139,7 +137,7 @@ public class HDBManager extends User{
                         }
                         System.out.println("Not within managed projects");
                         break;
-                    case "closingdate":
+                    case "closingdate","5":
                         if(general.findProject(this.managedProjects, projectName) != null){
                             // DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
                             general.editFile(DataFilePath + "/ProjectList.txt", 
@@ -151,27 +149,27 @@ public class HDBManager extends User{
                         }
                     System.out.println("Not within managed projects");
                         break;
-                    case "manager":
-                        //DONE: add the project to another manager
-                        //DONE: delet project from current manager
-                        if(general.findManager(hdbManager, updateContent)!= null){
-                            general.findManager(hdbManager, updateContent).setManagedProjects(this.deletProject(general.findProject(this.managedProjects,projectName)));
-                        }else{
-                            System.out.println("New manager does not exist");
-                            break;
-                        }
-                        //DONE: change project manager name
-                        general.editFile(DataFilePath + "/ProjectList.txt", updateContent,this.getName(),projectName);
-                        break;
-                    case "officer":
+                    // case "manager","6":
+                    //     //DONE: add the project to another manager
+                    //     //DONE: delet project from current manager
+                    //     if(general.findManager(hdbManager, updateContent)!= null){
+                    //         general.findManager(hdbManager, updateContent).setManagedProjects(this.deletProject(general.findProject(this.managedProjects,projectName)));
+                    //     }else{
+                    //         System.out.println("New manager does not exist");
+                    //         break;
+                    //     }
+                    //     //DONE: change project manager name
+                    //     general.editFile(DataFilePath + "/ProjectList.txt", updateContent,this.getName(),projectName);
+                    //     break;
+                    // case "officer","7":
 
 
 
-                        //YET: same as manager
-                        //Note that there are more than one officer
+                    //     //YET: same as manager
+                    //     //Note that there are more than one officer
 
         
-                        break;
+                    //     break;
                     default:
                         System.out.println("!!!Error input!!!");
                         break;

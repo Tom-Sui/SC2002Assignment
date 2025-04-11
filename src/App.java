@@ -5,7 +5,7 @@ import java.sql.Date;
 
 public class App{
     //To keep track who is loged in
-    private static String filePath = "./Data";
+    private static String filePath = "./Data";  // TO ADD /src/ FOR ECLIPSE
     private static boolean logedIn = false;
     private static String currentUserId = "NULL";
     private static String userType = "NULL";
@@ -77,7 +77,7 @@ public class App{
 
 
                     System.out.println("===User type===");
-                    System.out.println("1. HDB Manger");
+                    System.out.println("1. HDB Manager");
                     System.out.println("2. HDB Officer");
                     System.out.println("3. Applicant");
                     System.out.println("===============");
@@ -101,7 +101,7 @@ public class App{
                     //Will update this method later on
 
                     switch (userType.toLowerCase()){
-                        case "hdb manager":
+                        case "hdb manager","1":
                             for(int i = 0; i < hdbManagers.size(); i++){
                                 if(hdbManagers.get(i).getName().equals(userName) || hdbManagers.get(i).getNRIC().equals(userName)){
                                     if(hdbManagers.get(i).login(userPassword)){
@@ -111,6 +111,9 @@ public class App{
                                         userPos = i;
                                         currentUserId = userName;
                                         logedIn = true;
+                                        
+                                        ManagerInput manager = new ManagerInput();
+                                        manager.switchFunction(userName, projects, hdbManagers, hdbOfficers);                                        
                                         break;
                                     }
                                 }

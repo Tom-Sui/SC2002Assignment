@@ -74,10 +74,6 @@ public class Project {
     	this.visibility = visibility;
     }
 
-    public void setVisibility(boolean visibility){
-        this.visibility = visibility;
-    }
-
     //get methods
     public String getProjectName(){
         return this.projectName;

@@ -21,17 +21,18 @@ public class Init {
             while(scanner.hasNextLine()){
                 applicant = new Applicant();
                 String[] data = scanner.nextLine().split(",");
-                applicant.setName(data[0]);
-                applicant.setNRIC(data[1]);
-                applicant.setage(Integer.parseInt(data[2]));
-                if(data[3].equals("Single")){
+                applicant.setUserID(Integer.parseInt(data[0]));
+                applicant.setName(data[1]);
+                applicant.setNRIC(data[2]);
+                applicant.setage(Integer.parseInt(data[3]));
+                if(data[4].equals("Single")){
                     applicant.setMaritalStatus(MaritalStatus.SINGLE);
                 }else{
                     applicant.setMaritalStatus(MaritalStatus.MARRIED);
                 }
 
                 //Hash the password and store back
-                applicant.setPassword(data[4]);
+                applicant.setPassword(data[5]);
                 applicants.add(applicant);
                 // count += 1;
             }

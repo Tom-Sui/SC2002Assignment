@@ -185,19 +185,36 @@ public class App{
                                         
                                         projectList.add(dummyProject);
                                         dummyProject.addHDBOfficer(hdbOfficers.get(i));
+                                        // Applicant applicant1 = new Applicant(
+                                        // 	    "Alice Tan", 
+                                        // 	    "S1234567A", 
+                                        // 	    "aliceT", 
+                                        // 	    "password1", 
+                                        // 	    28, 
+                                        // 	    MaritalStatus.SINGLE
+                                        // 	);
+
+                                        // Applicant applicant2 = new Applicant(
+                                        // 	    "Bob Lim", 
+                                        // 	    "S7654321B", 
+                                        // 	    "bobL", 
+                                        // 	    "password2", 
+                                        // 	    35, 
+                                        // 	    MaritalStatus.MARRIED
+                                        // 	);
                                         Applicant applicant1 = new Applicant(
                                         	    "Alice Tan", 
                                         	    "S1234567A", 
-                                        	    "aliceT", 
+                                        	    1, 
                                         	    "password1", 
                                         	    28, 
                                         	    MaritalStatus.SINGLE
                                         	);
 
-                                        	Applicant applicant2 = new Applicant(
+                                        Applicant applicant2 = new Applicant(
                                         	    "Bob Lim", 
                                         	    "S7654321B", 
-                                        	    "bobL", 
+                                        	    2, 
                                         	    "password2", 
                                         	    35, 
                                         	    MaritalStatus.MARRIED
@@ -289,7 +306,7 @@ public class App{
                                         );
                                         
                                         projectList.add(dummyProject);
-                                        HDBOfficer dummyOfficer = new HDBOfficer("DummyOfficer", "T1234567I", "DummyOfficer", "password", 35, MaritalStatus.MARRIED, dummyProject);
+                                        HDBOfficer dummyOfficer = new HDBOfficer("DummyOfficer", "T1234567I", 1, "password", 35, MaritalStatus.MARRIED, dummyProject);
                                         dummyProject.addHDBOfficer(dummyOfficer);
                                         // Launch applicant interface
                                         ApplicantApp applicantApp = new ApplicantApp();
@@ -365,6 +382,7 @@ public class App{
                     System.out.println("\n!!!Wrong input!!!\n");
                     break;
             }
+            helpInfo();
             System.out.print("Enter cmd: ");
             userInput = scanner.nextLine();
         }

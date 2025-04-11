@@ -5,41 +5,36 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class Project {
+    private static int projectID = 0;
     private String projectName;
     private String neighborhood;
-    //private int twoRoomUnits;
-    //private int threeRoomUnits;
-    private ArrayList<FlatType> flatTypes = new ArrayList<FlatType>();
+    private ArrayList<FlatType> flatTypes = new ArrayList<>();
     private Date applicationOpeningDate;
     private Date applicationClosingDate;
     private HDBManager hdbManager;
-    private int availableOfficerSlots;
     private boolean visibility;
-    private ArrayList<Applicant> applicants = new ArrayList<Applicant>();
-    private ArrayList<HDBOfficer> hdbOfficers = new ArrayList<HDBOfficer>();
+    private ArrayList<Applicant> applicants = new ArrayList<>();
+    private ArrayList<HDBOfficer> hdbOfficers = new ArrayList<>();
     private ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>();
-    private ArrayList<Application> applications = new ArrayList<Application>();
-    private MaritalStatus maritalStatus = null;
+    private ArrayList<Application> applications = new ArrayList<>();
+    private ArrayList<MaritalStatus> allowedGroups = new ArrayList<>()
 
-    //Wasn't stated in the UML diagram
-    // private FlateType flateType;
-    
     public Project() {};
     public Project(String projectName, String neighborhood, ArrayList<FlatType> flatTypes, Date applicationOpeningDate, Date applicationClosingDate,
-    		HDBManager hdbManager, int availableOfficerSlots, boolean visiblity, ArrayList<Applicant> applicants, ArrayList<HDBOfficer> hdbOfficers, ArrayList<Enquiry> enquiries,
-    		MaritalStatus maritalStatus) {
+    		HDBManager hdbManager, boolean visiblity, ArrayList<Applicant> applicants, ArrayList<HDBOfficer> hdbOfficers, ArrayList<Enquiry> enquiries,
+    		ArrayList<MaritalStatus> allowedGroups) {
+        projectID = projectID++;
     	this.projectName = projectName;
     	this.neighborhood = neighborhood;
     	this.flatTypes = flatTypes;
     	this.applicationOpeningDate = applicationOpeningDate;
     	this.applicationClosingDate = applicationClosingDate;
     	this.hdbManager = hdbManager;
-    	this.availableOfficerSlots = availableOfficerSlots;
     	this.visibility = visiblity;
     	this.applicants = applicants;
     	this.hdbOfficers = hdbOfficers;
     	this.enquiries = enquiries;
-    	this.maritalStatus = maritalStatus;  	
+    	this.allowedGroups = allowedGroups;  	
     }
 
     //set methods
@@ -63,9 +58,7 @@ public class Project {
     public void setHDBOfficer(ArrayList<HDBOfficer> hdbOfficer){
         this.hdbOfficers = hdbOfficer;
     }
-    public void setAvailableOfficerSlots(int availableOfficerSlots){
-        this.availableOfficerSlots = availableOfficerSlots;
-    }
+    
     public void setFlatType(ArrayList<FlatType> flatType){
         this.flatTypes = flatType;
     }
@@ -74,9 +67,11 @@ public class Project {
     public String getProjectName(){
         return this.projectName;
     }
+
     public String getNeiborhood(){
         return this.neighborhood;
     }
+
     public Date getApplicationOpeningDate(){
         return this.applicationOpeningDate;
     }
@@ -90,54 +85,9 @@ public class Project {
     public ArrayList<HDBOfficer> getHDBOfficer(){
         return this.hdbOfficers;
     }
-    public int getAvailableOfficerSlots(){
-        return this.availableOfficerSlots;
-    }
-
-    //Debug method
-    // public void debugOut(){
-    //     System.out.println(this.projectName);
-    //     System.out.println(this.neiborhood);
-    //     System.out.println(this.flateType[0].getFlateType());
-    //     System.out.println(this.applicationOpeningData);
-    //     System.out.println(this.applicationClosingData);
-    //     System.out.println(this.hdbManager.getName());
-    //     System.out.println(this.hdbOfficer[0].getName());
-    // }
-
-
-    //Methods
-    public boolean getVisibility(){
-        return visibility;
-    }
-    
-    public MaritalStatus getMaritalStatus() {
-    	return maritalStatus;
-    }
-    
-    public ArrayList<FlatType> getFlatTypes(){ return flatTypes; }
-    
-    public void addApplicant(Applicant applicant){
-
-    }
-    public void removeApplicant(Applicant applicant){
-
-    }
     
     public void addHDBOfficer(HDBOfficer hdbOfficer) {
     	hdbOfficers.add(hdbOfficer);
-    }
-    public void removeHDBOfficer(HDBOfficer hdbOfficer){
-
-    }
-    public void addEnquiry(Enquiry enquiry){
-
-    }
-//    public FlateType getRemainingUnits(FlateType flateType){
-//        return FlateType;
-//    }
-    public void decreaseRemainingUnits(FlatType flatType){
-
     }
     
     public String toString() {

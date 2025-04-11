@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -21,17 +23,18 @@ public class Init {
             while(scanner.hasNextLine()){
                 applicant = new Applicant();
                 String[] data = scanner.nextLine().split(",");
-                applicant.setName(data[0]);
-                applicant.setNRIC(data[1]);
-                applicant.setage(Integer.parseInt(data[2]));
-                if(data[3].equals("Single")){
+                applicant.setUserID(Integer.parseInt(data[0]));
+                applicant.setName(data[1]);
+                applicant.setNRIC(data[2]);
+                applicant.setage(Integer.parseInt(data[3]));
+                if(data[4].equals("Single")){
                     applicant.setMaritalStatus(MaritalStatus.SINGLE);
                 }else{
                     applicant.setMaritalStatus(MaritalStatus.MARRIED);
                 }
 
                 //Hash the password and store back
-                applicant.setPassword(data[4]);
+                applicant.setPassword(data[5]);
                 applicants.add(applicant);
                 // count += 1;
             }
@@ -136,6 +139,8 @@ public class Init {
             e.printStackTrace();
             return null;
         }
+
+
         // project[0].debugOut();
         return projects;
     }
@@ -146,8 +151,7 @@ public class Init {
         Project project = new Project();
         project.setProjectName(data[0]);
         project.setNeiborhood(data[1]);
-
-        if(general.findManager(hdbManager, data[data.length - 3]) == null){
+        if(general.findManager(hdbManager, data[data.length - 4]) == null){
             System.out.println("No such manager found");
             return null;
         }
@@ -173,7 +177,7 @@ public class Init {
                 maritalStatus.add(MaritalStatus.MARRIED);
                 threeRoom = new ThreeRoom(Integer.parseInt(data[3+3*i]),Double.parseDouble(data[4+3*i]),maritalStatus);
                 flatTypes.add(threeRoom);
-            }   
+            }
         }
         project.setFlatType(flatTypes);
 
@@ -181,21 +185,21 @@ public class Init {
         // project.setApplicationOpeningData(Date.parse(data[data.length - 5],formatter));
         // project.setApplicationClosingData(Date.parse(data[data.length - 4],formatter));
         try{
-            project.setApplicationOpeningDate(formatter.parse(data[data.length - 5]));
-            project.setApplicationClosingDate(formatter.parse(data[data.length - 4]));
+            project.setApplicationOpeningDate(formatter.parse(data[data.length - 6]));
+            project.setApplicationClosingDate(formatter.parse(data[data.length - 5]));
         }catch(ParseException e){
             System.out.println("Error occured when parse String to Date");
             e.printStackTrace();
         }
 
         //Assuming that there can only can be one manager per project
-        project.setHDBManager(general.findManager(hdbManager, data[data.length - 3]));
+        project.setHDBManager(general.findManager(hdbManager, data[data.length - 4]));
 
         //set available officer slots
-        project.setAvailableOfficerSlots(Integer.parseInt(data[data.length - 2]));
+        project.setAvailableOfficerSlots(Integer.parseInt(data[data.length - 3]));
 
         //Set all included HDB officers
-        String[] officerName = data[data.length - 1].split("&");
+        String[] officerName = data[data.length - 2].split("&");
         
         ArrayList<HDBOfficer> hdbOfficers = new ArrayList<HDBOfficer>();
         // HDBOfficer[] tempHDBOfficers = new HDBOfficer[officerName.length];
@@ -206,6 +210,13 @@ public class Init {
             hdbOfficers.add(tempHDBOfficer);
         }
         project.setHDBOfficer(hdbOfficers);
+
+        if(data[data.length - 1].equals("true")){
+            project.setVisibility(true);
+        }else{
+            project.setVisibility(false);
+        }
+
         return project;
         
     }

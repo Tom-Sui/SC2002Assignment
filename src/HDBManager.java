@@ -189,37 +189,35 @@ public class HDBManager extends User{
         return false;
     }
     
-    // public void deletProject(Project targetProject){
-    //     Project[] tempProject = new Project[this.managedProjects.size() - 1];
-    //     int count = 0;
-    //     for(Project project : this.managedProjects){
-    //         if(project.getProjectName().equals(targetProject.getProjectName())){
-    //             continue;
-    //         }else{
-    //             tempProject[count] = project;
-    //             count++;
-    //         }
-    //     }
-    //     this.managedProjects = tempProject;
-    // }
-    // public Project deletProject(String targetProject){
-    //     // ArrayList<Project> tempProject = new Project[this.managedProjects.size() - 1];
-    //     Project deletedProject = new Project();
-    //     int count = 0;
-    //     for(Project project : this.managedProjects){
-    //         if(project.getProjectName().equals(targetProject)){
-    //             deletedProject = project;
-    //             continue;
-    //         }else{
-    //             tempProject[count] = project;
-    //             count++;
-    //         }
-    //     }
-    //     this.managedProjects = tempProject;
-    //     return deletedProject;
-    // }
     public Project deletProject(Project targetProject){
         // ArrayList<Project> tempProject = new Project[this.managedProjects.size() - 1];
+        File projectFile = new File("./Data/ProjectList.txt");
+        String fileContent = "";
+        String buffer;
+        try{
+            Scanner scanner = new Scanner(projectFile);
+            while(scanner.hasNextLine()){
+                buffer = scanner.nextLine();
+                String[] data = buffer.split(",");
+
+                if(data[0].equals(targetProject.getProjectName())){
+                    continue;
+                }
+                fileContent = fileContent + buffer + "\n";
+            }
+            FileWriter writer = new FileWriter("./Data/ProjectList.txt");
+            writer.write(fileContent);
+            writer.close();
+            scanner.close();
+        }catch (FileNotFoundException e){
+            System.out.println("Error occured while reading ProjectLists.txt");
+            e.printStackTrace();
+            return null;
+        }catch(IOException e){
+            System.out.println("Error occured when writing ProjectLists.txt");
+            e.printStackTrace();
+        }
+
         if(this.managedProjects == null){
             System.out.println("No project managed");
             return targetProject;

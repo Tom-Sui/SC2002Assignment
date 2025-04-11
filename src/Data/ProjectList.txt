@@ -1,7 +1,2 @@
-Acacia Breeze,Yishun,2-Room,2,350000,3-Room,3,450000,15/02/2025,20/03/2025,Michael,3,Daniel&Emily
-Hawaii Cameron,Tampines,2-Room,5,800000,3-Room,10,1000000,22/12/2030,15/8/2033,Michael,2, 
-Raymon Dusk,Orchard,2-Room,10,1000000,3-Room,15,1200000,12/5/2033,22/6/2035,Jessica,4, 
-Sky View,Marina,2-Room,20,2000000,3-Room,25,3000000,7/4/2028,3/6/2030,Jessica,2, 
-Disney,Changi,2-Room,5,3000000,3-Room,5,3500000,12/5/2026,24/6/2028,Michael,1, 
-MoonLight,Bedok,2-Room,6,800000,3-Room,10,900000,12/3/2027,8/12/2028,Jessica,3, 
-SeaSide UO,Jurong,2-Room,3,600000,3-Room,6,800000,3/4/2028,9/12/2029,Michael,4, 
+Acacia Breeze,Yishun,2-Room,2,350000,3-Room,3,450000,15/02/2025,20/03/2025,Michael,3,Daniel&Emily,true
+different name,some random name,2-Room,2,350000,3-Room,3,450000,12/12/2343,12/12/2343,Jessica,3,Daniel&Emily,true

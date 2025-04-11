@@ -228,4 +228,30 @@ public class Init {
     // public void setManagedProjects(HDBManager hdbManager, Project project){
     //     hdbManager.setManagedProjects(project);
     // }
+
+    public ArrayList<Application> LoadApplicationInfo(ArrayList<Applicant> applicants, ArrayList<Project> projects){
+        File applicationFile = new File("./Data/ApplicationList.txt");
+        ArrayList<Application> applications = new ArrayList<Application>();
+    
+        Application application;
+        try{
+            Scanner scanner = new Scanner(applicationFile);
+
+            while(scanner.hasNextLine()){
+                application = new Application();
+                String[] data = scanner.nextLine().split(",");
+                application.setApplicant(general.findApplicant(applicants, data[0]));
+                application.setProject(general.findProject(projects, data[1]));
+                application.setFlatType(general.findFlatType(projects, data[1], data[2]));
+                application.setApplicationStatus(ApplicationStatus.valueOf(data[3]));
+                applications.add(application);
+            }
+
+            scanner.close();
+        }catch (FileNotFoundException e){
+            System.out.println("Error occured while reading ApplicationList.txt");
+            e.printStackTrace();
+        }
+        return applications;
+    }
 }

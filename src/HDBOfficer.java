@@ -74,7 +74,6 @@ public class HDBOfficer extends Applicant{
     		//Updating applicant and his application process
     		application.setIsBooked(true); //finished booking
     		application.setBookingRequested(false); //reset request back to false
-    		application.getApplicant().setFlatType(chosenFlatType); //update flatType in applicant profile
     		application.setApplicationStatus(ApplicationStatus.BOOKED);
     	
     		//Updating units in project

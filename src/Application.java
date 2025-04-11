@@ -3,14 +3,14 @@
 public class Application {
 
     //Static attribute
-    private static int applicationId = 0;
+    private static int applicationId = 1;
     //Attributes
     private Applicant applicant;
     private Project project;
     private ApplicationStatus applicationStatus;
     private boolean isBooked;
     private boolean bookingRequested;
-    private FlatType appliedflatType;
+    private FlatType flatType;
     //Constructor
     public Application(Applicant applicant, Project project, FlatType flatType) {
         Application.applicationId = applicationId++;
@@ -19,7 +19,7 @@ public class Application {
         this.isBooked = false;
         this.bookingRequested = false;
         this.applicationStatus = ApplicationStatus.SUCCESSFUL; //SHOULD BE PENDING. CHANGED TO SUCCESSFUL TO TEST OTHER FEATURES
-        this.appliedflatType = flatType;
+        this.flatType = flatType;
     }
 
     //Getters and Setters
@@ -54,15 +54,15 @@ public class Application {
     	applicationStatus = status;
     }
     public FlatType getFlatType() {
-        return appliedflatType;
+        return flatType;
     }
 
     public int getApplicationId() {
         return applicationId;
     }
-    
+
     public String toString() {
-		String applicationDetails = String.format("%s, %s, %d, %s, %s", applicant.getName(), applicant.getNRIC(), applicant.getAge(), applicant.getMaritalStatus(), appliedflatType);
+		String applicationDetails = String.format("%s, %s, %d, %s, %s", applicant.getName(), applicant.getNRIC(), applicant.getAge(), applicant.getMaritalStatus(), flatType.toString());
 		return applicationDetails;
     }
 

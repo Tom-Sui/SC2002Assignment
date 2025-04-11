@@ -4,7 +4,6 @@ public class Applicant extends User{
     private Application currentApplication; 
     private ArrayList<Project> pastAppliedProjects = new ArrayList<Project>();
     private ApplicationStatus applicationStatus;
-    private FlatType bookedFlatType;
     
     public Applicant() {};
     public Applicant(String name, String NRIC, String userID, String password, int age, MaritalStatus maritalStatus, Project appliedProject,  ArrayList<Project> pastAppliedProjects, ApplicantStatus applicationStatus, FlatType bookedFlatType){
@@ -32,13 +31,6 @@ public class Applicant extends User{
     }
     public boolean canApply(Project project){
         return false;
-    }
-    public void setFlatType(FlatType flatType) {
-    	bookedFlatType = flatType;
-    }
-    
-    public FlatType getFlatType() {
-    	return bookedFlatType;
     }
     //Applicant functions
     

@@ -196,11 +196,7 @@ public class App{
                                         // 	    MaritalStatus.SINGLE
                                         // 	);
 
-<<<<<<< HEAD
                                         // 	Applicant applicant2 = new Applicant(
-=======
-                                        // Applicant applicant2 = new Applicant(
->>>>>>> cd2e5f122366f052f76aad05f788a2884c3e6777
                                         // 	    "Bob Lim", 
                                         // 	    "S7654321B", 
                                         // 	    "bobL", 
@@ -208,11 +204,7 @@ public class App{
                                         // 	    35, 
                                         // 	    MaritalStatus.MARRIED
                                         // 	);
-<<<<<<< HEAD
                                             Applicant applicant1 = new Applicant(
-=======
-                                        Applicant applicant1 = new Applicant(
->>>>>>> cd2e5f122366f052f76aad05f788a2884c3e6777
                                         	    "Alice Tan", 
                                         	    "S1234567A", 
                                         	    1, 
@@ -221,7 +213,7 @@ public class App{
                                         	    MaritalStatus.SINGLE
                                         	);
 
-                                        Applicant applicant2 = new Applicant(
+                                        	Applicant applicant2 = new Applicant(
                                         	    "Bob Lim", 
                                         	    "S7654321B", 
                                         	    2, 
@@ -316,11 +308,7 @@ public class App{
                                         );
                                         
                                         projectList.add(dummyProject);
-<<<<<<< HEAD
                                         HDBOfficer dummyOfficer = new HDBOfficer("DummyOfficer", "T1234567I", -1, "password", 35, MaritalStatus.MARRIED, dummyProject);
-=======
-                                        HDBOfficer dummyOfficer = new HDBOfficer("DummyOfficer", "T1234567I", 1, "password", 35, MaritalStatus.MARRIED, dummyProject);
->>>>>>> cd2e5f122366f052f76aad05f788a2884c3e6777
                                         dummyProject.addHDBOfficer(dummyOfficer);
                                         // Launch applicant interface
                                         ApplicantApp applicantApp = new ApplicantApp();
@@ -396,7 +384,6 @@ public class App{
                     System.out.println("\n!!!Wrong input!!!\n");
                     break;
             }
-            helpInfo();
             System.out.print("Enter cmd: ");
             userInput = scanner.nextLine();
         }

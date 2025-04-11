@@ -10,11 +10,7 @@ import java.util.Scanner;
 public abstract class User {
     private String name;
     private String NRIC;
-<<<<<<< HEAD
     private int userID;
-=======
-    private static int userID;
->>>>>>> cd2e5f122366f052f76aad05f788a2884c3e6777
     private String password;
     private int age;
     // private boolean maritalStatus;
@@ -28,7 +24,7 @@ public abstract class User {
     public User(String name, String NRIC, int userID, String password, int age, MaritalStatus maritalStatus){
         this.name = name;
         this.NRIC = NRIC;
-        User.userID = userID;
+        this.userID = userID;
         this.password = password;
         this.age = age;
         this.maritalStatus = maritalStatus;

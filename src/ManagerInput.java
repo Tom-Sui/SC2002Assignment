@@ -92,7 +92,9 @@ public class ManagerInput {
             		String createProjectString = String.join(",", projectName, neighborhood, "2-Room", unitType1, sellPriceType1, "3-Room", unitType2, sellPriceType2, openingDate, endingDate, userName, slots," ", visibility);
             		System.out.printf("%s", createProjectString);
             		
-            		manager.createProject(createProjectString, projects, hdbManagers, hdbOfficers); // WRITE to createProject function            		
+            		// manager.createProject(createProjectString, projects, hdbManagers, hdbOfficers); // WRITE to createProject function
+					//Load the created project to the list      
+					projects = manager.createProject(createProjectString, projects, hdbManagers, hdbOfficers); // WRITE to createProject function
             	}
             	else
             	{

@@ -6,6 +6,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Date;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 
 public class HDBManager extends User{
@@ -90,7 +91,11 @@ public class HDBManager extends User{
 
     //If call this function
     //Do remember to run init.LoadProjectInfo() to restore the changed project info
-    public boolean editProject(String projectName, String updateContent, String target, ArrayList<Project> currentProjects, int i, ArrayList<HDBManager> hdbManager,ArrayList<HDBOfficer> hdbOfficer){
+    public boolean editProject(String projectName, String updateContent
+							, String target, ArrayList<Project> currentProjects
+							, int i, ArrayList<HDBManager> hdbManager
+							,ArrayList<HDBOfficer> hdbOfficer){
+
         General general = new General();
 
         if (managedProjects == null) {
@@ -100,6 +105,7 @@ public class HDBManager extends User{
         
         else
         {
+			DateFormat formatter = new SimpleDateFormat("d/M/yyyy");
         	// checking is done in Manager Main
         	switch(target)
         	{
@@ -126,18 +132,20 @@ public class HDBManager extends User{
         		
         		// Change Application Opening Date
         	case "4":
-        		// DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        		
-        		//System.out.printf("OVER HERE: %s", currentProjects.get(i).getApplicationOpeningDate().toString());
-        				
-        		general.editFile(DataFilePath + "/ProjectList.txt", updateContent, currentProjects.get(i).getApplicationOpeningDate().toString(), projectName);
+        		general.editFile(DataFilePath + "/ProjectList.txt", 
+								updateContent, 
+								formatter.format(currentProjects.get(i).getApplicationOpeningDate()).toString(),
+								projectName);
         		System.out.println("Opending date changed to: " + updateContent);
         		break;
         		
         		// Change Application Closing Date
         	case "5":
-        		// DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        		general.editFile(DataFilePath + "/ProjectList.txt", updateContent, currentProjects.get(i).getApplicationClosingDate().toString(), projectName);
+				// System.out.println(formatter.format(currentProjects.get(i).getApplicationClosingDate()));
+        		general.editFile(DataFilePath + "/ProjectList.txt", 
+								updateContent, 
+								formatter.format(currentProjects.get(i).getApplicationClosingDate()).toString(), 
+								projectName);
         		System.out.println("Closing date changed to: " + updateContent);
         		break;
         		

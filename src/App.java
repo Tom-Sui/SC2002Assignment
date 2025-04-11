@@ -45,16 +45,23 @@ public class App{
 
         // hdbInterface.interface(project,hdbManagers,hdbOfficers)
         // Return null if there is maching manager found
-        // projects = hdbManagers.get(0).createProject("aNOTHER NAME,TESTING TESTING name,2-Room,2,350000,3-Room,3,450000,12/12/2343,12/12/2343,tom,3,Daniel&Emily",projects,hdbManagers,hdbOfficers);
-
-
+        // projects = hdbManagers.get(1).createProject("aNOTHER NAME,TESTING TESTING name,2-Room,2,350000,3-Room,3,450000,2/2/2343,12/12/2343,Jessica,3,Daniel&Emily,true",projects,hdbManagers,hdbOfficers);
+        // hdbManagers.get(1).editProject("Acacia Breeze",
+        //                                      "12/12/1212", 
+        //                                      "5",
+        //                                      projects,
+        //                                      0, 
+        //                                      hdbManagers,
+        //                                      hdbOfficers);
+        // projects = init.LoadProjectInfo(hdbManagers, hdbOfficers);
+        // System.exit(0);
         //Initialize manager managed projects
         hdbManagers = init.setManagerManagedProjects(hdbManagers,projects);
 
 
         // System.out.println(hdbManagers.get(0).getName());
         // hdbManagers.get(0).deletProject(projects.get(0));
-        // hdbManagers.get(1).editProject("different name", "new name", choice2,hdbManagers,hdbOfficers);
+
         // System.exit(0);
         //Example of how to edit project
 

@@ -152,7 +152,7 @@ public class Init {
         project.setProjectName(data[0]);
         project.setNeiborhood(data[1]);
         if(general.findManager(hdbManager, data[data.length - 4]) == null){
-            System.out.println("No such manager found");
+            System.out.println("No such manager found: " + data[data.length - 4]);
             return null;
         }
 

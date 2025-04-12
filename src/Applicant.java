@@ -6,12 +6,12 @@ public class Applicant extends User{
     private ApplicationStatus applicationStatus;
     
     public Applicant() {};
-    public Applicant(String name, String NRIC, String userID, String password, int age, MaritalStatus maritalStatus, Project appliedProject,  ArrayList<Project> pastAppliedProjects, ApplicantStatus applicationStatus, FlatType bookedFlatType){
+    public Applicant(String name, String NRIC, int userID, String password, int age, MaritalStatus maritalStatus, Project appliedProject,  ArrayList<Project> pastAppliedProjects, ApplicantStatus applicationStatus, FlatType bookedFlatType){
     	super(name, NRIC, userID, password, age, maritalStatus);
     	//TODO FILL  iN THE REST OF THE ATTRIBUTES
     }
     
-    public Applicant(String name, String NRIC, String userID, String password, int age, MaritalStatus maritalStatus){
+    public Applicant(String name, String NRIC, int userID, String password, int age, MaritalStatus maritalStatus){
     	super(name, NRIC, userID, password, age, maritalStatus);
     }
     //Absract functions

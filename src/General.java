@@ -18,19 +18,18 @@ public class General {
 
         try{
             Scanner scanner = new Scanner(projectFile);
-            fileContent = fileContent + scanner.nextLine() + "\n";
+            // fileContent = fileContent + scanner.nextLine() + "\n";
             //This may having issue if some
             while(scanner.hasNextLine()){
                 buffeString = scanner.nextLine();
                 //check if search target in the String
                 if (buffeString.contains(targetRow)){
+                    System.out.println(target);
                     System.out.println("write into file");
                     buffeString = buffeString.replace(target, newContent);
                 }
                 fileContent = fileContent + buffeString + "\n";
-
             }
-
             FileWriter writer = new FileWriter(DataFilePath + "/ProjectList.txt");
             writer.write(fileContent);
             writer.close();

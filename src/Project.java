@@ -69,6 +69,10 @@ public class Project {
     public void setFlatType(ArrayList<FlatType> flatType){
         this.flatTypes = flatType;
     }
+    
+    public void setVisibility(boolean visibility) {
+    	this.visibility = visibility;
+    }
 
     //get methods
     public String getProjectName(){

@@ -229,29 +229,74 @@ public class Init {
     //     hdbManager.setManagedProjects(project);
     // }
 
-    public ArrayList<Application> LoadApplicationInfo(ArrayList<Applicant> applicants, ArrayList<Project> projects){
-        File applicationFile = new File("./Data/ApplicationList.txt");
-        ArrayList<Application> applications = new ArrayList<Application>();
-    
-        Application application;
-        try{
-            Scanner scanner = new Scanner(applicationFile);
+    /**
+     * Loads application information from a file and creates Application objects.
+     * 
+     * @param applicants List of all available applicants
+     * @param projects List of all available projects
+     * @return ArrayList of Application objects loaded from the file
+     * @throws IllegalArgumentException if the input lists are null
+     * @throws IllegalStateException if the application file cannot be read or has invalid data
+     */
+    // public ArrayList<Application> LoadApplicationInfo(ArrayList<Applicant> applicants, ArrayList<Project> projects) {
+    //     if (applicants == null || projects == null) {
+    //         throw new IllegalArgumentException("Applicants and projects lists cannot be null");
+    //     }
 
-            while(scanner.hasNextLine()){
-                application = new Application();
-                String[] data = scanner.nextLine().split(",");
-                application.setApplicant(general.findApplicant(applicants, data[0]));
-                application.setProject(general.findProject(projects, data[1]));
-                application.setFlatType(general.findFlatType(projects, data[1], data[2]));
-                application.setApplicationStatus(ApplicationStatus.valueOf(data[3]));
-                applications.add(application);
-            }
+    //     File applicationFile = new File("./Data/ApplicationList.txt");
+    //     ArrayList<Application> applications = new ArrayList<>();
+    //     General general = new General();
 
-            scanner.close();
-        }catch (FileNotFoundException e){
-            System.out.println("Error occured while reading ApplicationList.txt");
-            e.printStackTrace();
-        }
-        return applications;
-    }
+    //     try (Scanner scanner = new Scanner(applicationFile)) {
+    //         while (scanner.hasNextLine()) {
+    //             String line = scanner.nextLine().trim();
+    //             if (line.isEmpty()) {
+    //                 continue; // Skip empty lines
+    //             }
+
+    //             String[] data = line.split(",");
+    //             if (data.length < 4) {
+    //                 throw new IllegalStateException("Invalid data format in ApplicationList.txt: " + line);
+    //             }
+
+    //             Application application = new Application();
+                
+    //             // Find and set applicant
+    //             Applicant applicant = general.findApplicant(applicants, data[0]);
+    //             if (applicant == null) {
+    //                 throw new IllegalStateException("Applicant not found: " + data[0]);
+    //             }
+    //             application.setApplicant(applicant);
+
+    //             // Find and set project
+    //             Project project = general.findProject(projects, data[1]);
+    //             if (project == null) {
+    //                 throw new IllegalStateException("Project not found: " + data[1]);
+    //             }
+    //             application.setProject(project);
+
+    //             // Find and set flat type
+    //             FlatType flatType = general.findFlatType(projects, data[1], data[2]);
+    //             if (flatType == null) {
+    //                 throw new IllegalStateException("Flat type not found for project: " + data[1] + ", type: " + data[2]);
+    //             }
+    //             application.setFlatType(flatType);
+
+    //             // Set application status
+    //             try {
+    //                 application.setApplicationStatus(ApplicationStatus.valueOf(data[3]));
+    //             } catch (IllegalArgumentException e) {
+    //                 throw new IllegalStateException("Invalid application status: " + data[3]);
+    //             }
+
+    //             applications.add(application);
+    //         }
+    //     } catch (FileNotFoundException e) {
+    //         throw new IllegalStateException("ApplicationList.txt file not found", e);
+    //     } catch (Exception e) {
+    //         throw new IllegalStateException("Error reading ApplicationList.txt", e);
+    //     }
+
+    //     return applications;
+    // }
 }

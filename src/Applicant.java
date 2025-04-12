@@ -29,13 +29,12 @@ public class Applicant extends User{
     public void deletEnquiry(Enquiry enquiry){
 
     }
-    public boolean canApply(Project project){
-        return false;
-    }
-    //Applicant functions
     
-    /* Display projects that are available to the applicants
-     */
+    /*
+    * @param display projects that are available to applicant
+    * @return void    
+    * @description applicants can only view projects that are visible and they must meet the eligibility criteria (marital status) or projects that they have previously applied. 
+    */
     public void viewAvailableProjects(ArrayList<Project> projects){
     	int size = projects.size();
     	for (int i=0; i<size; i++) {
@@ -62,12 +61,17 @@ public class Applicant extends User{
         System.out.println("Application ID: " + application.getApplicationId());
     }
     public ApplicationStatus viewApplicationStatus(){
-        // ApplicationStatus applicationStatus = new ApplicantStatus();
         return currentApplication.getApplicationStatus();
     }
     public void requestWithdrawal(){
         currentApplication.setApplicationStatus(ApplicationStatus.PENDINGWITHDRAWAL);
     }
+    
+    /*
+    * @param allow the user to book flat
+    * @return void
+    * @description - This function will send a booking request to a managing HDB Officer. Only valid if the applicant's application is successful (checked at ApplicantOfficerApp)   */
+
     public void bookFlat(HDBOfficer officer) {
     	currentApplication.setBookingRequested(true);
     	officer.receiveBookFlatRequest(currentApplication);
@@ -80,6 +84,11 @@ public class Applicant extends User{
     public void setCurrentApplication(Application currentApplication) {
         this.currentApplication = currentApplication;
     }
+
+	public boolean canApply(Project project) {
+		// TODO Auto-generated method stub
+		return false;
+	}
     
     
 }

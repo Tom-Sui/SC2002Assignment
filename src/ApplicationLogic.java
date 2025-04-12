@@ -2,6 +2,11 @@ import java.util.ArrayList;
 
 public class ApplicationLogic {
 	
+    /*
+    * @param filter applications by those that are not booked
+    * @return ArrayList<Application>  
+    */
+	
     public static ArrayList<Application> filterByNotBooked(ArrayList<Application> applicationList) {
         ArrayList<Application> filteredApplications = new ArrayList<>();
 
@@ -13,7 +18,10 @@ public class ApplicationLogic {
         return filteredApplications;
     }   
     
-    
+    /*
+    * @param filter applications by those that are booked
+    * @return ArrayList<Application>  
+    */
     public static ArrayList<Application> filterByBooked(ArrayList<Application> applicationList) {
         ArrayList<Application> filteredApplications = new ArrayList<>();
 
@@ -24,6 +32,11 @@ public class ApplicationLogic {
         }
         return filteredApplications;
     }   
+    
+    /*
+    * @param display application details 
+    * @return void 
+    */
     
     public static void displayApplications(ArrayList<Application> applicationList) {
         for (int i = 0; i < applicationList.size(); i++) {

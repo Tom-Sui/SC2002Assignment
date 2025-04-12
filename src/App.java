@@ -200,6 +200,7 @@ public class App{
                                         
                                         projectList.add(dummyProject);
                                         dummyProject.addHDBOfficer(hdbOfficers.get(i));
+                                        
                                         // Applicant applicant1 = new Applicant(
                                         // 	    "Alice Tan", 
                                         // 	    "S1234567A", 
@@ -242,7 +243,8 @@ public class App{
                                         applicant1.bookFlat(hdbOfficers.get(i));
                                         applicant2.bookFlat(hdbOfficers.get(i));
                                         hdbOfficers.get(i).setManagedProject(dummyProject);
-                                        OfficerApp.start(hdbOfficers.get(i));
+                                        hdbOfficers.get(i).setManagingOfficer(true);
+                                        ApplicantOfficerApp.start(hdbOfficers.get(i),projectList);
                                         userPos = i;
                                         currentUserId = userName;
                                         logedIn = true;
@@ -325,7 +327,7 @@ public class App{
                                         dummyProject.addHDBOfficer(dummyOfficer);
                                         // Launch applicant interface
                                         ApplicantApp applicantApp = new ApplicantApp();
-                                        applicantApp.start(applicant.get(i), projectList);
+                                        ApplicantOfficerApp.start(applicant.get(i), projectList);
                                         
                                         userPos = i;
                                         currentUserId = userName;

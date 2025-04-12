@@ -46,6 +46,12 @@ public class HDBOfficer extends Applicant{
     public OfficerRegistrationStatus getOfficerRegistrationStatus() {
     	return officerRegistrationStatus;
     }
+    
+    /*
+    * @param allow HDBOfficer to view all booking requests from applicants.
+    * @return void  
+    * @description - The HDBOfficer can only receive and view requests of applicants that applied to the project he/she is part of */
+    
     public void viewBookRequests() {
     	if (managedApplications.size() > 0) {
         	for (Application app : managedApplications) {
@@ -62,10 +68,19 @@ public class HDBOfficer extends Applicant{
     	return managedApplications;
     }
     
+    /*
+    * @param receive book flat requests from applicants
+    * @return void
+    */
     public void receiveBookFlatRequest(Application application) {
     	managedApplications.add(application);
     }
     
+    /*
+    * @param helps applicants to book their flat 
+    * @return void
+    * @throws Exception - If the booked flat type has no more units
+    */
     public void helpBookFlat(Application application) {
     	FlatType chosenFlatType = application.getFlatType();
     	ArrayList<FlatType> flatTypes = managedProject.getFlatTypeList();

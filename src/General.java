@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import javax.print.event.PrintJobAdapter;
 
 public class General {
     private String DataFilePath = "./Data";
@@ -19,13 +20,9 @@ public class General {
 
         try{
             Scanner scanner = new Scanner(projectFile);
-            // fileContent = fileContent + scanner.nextLine() + "\n";
-            //This may having issue if some
             while(scanner.hasNextLine()){
                 buffeString = scanner.nextLine();
-                //check if search target in the String
                 if (buffeString.contains(targetRow)){
-                    System.out.println(target);
                     System.out.println("write into file");
                     buffeString = buffeString.replace(target, newContent);
                 }
@@ -43,34 +40,33 @@ public class General {
             e.printStackTrace();
         }
     }
-    
-    public void editOtherFile(String filePath, String fileType, String newContent, String target, String targetRow){
+
+    public void editProjectFile(Project project){
         String buffeString;
         String fileContent = "";
-        File projectFile = new File(filePath);
-
+        File projectFile = new File(DataFilePath +  "/ProjectList.txt");
         try{
+
             Scanner scanner = new Scanner(projectFile);
-            // fileContent = fileContent + scanner.nextLine() + "\n";
-            //This may having issue if some
             while(scanner.hasNextLine()){
                 buffeString = scanner.nextLine();
-                //check if search target in the String
-                if (buffeString.contains(targetRow)){
-                    //System.out.println(target);
-                    buffeString = buffeString.replace(target, newContent);
+                if (buffeString.contains(project.getProjectName())){
+                    System.out.println("write into file");
+                    buffeString = project.toStore();
                 }
                 fileContent = fileContent + buffeString + "\n";
             }
-            FileWriter writer = new FileWriter(DataFilePath + fileType);
+            
+            FileWriter writer = new FileWriter(DataFilePath + "/ProjectList.txt");
             writer.write(fileContent);
             writer.close();
             scanner.close();
+
         }catch (FileNotFoundException e){
             System.out.println("Error occured while reading OfficerList.txt");
             e.printStackTrace();
         }catch(IOException e){
-            System.out.println("Error occured when writing " + filePath);
+            System.out.println("Error occured when writing " + DataFilePath + "/ProjectList.txt");
             e.printStackTrace();
         }
     }
@@ -94,14 +90,6 @@ public class General {
     public Project findProject(ArrayList<Project> project,String projectName){
         for(Project i : project){
             if(projectName.equals(i.getProjectName())){
-                return i;
-            }
-        }
-        return null;
-    }
-    public Applicant findApplicant(ArrayList<Applicant> applicant,String NRIC){
-        for(Applicant i : applicant){
-            if(NRIC.equals(i.getNRIC())){
                 return i;
             }
         }

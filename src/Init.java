@@ -147,12 +147,13 @@ public class Init {
 
     public Project setProject(String[] data,ArrayList<HDBManager> hdbManager, ArrayList<HDBOfficer> hdbOfficer){
         General general = new General();
-        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat formatter = new SimpleDateFormat("d/M/yyyy");
         Project project = new Project();
         project.setProjectName(data[0]);
         project.setNeiborhood(data[1]);
         if(general.findManager(hdbManager, data[data.length - 4]) == null){
-            System.out.println("No such manager found: " + data[data.length - 4]);
+            System.out.println("No such manager found");
+            System.out.println("Return null");
             return null;
         }
 
@@ -165,8 +166,8 @@ public class Init {
         TwoRoom twoRoom;
         ThreeRoom threeRoom;
 
-        for(int i = 0; i < (data.length-7)/3 - 1; i+=1){
-            if(data[2+3*i].equals("ThreeRoom")){
+        for(int i = 0; i < (data.length-7)/3; i+=1){
+            if(data[2+3*i].equals("2-Room")){
                 ArrayList<MaritalStatus> maritalStatus = new ArrayList<>();
                 maritalStatus.add(MaritalStatus.SINGLE);
                 twoRoom = new TwoRoom(Integer.parseInt(data[3+3*i]),Double.parseDouble(data[4+3*i]),maritalStatus);

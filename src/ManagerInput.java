@@ -13,6 +13,7 @@ public class ManagerInput {
 	{
 		
 		do {
+			
 			System.out.println("\nHere are the actions you can perform:");
 			System.out.println("==================================== \n");
 			
@@ -37,7 +38,7 @@ public class ManagerInput {
             scanner.nextLine();
             
             HDBManager manager = new HDBManager();   
-            init.LoadManagerInfo(); // restore changed data
+            init.LoadProjectInfo(hdbManagers, hdbOfficers); // restore changed data
             
             switch(choice) {
             
@@ -88,7 +89,7 @@ public class ManagerInput {
             		
             		System.out.println("\nNOTE: You will be assigned to this created project.\n");
             		
-            		// Convert inputs to a string to 
+            		// Convert inputs to a string to update the txt
             		String createProjectString = String.join(",", projectName, neighborhood, "2-Room", unitType1, sellPriceType1, "3-Room", unitType2, sellPriceType2, openingDate, endingDate, userName, slots," ", visibility);
             		System.out.printf("%s", createProjectString);
             		
@@ -131,9 +132,10 @@ public class ManagerInput {
             				// check which options to update 
             				do {
             					System.out.println("\n=== List of Options to Update ===");
-                        		System.out.println("1. Update Project Name");
-                        		System.out.println("2. Update Neighborhood");
-                        		System.out.println("3. Update Number of Units"); // Add IF statements -> if 2 room / 3 room
+                        		System.out.println("0. Update Project Name");
+                        		System.out.println("1. Update Neighborhood");
+                        		System.out.println("2. Update Price");
+                        		System.out.println("3. Update Number of Units");
                         		System.out.println("4. Change Application Opening Date");
                         		System.out.println("5. Change Application Closing Date");
                         		System.out.println("6. Toggle Visibility (On/Off)");
@@ -147,48 +149,107 @@ public class ManagerInput {
                         		switch(choice2)
                         		{
                         		// Update Project Name
-                        		case 1:
+                        		case 0:
                         			System.out.println("Enter Updated Project Name: ");
                                 	String newProjectName = scanner.nextLine();  
                                 	
-                                	manager.editProject(selectedProject, newProjectName, "1", projects, i, hdbManagers, hdbOfficers);
+                                	manager.editProject(selectedProject, newProjectName, "0", projects, i, hdbManagers, hdbOfficers);
                                 	break;
                                 	
                                 // Update Neighborhood
-                        		case 2:                                        	
+                        		case 1:                                        	
                                 	System.out.println("Enter Updated Neighbourhood: ");                                     	
                                 	String newNeighbourhood = scanner.nextLine();      
                                 	
-                                	manager.editProject(selectedProject, newNeighbourhood, "2", projects, i, hdbManagers, hdbOfficers);
+                                	manager.editProject(selectedProject, newNeighbourhood, "1", projects, i, hdbManagers, hdbOfficers);
                                 	break;
+                                	
+                                // Update price
+                        		case 2:
+                        			int flatType;                        			
+                        			do
+                        			{
+                        				System.out.println("1. 2-Room ");
+                        				System.out.println("2. 3-Room ");
+                        				System.out.println("Choose which Flat Type to Update: ");
+                        				flatType = scanner.nextInt();            		 
+                        				
+                        				scanner.nextLine();
+                        				
+                        				switch(flatType)
+                        				{
+                        				// 2 Room 
+                        				case 1:
+                        					System.out.println("Enter Updated Pricing for 2-Room: ");  
+                            				String newPricing1 = scanner.nextLine(); 
+                            				
+                            				String currentRoom1 = "2-Room,";
+                            				
+                            				currentRoom1 += newPricing1; // identifier
+                            				
+                            				manager.editProject(selectedProject, currentRoom1, "2", projects, i, hdbManagers, hdbOfficers);
+                            				flatType = -1;
+                        					break;
+                        					
+                        				// 3 Room
+                        				case 2:
+                        					System.out.println("Enter Updated Pricing for 3-Room: ");
+                            				String newPricing2 = scanner.nextLine(); 
+                            				
+                            				String currentRoom2 = "3-Room,";
+                            				
+                            				currentRoom2 += newPricing2; // identifier
+                            				
+                            				manager.editProject(selectedProject, currentRoom2, "2", projects, i, hdbManagers, hdbOfficers);
+                            				flatType = -1;
+                        					break;
+                        					
+                        				default:
+                        					System.out.println("Invalid type. Please try again!");
+                        					break;
+                        				}            		             
+                        				
+                        			}while (flatType != -1);          				                    			                      			
+                        			break;
                                 	
                                 // Update Number of Units
                         		case 3:
-                        			int unitType;
-                        			
+                        			int unitType;                        			
                         			do
                         			{
-                        				System.out.println("Choose which Unit Type to Update: ");
-                        				System.out.println("1. Type 1 (2-Room): ");
-                        				System.out.println("2. Type 2 (3-Room): ");
+                        				System.out.println("1. 2-Room ");
+                        				System.out.println("2. 3-Room ");
+                        				System.out.println("Choose which Flat Type to Update: ");
                         				unitType = scanner.nextInt();            		 
+                        				
+                        				scanner.nextLine();
                         				
                         				switch(unitType)
                         				{
                         				// 2 Room 
                         				case 1:
-                        					System.out.printf("Enter Updated Number of Units for Type %d: ", unitType);  
+                        					System.out.println("Enter Updated Number of Units for 2-Room: ");  
                             				String newNoUnits1 = scanner.nextLine(); 
                             				
-                        					//manager.editProject(selectedProject, newNoUnits1, 3); 
+                            				String setRoom1 = "2-Room,";
+                            				
+                            				setRoom1 += newNoUnits1; // identifier
+                            				
+                            				manager.editProject(selectedProject, setRoom1, "3", projects, i, hdbManagers, hdbOfficers);
+                            				unitType = -1;
                         					break;
                         					
                         				// 3 Room
                         				case 2:
-                        					System.out.printf("Enter Updated Number of Units for Type %d: ", unitType);  
+                        					System.out.println("Enter Updated Number of Units for 3-Room: ");
                             				String newNoUnits2 = scanner.nextLine(); 
                             				
-                        					//manager.editProject(selectedProject, newNoUnits2, 6); 
+                            				String setRoom2 = "3-Room,";
+                            				
+                            				setRoom2 += newNoUnits2; // identifier
+                            				
+                            				manager.editProject(selectedProject, setRoom2, "3", projects, i, hdbManagers, hdbOfficers);
+                            				unitType = -1;
                         					break;
                         					
                         				default:
@@ -451,12 +512,14 @@ public class ManagerInput {
             	    		manager.generateApplicantReport(applicants, null, null, null);
             	    		break;
             	    		
-            	    	case 5:
-            	    		
+            	    	case 5:            	    		
             	    		break;
+            	    		
+            	    	default:
+            	    		System.out.println("Invalid option. Please try again!");
             	    }
             	    
-            	} while(choice3>4);
+            	} while(choice3 != 5);
             	break;
             
             // View Enquiries for ALL Projects

@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -114,24 +115,75 @@ public class HDBManager extends User{
         	switch(target)
         	{
         	// Update Project Name
-        	case "1":
+        	case "0":
         		general.editFile(DataFilePath + "/ProjectList.txt", updateContent,projectName,projectName);
+        		
+        		// set project name in project.java
+        		currentProjects.get(i).setProjectName(updateContent);        		
+        		System.out.println("Project Name changed to: " + updateContent);
         		break;
         		
         		// Update Neighborhood
-        	case "2":
+        	case "1":
         		general.editFile(DataFilePath + "/ProjectList.txt", updateContent, currentProjects.get(i).getNeiborhood(), projectName);
-        		System.out.println("Neiborhood changed to: " + updateContent);
-        			break;
+        		
+        		// set neighborhood in project.java
+        		currentProjects.get(i).setNeiborhood(updateContent);
+        		
+        		System.out.println("Neighbour changed to: " + updateContent);
+        		break;
+        		
+        		// update pricing
+        	case "2":
+        		ArrayList<FlatType> flatDetail = currentProjects.get(i).getFlatTypes();		        		
+        		String[] flatPricing = updateContent.split(",");
+        		// 0 = flat Types
+        		// 1 = pricing
+        		
+        		// function to identify which flat to update
+        		for (int x = 0; x < flatDetail.size(); x++)
+        		{
+        			if(flatDetail.get(x).getFlatTypeName().equals(flatPricing[0]))
+        			{
+        				// get old content to update
+        				String oldContents = flatDetail.get(x).getFlatTypeName() + "," + flatDetail.get(x).getUnits() + "," + String.format("%.0f", flatDetail.get(x).getPrice());
+        				String updatedContents = flatDetail.get(x).getFlatTypeName() + "," + flatDetail.get(x).getUnits() + "," + flatPricing[1];
+        		        				
+        				// update to .txt
+        				general.editFile(DataFilePath + "/ProjectList.txt", updatedContents, oldContents, projectName);
+        				
+        				// set pricing in project.java
+        				flatDetail.get(x).setPrice(Double.parseDouble(flatPricing[1]));
+        				
+        				System.out.printf("Pricing of %s is updated to $%s.\n", flatPricing[0], flatDetail.get(x).getPrice());
+        			}
+        		}        		        		
+        		break;
         		
         		// Update Number of Units
-        	case "3":
-        		
-        		//YET
-        		//Note that there are more than one flate type
-        		//flate type is under a seperate class               
-        		
-        		
+        	case "3":        		        		
+        		ArrayList<FlatType> flatDetails = currentProjects.get(i).getFlatTypes();		        		
+        		String[] flatStr = updateContent.split(",");
+        		// 0 = flat Types
+        		// 1 = number of updated units
+        		        		
+        		// function to identify which flat to update
+        		for (int x = 0; x < flatDetails.size(); x++)
+        		{        			
+        			if (flatDetails.get(x).getFlatTypeName().equals(flatStr[0]))
+        			{
+        				// get old content to update
+        				String oldContent = flatDetails.get(x).getFlatTypeName() + "," + flatDetails.get(x).getUnits();
+        				
+        				// update to .txt 
+        				general.editFile(DataFilePath + "/ProjectList.txt", updateContent, oldContent, projectName);
+        				
+        				// set units in project.java
+        				flatDetails.get(x).setUnits(Integer.parseInt(flatStr[1]));
+        				
+        				System.out.printf("%s is updated to %s units.\n", flatStr[0], flatDetails.get(x).getUnits());
+        			}
+        		}	
         		break;
         		
         		// Change Application Opening Date
@@ -140,7 +192,11 @@ public class HDBManager extends User{
 								updateContent, 
 								formatter.format(currentProjects.get(i).getApplicationOpeningDate()).toString(),
 								projectName);
-        		System.out.println("Opending date changed to: " + updateContent);
+        		
+        		// set application date in project.java
+        		//currentProjects.get(i).setApplicationOpeningDate(updateContent);
+        		
+        		System.out.println("Opening date changed to: " + updateContent);
         		break;
         		
         		// Change Application Closing Date
@@ -150,9 +206,12 @@ public class HDBManager extends User{
 								updateContent, 
 								formatter.format(currentProjects.get(i).getApplicationClosingDate()).toString(), 
 								projectName);
-        		System.out.println("Closing date changed to: " + updateContent);
-        		break;
         		
+        		// set application date in project.java
+        		
+        		
+        		System.out.println("Closing date changed to: " + updateContent);
+        		break;        		
         		
         	/*
         		// Change Manager in-Charge
@@ -171,16 +230,7 @@ public class HDBManager extends User{
         		general.editFile(DataFilePath + "/ProjectList.txt", updateContent,this.getName(),projectName);
         		break;
         		
-        	*/
-        		
-        		// Not needed? officer can register themselves
-        	case "officer":
-        		
-        		//YET: same as manager
-        		//Note that there are more than one officer
-        		
-        		break;
-        		
+        	*/        		
         		
         	default:
         		System.out.println("!!!Error input!!!");
@@ -226,7 +276,7 @@ public class HDBManager extends User{
 
         this.managedProjects.remove(targetProject);
         System.out.println("Project " + targetProject.getProjectName() + " removed");
-        return targetProject;
+        return null;
     }
     
     
@@ -296,21 +346,16 @@ public class HDBManager extends User{
     // General Function: print out all the required projects (Place inside loop, with index specified)
     public void listRequiredProjects(ArrayList<Project> currentProjects, int i) {
     	
-		//** TO-DO: NEED CHECK FOR TOGGLE VISIBILITY
 		System.out.printf("Project Name: %s | Neighborhood: %s | Visibility: %s \n", currentProjects.get(i).getProjectName(), currentProjects.get(i).getNeiborhood(), currentProjects.get(i).getVisibility());  
 		
 		// CALL flat types
-		System.out.println("   - Flat Types: \n");
+		System.out.println("   - Flat Details:");
 		
-		// STILL FIXING
-		//ArrayList<FlatType> flatTypes = currentProjects.get(i).getFlatTypes();
-		//StringBuilder flatDetails = new StringBuilder();
-		//for (FlatType flatType : flatTypes)
-		//{
-			//flatDetails.append(String.format("Flat Type: %s, Units: %d, Price: $%.2f\n",
-                    //flatType.getClass().getSimpleName(), flatType.getUnits(), flatType.getPrice()));
-		//}
-		//System.out.println(flatDetails);
+		ArrayList<FlatType> flatDetails = currentProjects.get(i).getFlatTypes();			
+		for (FlatType flatD : flatDetails)
+		{
+			System.out.printf("      - Flat Type: %s, Units: %d, Price: $%.2f\n", flatD.getFlatTypeName(), flatD.getUnits(), flatD.getPrice());			
+		}			
 		
 		System.out.printf("   - Application Period: %s to %s \n", currentProjects.get(i).getApplicationOpeningDate(), currentProjects.get(i).getApplicationClosingDate());
 		System.out.printf("   - HDB Manager: %s \n", currentProjects.get(i).getHDBManager().getName());
@@ -646,7 +691,7 @@ public class HDBManager extends User{
     			//Clear from applicant
     			applicant.setCurrentApplication(null);
     	
-    			ArrayList<FlatType> flatTypes = project.getFlatTypeList();
+    			ArrayList<FlatType> flatTypes = project.getFlatTypes(); // changes to .getFlatTypes from .getFlatTypesList
     			
     			
     			//Check if a flat was booked

@@ -172,11 +172,13 @@ public class Init {
                 maritalStatus.add(MaritalStatus.SINGLE);
                 twoRoom = new TwoRoom(Integer.parseInt(data[3+3*i]),Double.parseDouble(data[4+3*i]),maritalStatus);
                 flatTypes.add(twoRoom);
-            }else{
+            }
+            
+            if(data[5+3*i].equals("3-Room")){
                 ArrayList<MaritalStatus> maritalStatus = new ArrayList<>();
                 maritalStatus.add(MaritalStatus.SINGLE);
                 maritalStatus.add(MaritalStatus.MARRIED);
-                threeRoom = new ThreeRoom(Integer.parseInt(data[3+3*i]),Double.parseDouble(data[4+3*i]),maritalStatus);
+                threeRoom = new ThreeRoom(Integer.parseInt(data[6+3*i]),Double.parseDouble(data[7+3*i]),maritalStatus);
                 flatTypes.add(threeRoom);
             }
         }

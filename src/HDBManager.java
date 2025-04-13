@@ -8,10 +8,13 @@ import java.util.Scanner;
 import java.util.Date;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 public class HDBManager extends User{
-    private String DataFilePath = "./Data";   // TO ADD /src/ FOR ECLIPSE
+    private String DataFilePath = "./src/Data";   // TO ADD /src/ FOR ECLIPSE
     private ArrayList<Project> managedProjects = new ArrayList<Project>();
+    General general = new General();
 
     //set managed projects
     public void setManagedProjects(Project project){
@@ -366,7 +369,6 @@ public class HDBManager extends User{
 
     // return boolean visibility to check for Applicant & HDB Manager
     public void toggleVisibility(ArrayList<Project> currentProjects, String projectName){
-    	General general = new General();
     	
     	//We are only toggling the visibility of the project that the manager wants to toggle
     	for (int i=0; i<currentProjects.size(); i++) {
@@ -395,35 +397,307 @@ public class HDBManager extends User{
     	}    	
     }
     
+    public void viewOfficerRegistrationList() {
+    	
+    	String filePath = "./src/Data/OfficerRegistrationList.txt"; // change this if your path is different
 
-    public void approveOfficerRegistration(HDBOfficer officer, Project project){
+        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+            String line;
+            
+            int i =1;
+            
+            while ((line = br.readLine()) != null) {
+                // Split the line by comma
+            	
+                String[] parts = line.split(",");
+
+                if (parts.length == 4) {
+                    String officerName = parts[0].trim();
+                    String officerNRIC = parts[1].trim();
+                    String projectName = parts[2].trim();
+                    String registrationStatus = parts[3].trim();
+
+                    // Do something with registrationStatus
+                    System.out.printf("%d. %s|%s|%s|%s\n", i,officerName,officerNRIC,projectName,registrationStatus); 
+                } 
+                i++;
+            }
+        } catch (IOException e) {
+            System.err.println("Error reading the file: " + e.getMessage());
+        }
+
+    	
+    	
+    }
+    public void approveOrRejectOfficerRegistration(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, ArrayList<HDBOfficer> HDBOfficers, String userName){
+
+    	
+    	
+    	/*When function called, we will run through officerRegistration list, first for loop will be size of officer list
+    	 * Will check if status is pending
+    	 * 		If no, go next officer
+    	 * 		If yes, get officer NRIC and projectName
+    	 * 
+    	 * 
+    	 * Check if manager is managing project
+    	 * Check if request is pending
+    	 * Check if officer is in applicants /If yes need reject
+    	 * Check if officer is handling another project within date
+    	 * 		Check if officer is handling another project in projectlist
+    	 * 			If no, approve
+    	 * 			If yes, get project endDate check currentProject's startDate or get project startDate and currentProject's endDate
+    	 * 			Check if startDate of registeredProject is before endDate of alreadyRegisteredProject
+    	 * 			Check if startDate or endDate of RegisteringProject is in between startDate and endDate of alreadyRegisteredProject
+    	 * Check if there is slot for the project
+    	 * 
+    	 */
+    	OfficerRegistrationStatus status;
+    	General general = new General();
+    	
+    	 String filePath = "./src/Data/OfficerRegistrationList.txt"; // change this if your path is different
+
+         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
+             String line;
+             
+             //Run through each officer registration
+             while ((line = br.readLine()) != null) {
+                 String[] parts = line.split(",");
+                 
+                 boolean approved = false;
+                 
+
+                 if (parts.length == 4) {
+                     String officerName = parts[0].trim(); 
+                     String officerNRIC = parts[1].trim();
+                     String projectName = parts[2].trim();
+                     String registrationStatus = parts[3].trim();
+                     status = OfficerRegistrationStatus.valueOf(registrationStatus.toUpperCase());
+                     
+                     //Find the index of project with projectName
+                     Project index = general.findProject(currentProjects, projectName);
+                     
+                     
+                     //Check if manager is managing the current project
+ 
+                    	 //Check if registrationStatus is pending
+                    	 if(index != null && index.getHDBManager().getName().equals(userName) && status == OfficerRegistrationStatus.PENDING) {
+                    	
+                    		 
+                    		 //Check if officer NRIC is in applicant list 
+                    		 Applicant NRICindex = general.findApplicant(applicants, officerNRIC);
+                    		 
+                    		 
+                    		 //Officer is in applicants
+                    		 if(NRICindex !=null) {
+                    			 rejectRegistration(filePath, officerNRIC);
+                    			 System.out.printf("Officer %s has been rejected from Project %s as he/she is in applicants list\n", officerName,projectName);
+                    			 continue;
+                    		 }
+                    		 
+                    		 //To indicate when to break loop to go to next officerRegistration if officer is rejected
+                    		 boolean conflict = false;
+                    		 
+                    		 
+                    		 
+                    			 
+                    		 //Loop through projects and get managers 
+                    		 for(Project project : currentProjects) {
+                    			 
+                    				//Check that the current project is not the project they are registering for 
+                    				 if(!project.getProjectName().equals(projectName)) {
+                    					 //Get officers for the current project
+                    					 ArrayList<HDBOfficer> officers = project.getHDBOfficer();
+                    					 //Go through each officer in the project to check if the officer is handling the current project
+                    					 for(HDBOfficer officer : officers) {
+                    						 //If officer is in this project, check date
+                    						 if(officer != null && officer.getName().equals(officerName)){
+                    							 
+                    							 //Checks if start date of registeringProject is in between start and end date of current project they are already handling 
+                    							 boolean startDateConflict = ((index.getApplicationOpeningDate().after(project.getApplicationOpeningDate()) 
+                    									 && index.getApplicationOpeningDate().before(project.getApplicationClosingDate())) || index.getApplicationOpeningDate().equals(project.getApplicationClosingDate()));
+                    							//Checks if end date date of registeringProject is in between start and end date of current project they are already handling
+                    							 boolean endDateConflict = ((index.getApplicationClosingDate().after(project.getApplicationOpeningDate())
+                    									 && index.getApplicationClosingDate().before(project.getApplicationClosingDate())) || index.getApplicationClosingDate().equals(project.getApplicationOpeningDate()));
+                    							 //If start date or end date has a conflict, reject registration
+                    							 if( startDateConflict || endDateConflict) {
+                    								 conflict = true; //Set conflict to true
+                    								 rejectRegistration(filePath,officerNRIC);
+                    								 System.out.printf("Officer %s has been rejected from Project %s as he/she is already handling another project within the time period\n", officerName,projectName);
+                    								 break;
+                    							 }
+                    							 
+                    					}
+                    				 }
+                    					 
+                    				 if(conflict) break; //If conflict is set to true, it will go out of the projects loop
+                    				 
+                    					
+                    	
+                    				}	 
+                    				 
+                    			 }
+                    		 
+                    		if(conflict) continue;//If conflict is true, it will go to next officer in RegistrationList
+                    		
+                    		HDBOfficer currentOfficer = general.findOfficer(HDBOfficers, officerName);
+                    		
+                    		ArrayList<HDBOfficer> currentOfficers = index.getHDBOfficer();
+                    		String officerNames = "";
+                    		
+                    		for (int i = 0; i < currentOfficers.size(); i++) {
+                    		    HDBOfficer officer = currentOfficers.get(i);
+                    		    if (officer != null) {
+                    		        officerNames += officer.getName();
+                    		        // Add "&" if it's not the last non-null officer
+                    		        // Look ahead to see if there is another non-null officer
+                    		        for (int j = i + 1; j < currentOfficers.size(); j++) {
+                    		            if (currentOfficers.get(j) != null) {
+                    		                officerNames += " & ";
+                    		                break;
+                    		            }
+                    		        }
+                    		    }
+                    		}
+                    	
+                    		
+                    		
+                    			 
+                    		if(index.getAvailableOfficerSlots() == 0) {
+                    				rejectRegistration(filePath, officerNRIC);
+                    				System.out.printf("Officer %s has been rejected from Project %s as there are no more available slots\n", officerName,projectName);
+                    		} else {
+                    			    approveRegistration(filePath, officerNRIC);
+                    				int slots = index.getAvailableOfficerSlots();
+                    				index.addHDBOfficer(currentOfficer);
+                    				String newOfficerNames = officerNames + "&" + officerName;
+                    				general.editFile(DataFilePath + "/ProjectList.txt",String.valueOf(slots-1) , String.valueOf(index.getAvailableOfficerSlots()) ,projectName);
+                    				if (officerNames.isEmpty()) {
+                    				   // general.editFile(DataFilePath + "/ProjectList.txt", officerName, "", projectName);
+                    				} else {
+                    				    general.editFile(DataFilePath + "/ProjectList.txt", newOfficerNames, officerNames, projectName);
+                    				}
+                    				index.setAvailableOfficerSlots(slots-1);
+                    				approved = true;
+                    				currentOfficer.setManagingOfficer(true);
+                    				System.out.printf("Officer %s has been approved for Project %s\n", officerName,projectName);
+                    			 }
+                    			 
+                    			 
+                    		 } 
+                    	 }
+                     
+
+                 
+             }
+         } catch (IOException e) {
+             System.err.println("Error reading the file: " + e.getMessage());
+         }
 
     }
-    public void rejectOfficerRegistration(HDBOfficer officer, Project project){
-
+    private void rejectRegistration(String filePath, String officerNRIC) {
+        general.editOtherFile(filePath,"/OfficerRegistrationList.txt", "REJECTED", "PENDING", officerNRIC);
     }
-    public void approveApplication(Applicant applicant, Project project){
+
+    // Approve the officer registration
+    private void approveRegistration(String filePath, String officerNRIC) {
+        general.editOtherFile(filePath,"/OfficerRegistrationList.txt", "APPROVED", "PENDING", officerNRIC);
+    }
+    
+    
+    public void approveOrRejectApplication(Applicant applicant, Project project){
+    	
+    	/*
+    	 * 
+    	 */
+    	
 
     }
     public void rejectApplication(Applicant applicant, Project project){
 
     }
-    public void approveWithdrawal(Applicant applicant, Project project){
+    public void approveWithdrawal(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants){
         // filter for applicant PENDINGWITHDRAWAL application 
         // set application status to WITHDRAWN
         // remove application from applicant
         // remove application from project
         // check if bookedflat 
         // minus from available units 
+    	
+    	//Run through each applicant
+    	for(Applicant applicant : applicants) {
+    		
+    		//Get the application of the current applicant
+    		Application application = applicant.getCurrentApplication();
+    		
+    		//Check if applicant has an application and if application is PENDINGWITHDRAWAL
+    		if(application != null && application.getApplicationStatus() == ApplicationStatus.PENDINGWITHDRAWAL) {
+    			Project project = application.getProject(); //Get the project of the application
+    			FlatType flatType = application.getFlatType(); //Get flatType that was applied for
+    			
+    			
+    			//Set application status to withdrawn
+    			application.setApplicationStatus(ApplicationStatus.WITHDRAWN);
+    			
+    			//Remove from project's application list
+    			project.getApplications().remove(application);
+    			
+    			
+    			//Clear from applicant
+    			applicant.setCurrentApplication(null);
+    	
+    			ArrayList<FlatType> flatTypes = project.getFlatTypeList();
+    			
+    			
+    			//Check if a flat was booked
+    			if(application.getIsBooked()) {
+    				FlatTypeLogic.updateIncreaseFilteredFlatTypeUnits(flatTypes, flatType);
+    			}
+    			
+    			System.out.printf("Withdrawn application for applicant %s (NRIC: %s)\\n", 
+                        applicant.getName(), applicant.getNRIC());
+    		}
+    		
+    		
+    	}
+
 
 
     }
-    public void rejectWithdrawal(Applicant applicant, Project project){
-
-    }
-    public String generateApplicantReport(ReportFilter filters){
-        return "report";
-    }
+    
+    public void generateApplicantReport(ArrayList<Applicant> applicants, String maritalStatusFilter, Integer minAge, Integer maxAge){
+    	
+    	System.out.println("=== Applicant report ===");
+    	System.out.println("Name | Project | Flat Type | Age | Marital Status");
+    	
+    	for(Applicant applicant : applicants) {
+    		
+    		//Filter by marital status
+    		if(maritalStatusFilter != null && !applicant.getMaritalStatus().toString().equalsIgnoreCase(maritalStatusFilter)) {
+    			continue;
+    		}
+    		
+    		//Filter by age
+    		int age = applicant.getAge();
+    		if((minAge != null && age<minAge) || (maxAge != null && age>maxAge)) {
+    			continue;
+    		}
+    		
+    		
+    		Application application = applicant.getCurrentApplication();
+    		if(application ==null) {
+    			continue;}
+    			
+    		String projectName = application.getProject().getProjectName();
+    		String flatTypeStr = application.getFlatType().toString(); // Assuming FlatType has a toString method
+            int age2 = applicant.getAge();
+            String maritalStatus = applicant.getMaritalStatus().toString();
+                
+            System.out.printf("%s | %s | %s | %d | %s\n", 
+                        applicant.getName(), projectName, flatTypeStr, age2, maritalStatus);
+    			
+    		}
+    	}
+    
     public void replyToEnquiry(Enquiry enquiry, String reply){
 
     }

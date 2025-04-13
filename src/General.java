@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+
 public class General {
     private String DataFilePath = "./Data";
     //This function will only add the new content at the end of the file
@@ -42,6 +43,37 @@ public class General {
             e.printStackTrace();
         }
     }
+    
+    public void editOtherFile(String filePath, String fileType, String newContent, String target, String targetRow){
+        String buffeString;
+        String fileContent = "";
+        File projectFile = new File(filePath);
+
+        try{
+            Scanner scanner = new Scanner(projectFile);
+            // fileContent = fileContent + scanner.nextLine() + "\n";
+            //This may having issue if some
+            while(scanner.hasNextLine()){
+                buffeString = scanner.nextLine();
+                //check if search target in the String
+                if (buffeString.contains(targetRow)){
+                    //System.out.println(target);
+                    buffeString = buffeString.replace(target, newContent);
+                }
+                fileContent = fileContent + buffeString + "\n";
+            }
+            FileWriter writer = new FileWriter(DataFilePath + fileType);
+            writer.write(fileContent);
+            writer.close();
+            scanner.close();
+        }catch (FileNotFoundException e){
+            System.out.println("Error occured while reading OfficerList.txt");
+            e.printStackTrace();
+        }catch(IOException e){
+            System.out.println("Error occured when writing " + filePath);
+            e.printStackTrace();
+        }
+    }
 
     public HDBManager findManager(ArrayList<HDBManager> hdbManager,String name){
         for(HDBManager i : hdbManager){
@@ -62,6 +94,14 @@ public class General {
     public Project findProject(ArrayList<Project> project,String projectName){
         for(Project i : project){
             if(projectName.equals(i.getProjectName())){
+                return i;
+            }
+        }
+        return null;
+    }
+    public Applicant findApplicant(ArrayList<Applicant> applicant,String NRIC){
+        for(Applicant i : applicant){
+            if(NRIC.equals(i.getNRIC())){
                 return i;
             }
         }

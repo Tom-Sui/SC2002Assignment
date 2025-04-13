@@ -9,7 +9,7 @@ public class ManagerInput {
 	Init init = new Init();
 	int choice;
 	
-	public void switchFunction(String userName, ArrayList<Project> projects, ArrayList<HDBManager> hdbManagers, ArrayList<HDBOfficer> hdbOfficers)
+	public void switchFunction(String userName, ArrayList<Project> projects, ArrayList<HDBManager> hdbManagers, ArrayList<HDBOfficer> hdbOfficers, ArrayList<Applicant> applicants)
 	{
 		
 		do {
@@ -365,11 +365,14 @@ public class ManagerInput {
             // View Pending and Approved HDB Officer Registrations
             case 7:            	
             	System.out.println("_________Pending Officer Registration______");
+            	manager.viewOfficerRegistrationList();
+            	
             	//Might need to create a txt file for officer registration 
             	break;
             	
             // Approve or Reject HDB Officer Registrations
-            case 8:            		
+            case 8:           
+            	manager.approveOrRejectOfficerRegistration(projects, applicants, hdbOfficers, userName);
             	break;
             	
             // Approve or Reject Applicant’s BTO Application
@@ -377,11 +380,83 @@ public class ManagerInput {
             	break;
             	
             // Approve or Reject Applicant’s Withdrawal Request
-            case 10:            	
+            case 10:       
+            	manager.approveWithdrawal(projects, applicants);
             	break;
             	
             // Generate Reports of Applicants
-            case 11:            	
+            case 11:  
+            	FlatType selectedFlatType = null;
+            	String maritalStatusFilter = null;
+            	Integer minAge = null, maxAge = null;
+            	int choice3;
+            	
+            	do {
+            		System.out.println("\n=== Report Filter Menu ===");
+            		System.out.println("1. Filter by Marital Status");
+            		System.out.println("2. Filter by Age Range");
+            		System.out.println("3. Filter by Marital Status and Age Range");
+            		System.out.println("4. Show All Applicants");
+            	    System.out.println("5. Exit");
+            	    
+            	    choice3 = scanner.nextInt();
+            	    scanner.nextLine();
+            	    
+            	    switch(choice3) {
+            	    	//Filter by marital status
+            	    	case 1:
+            	    		
+            	    		System.out.print("Enter marital status(SINGLE/MARRIED): ");
+            	    		maritalStatusFilter = scanner.nextLine().toUpperCase();
+            	    		
+            	    		if(maritalStatusFilter.equals("SINGLE") || maritalStatusFilter.equals("MARRIED")) {
+            	    			manager.generateApplicantReport(applicants, maritalStatusFilter,null,null);
+            	    			break;    
+            	    		} else {
+            	    			System.out.print("Invalid Marital Status");
+            	    			break;
+            	    		}
+            	    		
+            	    		
+            	          
+            	        //Filter by age range    
+            	    	case 2:
+            	    		System.out.print("Enter min age: ");
+            	            minAge = scanner.nextInt();
+            	            System.out.print("Enter max age: ");
+            	            maxAge = scanner.nextInt();
+            	            scanner.nextLine(); // consume newline
+            	            manager.generateApplicantReport(applicants, null, minAge, maxAge);
+            	            break;
+            	        
+            	    	//Filter by marital status and age range	
+            	    	case 3:
+            	    		System.out.print("Enter marital status (e.g. SINGLE, MARRIED): ");
+            	            maritalStatusFilter = scanner.nextLine().toUpperCase();
+            	            if(maritalStatusFilter.equals("SINGLE") || maritalStatusFilter.equals("MARRIED")) {
+            	            	System.out.print("Enter min age: ");
+                	            minAge = scanner.nextInt();
+                	            System.out.print("Enter max age: ");
+                	            maxAge = scanner.nextInt();
+                	            scanner.nextLine(); // consume newline
+                	            manager.generateApplicantReport(applicants, maritalStatusFilter, minAge, maxAge);
+                	            break;    
+                	    		} else {
+                	    			System.out.print("Invalid Marital Status");
+                	    			break;
+                	    		}
+  
+            	    	//Show all	
+            	    	case 4:
+            	    		manager.generateApplicantReport(applicants, null, null, null);
+            	    		break;
+            	    		
+            	    	case 5:
+            	    		
+            	    		break;
+            	    }
+            	    
+            	} while(choice3>4);
             	break;
             
             // View Enquiries for ALL Projects

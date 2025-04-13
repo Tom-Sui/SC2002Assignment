@@ -123,7 +123,7 @@ public class App{
                                         logedIn = true;
                                         
                                         ManagerInput manager = new ManagerInput();
-                                        manager.switchFunction(userName, projects, hdbManagers, hdbOfficers);                                        
+                                        manager.switchFunction(userName, projects, hdbManagers, hdbOfficers, applicant);                                        
                                         break;
                                     }
                                 }

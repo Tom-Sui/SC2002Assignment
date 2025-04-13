@@ -50,5 +50,13 @@ public class FlatTypeLogic {
     		}
     	}
     }
+    
+    public static void updateIncreaseFilteredFlatTypeUnits(ArrayList<FlatType> flatTypes, FlatType type) {
+    	for (FlatType flat : flatTypes) {
+    		if (flat.equals(type)) {
+    			flat.setUnits(flat.getUnits()+1);
+    		}
+    	}
+    }
 
 }

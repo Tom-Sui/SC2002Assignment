@@ -93,7 +93,8 @@ public class HDBManager extends User{
     //Do remember to run init.LoadProjectInfo() to restore the changed project info
     public boolean editProject(String projectName, String updateContent
 							, String target, ArrayList<Project> currentProjects
-							, int i, ArrayList<HDBManager> hdbManager
+							, int i
+							, ArrayList<HDBManager> hdbManager
 							,ArrayList<HDBOfficer> hdbOfficer){
 
         General general = new General();

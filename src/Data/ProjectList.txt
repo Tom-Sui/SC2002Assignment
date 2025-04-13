@@ -1,5 +1,5 @@
-Acacia Breeze,Yishun,2-Room,2,350000,3-Room,3,450000,1/2/2025,12/12/1212,Michael,3,Daniel&Emily,true
-Raymon Dusk,Orchard,2-Room,10,1000000,3-Room,15,1200000,12/5/2033,12/12/1212,Jessica,4, ,true
+Acacia Breeze,Yishun,2-Room,6,13000.0,3-Room,15,43555.0,1/2/2025,12/12/1312,Michael,5,Daniel&Emily,true
+Raymon Dusk,Orchard,2-Room,6,13000,3-Room,15,43555,12/5/2033,12/12/1212,Jessica,4, ,true
 Disney SEA,Changi,2-Room,5,3000000,3-Room,5,3500000,12/5/2026,24/6/2028,Michael,1, ,true
 MessyHead,Woodlands,2-Room,4,100200,3-Room,5,200300,10/4/2025,20/12/2029,Jessica,8, ,true
 Sky View,Marina,2-Room,20,2000000,3-Room,25,3000000,8/4/2025,3/6/2030,Jessica,2, ,false

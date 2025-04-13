@@ -1,5 +1,7 @@
 import java.util.Date;
 import java.util.ArrayList;
+import java.lang.reflect.Field;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -151,7 +153,49 @@ public class Project {
     	String flatDetails = FlatTypeLogic.displayFlatTypes(flatTypes);
 		String projectDetails = String.format("%s, %s, %s to %s\n%s", projectName, neighborhood, formattedOpeningDate, formattedClosingDate, flatDetails);
 		return projectDetails;
-    	
+    }
+
+    public String toStore() {
+    	SimpleDateFormat formatter = new SimpleDateFormat("d/M/yyyy");
+        String projectDetails = "";
+        projectDetails = projectDetails + this.projectName + ",";
+        projectDetails = projectDetails + this.neighborhood + ",";
+
+        for(FlatType flatType : this.flatTypes){
+            if(flatType instanceof TwoRoom){
+                projectDetails = projectDetails + "2-Room,";
+                projectDetails = projectDetails + String.valueOf(flatType.getUnits()) + ",";
+                projectDetails = projectDetails + String.valueOf(flatType.getPrice()) + ",";
+            }else if(flatType instanceof ThreeRoom){
+                projectDetails = projectDetails + "3-Room,";
+                projectDetails = projectDetails + String.valueOf(flatType.getUnits()) + ",";
+                projectDetails = projectDetails + String.valueOf(flatType.getPrice()) + ",";
+            }
+        }
+    	projectDetails = projectDetails + formatter.format(this.applicationOpeningDate) + ",";
+    	projectDetails = projectDetails + formatter.format(this.applicationClosingDate) + ",";
+        projectDetails = projectDetails + this.hdbManager.getName() + ",";
+
+        projectDetails = projectDetails + String.valueOf(this.availableOfficerSlots) + ",";
+
+        int i = 0;
+        for(HDBOfficer hdbOfficer : this.hdbOfficers){
+
+            if(i++ == hdbOfficers.size() - 1){
+                projectDetails = projectDetails + hdbOfficer.getName() + ",";
+                break;
+            }
+            projectDetails = projectDetails + hdbOfficer.getName() + "&";
+        }
+
+
+
+        if(visibility){
+            projectDetails = projectDetails + "true"; 
+        }else{
+            projectDetails = projectDetails + "false"; 
+        }
+		return projectDetails;
     }
 
     public void addApplication(Application application){
@@ -161,10 +205,5 @@ public class Project {
     public ArrayList<Application> getApplications(){
         return applications;
     }
-
-    public ArrayList<FlatType> getFlatTypeList(){
-        return flatTypes;
-    }
-    
 
 }

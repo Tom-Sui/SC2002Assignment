@@ -41,8 +41,6 @@ public class App{
         //Initialize projects info into Project class
         ArrayList<Project> projects;
         projects = init.LoadProjectInfo(hdbManagers, hdbOfficers);
-
-
         // hdbInterface.interface(project,hdbManagers,hdbOfficers)
         // Return null if there is maching manager found
         // projects = hdbManagers.get(1).createProject("aNOTHER NAME,TESTING TESTING name,2-Room,2,350000,3-Room,3,450000,2/2/2343,12/12/2343,Jessica,3,Daniel&Emily,true",projects,hdbManagers,hdbOfficers);

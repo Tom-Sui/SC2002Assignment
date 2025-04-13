@@ -68,7 +68,7 @@ public class HDBOfficer extends Applicant{
     
     public void helpBookFlat(Application application) {
     	FlatType chosenFlatType = application.getFlatType();
-    	ArrayList<FlatType> flatTypes = managedProject.getFlatTypeList();
+    	ArrayList<FlatType> flatTypes = managedProject.getFlatTypes();
     	int remainingUnits = FlatTypeLogic.returnFilteredFlatTypeUnits(flatTypes, chosenFlatType);
     	if (remainingUnits >= 1) {
     		//Updating applicant and his application process

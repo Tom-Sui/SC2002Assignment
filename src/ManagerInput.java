@@ -38,7 +38,7 @@ public class ManagerInput {
             scanner.nextLine();
             
             HDBManager manager = new HDBManager();   
-            init.LoadProjectInfo(hdbManagers, hdbOfficers); // restore changed data
+            projects = init.LoadProjectInfo(hdbManagers, hdbOfficers); // restore changed data
             
             switch(choice) {
             

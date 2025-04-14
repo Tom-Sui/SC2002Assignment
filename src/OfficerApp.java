@@ -2,45 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-/**
- * Provides the command-line interface for HDB officers to interact with the system.
- * <p>
- * This class handles all officer operations including registration status checks,
- * booking request management, and flat booking assistance through a command line interface.
- * </p>
- * 
- */
-
 public class OfficerApp {
-
-	/**
-     * Officer application interface.
-     * <p>
-     * Displays a menu of available features based on the officer
-     * and processes the selected operations. 
-	 * Managing officers get additional project management features.
-     * </p>
-     *
-     * @param officer The HDB officer using the application (must not be null)
-     *
-     * The system provides these functions:
-     * <ol>
-     *   <li>View Registration Status - Shows current project registration status</li>
-     *   <li>Register for Project - Placeholder for future implementation</li>
-     *   <li>View Booking Requests - Lists all pending booking requests</li>
-     *   <li>Help Book Flat - Processes flat booking for selected application</li>
-     *   <li>Generate Receipt - Generates flat selection receipts</li>
-     *   <li>View Project Details (only managed projects) - Shows managed project details</li>
-     *   <li>Exit - Quits the application</li>
-     * </ol>
-     *
-     * @throws NullPointerException if officer parameter is null
-     *
-     * @see HDBOfficer
-     * @see ApplicationLogic
-     * @see Application
-     */
-
 	public static void start(HDBOfficer officer) {
 		Scanner sc = new Scanner(System.in);
 		ArrayList<String> officerFeatures = new ArrayList<>(List.of(

@@ -1,47 +1,17 @@
-/**
- * Represents a housing application submitted by an applicant for a specific project and flat type.
- * <p>
- * This class tracks the application status, booking information, and maintains
- * references to the applicant, project, and flat type associated with the application.
- * </p>
- * 
- * @see Applicant
- * @see Project
- * @see FlatType
- * @see ApplicationStatus
- */
+// File: Application.java
+
 public class Application {
 
-    /** Static counter for generating unique application IDs */
+    //Static attribute
     private static int applicationId = 0;
-    
-    /** The applicant who submitted this application */
+    //Attributes
     private Applicant applicant;
-    
-    /** The project this application is for */
     private Project project;
-    
-    /** Current status of the application */
     private ApplicationStatus applicationStatus;
-    
-    /** Flag indicating if the flat has been booked */
     private boolean isBooked;
-    
-    /** Flag indicating if booking has been requested */
     private boolean bookingRequested;
-    
-    /** The type of flat being applied for */
     private FlatType appliedflatType;
-    
-    /**
-     * Constructs a new Application with the specified details.
-     * 
-     * @param applicant the applicant submitting the application
-     * @param project the project being applied to
-     * @param flatType the type of flat being requested
-     * Application status is initially set to SUCCESSFUL for testing purposes,
-     * but should normally be PENDING in production
-     */
+    //Constructor
     public Application(Applicant applicant, Project project, FlatType flatType) {
         Application.applicationId = applicationId++;
         this.applicant = applicant;
@@ -52,111 +22,48 @@ public class Application {
         this.appliedflatType = flatType;
     }
 
-    // ========== GETTERS AND SETTERS ==========
-    
-    /**
-     * Gets the applicant associated with this application.
-     * 
-     * @return the Applicant object
-     */
+    //Getters and Setters
     public Applicant getApplicant() {
         return applicant;
     }
     
-    /**
-     * Gets the project associated with this application.
-     * 
-     * @return the Project object
-     */
     public Project getProject() {
         return project;
     }
 
-    /**
-     * Gets the current status of the application.
-     * 
-     * @return the ApplicationStatus
-     */
     public ApplicationStatus getApplicationStatus() {
         return applicationStatus;
     }
 
-    /**
-     * Checks if the flat has been booked.
-     * 
-     * @return true if booked, false otherwise
-     */
     public boolean getIsBooked() {
         return isBooked;
     }
     
-    /**
-     * Checks if booking has been requested.
-     * 
-     * @return true if booking requested, false otherwise
-     */
     public boolean getBookingRequested() {
-        return bookingRequested;
+    	return bookingRequested;
     }
     
-    /**
-     * Sets the booked status of the application.
-     * 
-     * @param isBooked true to mark as booked, false otherwise
-     */
     public void setIsBooked(boolean isBooked) {
         this.isBooked = isBooked;
     }
 
-    /**
-     * Sets the booking requested status.
-     * 
-     * @param bookingRequested true to indicate booking requested, false otherwise
-     */
     public void setBookingRequested(boolean bookingRequested) {
-        this.bookingRequested = bookingRequested;
+    	this.bookingRequested = bookingRequested;
     }
-    
-    /**
-     * Updates the application status.
-     * 
-     * @param status the new ApplicationStatus
-     */
     public void setApplicationStatus(ApplicationStatus status) {
-        applicationStatus = status;
+    	applicationStatus = status;
     }
-    
-    /**
-     * Gets the flat type being applied for.
-     * 
-     * @return the FlatType object
-     */
     public FlatType getFlatType() {
         return appliedflatType;
     }
 
-    /**
-     * Gets the application ID.
-     * 
-     * @return the application ID number
-     */
     public int getApplicationId() {
         return applicationId;
     }
     
-    /**
-     * Returns a string representation of the application details.
-     * 
-     * @return formatted string containing applicant and flat information
-     */
-    @Override
     public String toString() {
-        String applicationDetails = String.format("%s, %s, %d, %s, %s", 
-            applicant.getName(), 
-            applicant.getNRIC(), 
-            applicant.getAge(), 
-            applicant.getMaritalStatus(), 
-            appliedflatType);
-        return applicationDetails;
+		String applicationDetails = String.format("%s, %s, %d, %s, %s", applicant.getName(), applicant.getNRIC(), applicant.getAge(), applicant.getMaritalStatus(), appliedflatType);
+		return applicationDetails;
     }
+
 }

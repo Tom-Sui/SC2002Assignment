@@ -2,58 +2,13 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 // For Manager Interfaces
-/**
- * Provides the command-line interface for HDB managers to interact with the system.
- * <p>
- * This class handles all manager operations including project management, application processing,
- * and report generation through a command line interface.
- * </p>
- * 
- */
+
 public class ManagerInput {
 	
 	Scanner scanner = new Scanner(System.in);
 	Init init = new Init();
 	int choice;
-	/**
-     * Displays and processes the manager menu system.
-     * <p>
-     * This method presents a comprehensive menu system and handles all manager operations
-     * including project creation, editing, deletion, and various approval workflows.
-     * </p>
-     *
-     * @param userName The username of the currently logged-in manager
-     * @param projects List of all projects in the system
-     * @param hdbManagers List of all HDB managers
-     * @param hdbOfficers List of all HDB officers
-     * @param applicants List of all applicants
-     *
-     * The system provides these functions:
-     * <ol start="0">
-     *   <li>View Current Active Project</li>
-     *   <li>Create a New BTO Project</li>
-     *   <li>Edit an Existing BTO Project</li>
-     *   <li>Delete a BTO Project</li>
-     *   <li>Toggle Project Visibility</li>
-     *   <li>View All Created Projects</li>
-     *   <li>View Personal Projects</li>
-     *   <li>View Officer Registrations</li>
-     *   <li>Approve/Reject Officer Registrations</li>
-     *   <li>Approve/Reject BTO Applications</li>
-     *   <li>Approve/Reject Withdrawal Requests</li>
-     *   <li>Generate Applicant Reports</li>
-     *   <li>View All Enquiries</li>
-     *   <li>View/Reply to Project Enquiries</li>
-     *   <li>Quit</li>
-     * </ol>
-     *
-     * @throws IllegalArgumentException if invalid inputs are provided
-     * @throws NullPointerException if required parameters are null
-     *
-     * @see HDBManager
-     * @see Project
-     * @see Applicant
-     */
+	
 	public void switchFunction(String userName, ArrayList<Project> projects, ArrayList<HDBManager> hdbManagers, ArrayList<HDBOfficer> hdbOfficers, ArrayList<Applicant> applicants)
 	{
 		
@@ -140,7 +95,7 @@ public class ManagerInput {
             		
             		// manager.createProject(createProjectString, projects, hdbManagers, hdbOfficers); // WRITE to createProject function
 					//Load the created project to the list      
-					projects = manager.createProject(createProjectString, hdbManagers, hdbOfficers); // WRITE to createProject function
+					projects = manager.createProject(createProjectString, projects, hdbManagers, hdbOfficers); // WRITE to createProject function
             	}
             	else
             	{
@@ -198,7 +153,7 @@ public class ManagerInput {
                         			System.out.println("Enter Updated Project Name: ");
                                 	String newProjectName = scanner.nextLine();  
                                 	
-                                	manager.editProject(selectedProject, newProjectName, "0", projects, i);
+                                	manager.editProject(selectedProject, newProjectName, "0", projects, i, hdbManagers, hdbOfficers);
                                 	break;
                                 	
                                 // Update Neighborhood
@@ -206,7 +161,7 @@ public class ManagerInput {
                                 	System.out.println("Enter Updated Neighbourhood: ");                                     	
                                 	String newNeighbourhood = scanner.nextLine();      
                                 	
-                                	manager.editProject(selectedProject, newNeighbourhood, "1", projects, i);
+                                	manager.editProject(selectedProject, newNeighbourhood, "1", projects, i, hdbManagers, hdbOfficers);
                                 	break;
                                 	
                                 // Update price

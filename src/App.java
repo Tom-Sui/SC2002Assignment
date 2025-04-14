@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.security.GeneralSecurityException;
 import java.sql.Date;
 
 public class App{
@@ -10,7 +11,6 @@ public class App{
     private static String currentUserId = "NULL";
     private static String userType = "NULL";
     private static int userPos = -1;
-    
 
     public static void main(String[] args) {
         String userInput;
@@ -56,6 +56,10 @@ public class App{
         //Initialize manager managed projects
         hdbManagers = init.setManagerManagedProjects(hdbManagers,projects);
 
+
+        projects.get(0).setProjectName("New Name");
+        General general = new General();
+        general.editProjectFile(projects);
 
         // System.out.println(hdbManagers.get(0).getName());
         // hdbManagers.get(0).deletProject(projects.get(0));

@@ -75,8 +75,9 @@ public class General {
             Scanner scanner = new Scanner(projectFile);
             while(scanner.hasNextLine()) {
                 buffeString = scanner.nextLine();
+                
                 if (buffeString.contains(project.getProjectName())) {
-                    System.out.println("Updating new changes...");
+                    System.out.println("Processing...");
                     buffeString = project.toStore();
                 }
                 fileContent = fileContent + buffeString + "\n";

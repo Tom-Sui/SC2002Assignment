@@ -12,6 +12,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.text.ParseException;
 /**
  * Provides functions for HDB Managers to perfrom operations.
  * 
@@ -20,7 +21,8 @@ public class HDBManager extends User{
     private String DataFilePath = "./src/Data";   // TO ADD /src/ FOR ECLIPSE
     private ArrayList<Project> managedProjects = new ArrayList<Project>();
     General general = new General();
-
+    DateFormat formatter = new SimpleDateFormat("d/M/yyyy");
+    Date currentDate = new Date();
 
 	/**
      * Update managed projects that are managed initialized manager
@@ -199,32 +201,36 @@ public class HDBManager extends User{
         }
         
         else
-        {
-			DateFormat formatter = new SimpleDateFormat("d/M/yyyy");
+        {			
         	// checking is done in Manager Main
         	switch(target)
         	{
         	// Update Project Name
         	case "0":
-        		general.editFile(DataFilePath + "/ProjectList.txt", updateContent,projectName,projectName);
-        		
+        		        		
         		// set project name in project.java
-        		currentProjects.get(i).setProjectName(updateContent);        		
+        		currentProjects.get(i).setProjectName(updateContent);
+        		
+        		// update to .txt
+        		general.editProjectFile(currentProjects.get(i));
+        		
         		System.out.println("Project Name changed to: " + updateContent);
         		break;
         		
         		// Update Neighborhood
         	case "1":
-        		general.editFile(DataFilePath + "/ProjectList.txt", updateContent, currentProjects.get(i).getNeiborhood(), projectName);
-        		
+       		
         		// set neighborhood in project.java
         		currentProjects.get(i).setNeiborhood(updateContent);
+        		// update to .txt
+        		general.editProjectFile(currentProjects.get(i));
         		
         		System.out.println("Neighbour changed to: " + updateContent);
         		break;
         		
         		// update pricing
         	case "2":
+        		
         		ArrayList<FlatType> flatDetail = currentProjects.get(i).getFlatTypes();		        		
         		String[] flatPricing = updateContent.split(",");
         		// 0 = flat Types
@@ -234,16 +240,12 @@ public class HDBManager extends User{
         		for (int x = 0; x < flatDetail.size(); x++)
         		{
         			if(flatDetail.get(x).getFlatTypeName().equals(flatPricing[0]))
-        			{
-        				// get old content to update
-        				String oldContents = flatDetail.get(x).getFlatTypeName() + "," + flatDetail.get(x).getUnits() + "," + String.format("%.0f", flatDetail.get(x).getPrice());
-        				String updatedContents = flatDetail.get(x).getFlatTypeName() + "," + flatDetail.get(x).getUnits() + "," + flatPricing[1];
-        		        				
-        				// update to .txt
-        				general.editFile(DataFilePath + "/ProjectList.txt", updatedContents, oldContents, projectName);
-        				
+        			{        		        		        				
         				// set pricing in project.java
         				flatDetail.get(x).setPrice(Double.parseDouble(flatPricing[1]));
+        				
+        				// update to .txt
+        				general.editProjectFile(currentProjects.get(i));
         				
         				System.out.printf("Pricing of %s is updated to $%s.\n", flatPricing[0], flatDetail.get(x).getPrice());
         			}
@@ -261,15 +263,12 @@ public class HDBManager extends User{
         		for (int x = 0; x < flatDetails.size(); x++)
         		{        			
         			if (flatDetails.get(x).getFlatTypeName().equals(flatStr[0]))
-        			{
-        				// get old content to update
-        				String oldContent = flatDetails.get(x).getFlatTypeName() + "," + flatDetails.get(x).getUnits();
-        				
-        				// update to .txt 
-        				general.editFile(DataFilePath + "/ProjectList.txt", updateContent, oldContent, projectName);
-        				
+        			{        				        				        				        				
         				// set units in project.java
         				flatDetails.get(x).setUnits(Integer.parseInt(flatStr[1]));
+        				
+        				// update to .txt 
+        				general.editProjectFile(currentProjects.get(i));
         				
         				System.out.printf("%s is updated to %s units.\n", flatStr[0], flatDetails.get(x).getUnits());
         			}
@@ -278,23 +277,42 @@ public class HDBManager extends User{
         		
         		// Change Application Opening Date
         	case "4":
-        		general.editFile(DataFilePath + "/ProjectList.txt", 
-								updateContent, 
-								formatter.format(currentProjects.get(i).getApplicationOpeningDate()).toString(),
-								projectName);
         		
-        		System.out.println("Opening date changed to: " + updateContent);
+        		// catch error for Date formatting 
+        		try {
+        			Date newDate = formatter.parse(updateContent);
+        			currentProjects.get(i).setApplicationOpeningDate(newDate);
+        			
+        			// update to .txt 
+    				general.editProjectFile(currentProjects.get(i));
+    				
+        			System.out.println("Opening date changed to: " + updateContent);        			
+        			
+        		}catch (ParseException e)
+        		{
+        			System.out.println("Incorrect date format: " + e.getMessage() + "\nDate NOT updated.");
+        		}     		       		
         		break;
         		
         		// Change Application Closing Date
         	case "5":
-				// System.out.println(formatter.format(currentProjects.get(i).getApplicationClosingDate()));
-        		general.editFile(DataFilePath + "/ProjectList.txt", 
-								updateContent, 
-								formatter.format(currentProjects.get(i).getApplicationClosingDate()).toString(), 
-								projectName);
-        		System.out.println("Closing date changed to: " + updateContent);
-        		break;        		
+				
+        		// catch error for Date formatting 
+        		try {
+        			Date newDate = formatter.parse(updateContent);
+        			currentProjects.get(i).setApplicationClosingDate(newDate);
+        			
+        			// update to .txt 
+    				general.editProjectFile(currentProjects.get(i));
+        			
+        			System.out.println("Closing date changed to: " + updateContent);
+        			
+        		}catch (ParseException e)
+        		{
+        			System.out.println("Incorrect date format: " + e.getMessage() + "\nDate NOT updated.");
+        		}
+        		break;   
+        		
         	default:
         		System.out.println("!!!Error input!!!");
         		break;        		
@@ -356,6 +374,171 @@ public class HDBManager extends User{
         this.managedProjects.remove(targetProject);
         System.out.println("Project " + targetProject.getProjectName() + " removed");
         return null;
+    }
+    
+    // verify unique Project Name
+    public String uniqueProjectName(ArrayList<Project> currentProjects, Scanner scanner, String prompt)
+    {
+    	String verifiedName = null;
+    	do {
+    		boolean isUnique = true;
+    		System.out.print(prompt);
+    		String inputName = scanner.nextLine();
+    		    		
+    		for (int i=0; i<currentProjects.size(); i++)
+    		{
+    			// case-insensitive comparison check
+    			if(currentProjects.get(i).getProjectName().equalsIgnoreCase(inputName))
+    			{
+    				System.out.println("Project Name has been used. Please try again! \n");
+    				isUnique = false;    				
+    			}
+    		}
+
+    		if(isUnique)
+    		{
+    			verifiedName = inputName; // set verified name if unique
+    		}
+    		
+    	}while(verifiedName == null);
+
+    	return verifiedName;    	
+    }
+    
+    // verify only integer numbers
+    public String validateInteger(Scanner scanner, String prompt)
+    {
+    	String verifiedInt = null;
+    	do {
+    		System.out.print(prompt);
+    		String input = scanner.nextLine();
+    		
+    		try
+    		{
+    			Integer.parseInt(input.trim());
+    			verifiedInt = input;    			
+    			
+    		}catch (NumberFormatException e)
+    		{
+    			System.out.println("Invalid input. Not an integer.\n");    			
+    		}    		
+    		
+    	}while(verifiedInt == null);
+    	
+    	return verifiedInt;
+    }
+    
+    // verify correct date input
+    public String verifyDate(Scanner scanner, String prompt)
+    {
+    	String verifiedDate = null;    	
+    	do 
+		{
+			System.out.print(prompt);
+			String inputDate = scanner.nextLine();
+			
+			try {								
+				// able to parse to Date format
+    			Date newDate = formatter.parse(inputDate);    			
+    			verifiedDate = formatter.format(newDate);
+    			
+    		}catch (ParseException e)
+    		{
+    			System.out.println("Incorrect date format. Please use the format: dd/mm/yy \n");
+    		}
+
+		}while(verifiedDate == null);
+    	
+    	return verifiedDate;
+    }
+       
+    // Runtime call to check past projects and auto toggle visibility false for that project
+    public boolean PastDateChecker(ArrayList<Project> currentProjects)
+    {
+    	for(int i=0; i<currentProjects.size(); i++)
+    	{
+    		// check past closing date in project lists
+    		if(currentProjects.get(i).getApplicationOpeningDate().before(currentDate) && 
+    		   currentProjects.get(i).getApplicationClosingDate().before(currentDate))
+    		{
+    			// auto update visibility to false
+    			// update project.java side
+				currentProjects.get(i).setVisibility(false);    
+				
+				// update the .txt file 
+				general.editProjectFile(currentProjects.get(i));
+				return true;
+    		}
+    	}
+    	return false;
+    }
+    
+    // Verify valid opening and closing dates for creating new project
+    public boolean ValidDateChecker(String openingDate, String closingDate)
+    {
+    	try {	    		
+    		Date convertedOpeningDate = formatter.parse(openingDate);
+    		Date convertedClosingDate = formatter.parse(closingDate);    			
+	    		
+    		// Invalid test cases between before & after
+    		if (convertedOpeningDate.after(convertedClosingDate) || 
+    			convertedOpeningDate.before(currentDate) && convertedClosingDate.before(currentDate) ||
+    			convertedOpeningDate.after(currentDate) && !convertedClosingDate.after(convertedOpeningDate))
+    		{
+    			// incorrect sequence of dates, project invalid
+    			return false;
+    		}    		
+			
+    		// either project ongoing or future project
+    		return true;  
+    		
+		}catch (ParseException e)
+		{
+			System.err.println("Error parsing the date: " + e.getMessage());
+		}    	
+    	return false;    	
+    }
+    
+    // Verify valid opening and closing dates for editing existing project
+    public boolean ValidDateCheckerforEditing(String openingDate, String closingDate, boolean forOpening)
+    {
+    	Date convertedOpeningDate;
+    	Date convertedClosingDate;
+    	
+    	try {	    		
+    		SimpleDateFormat inputFormat = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy");	
+    		
+    		// convert string representation of date to 'd/M/yyy' (for editing)
+    		if(forOpening)
+    		{
+    			convertedOpeningDate = formatter.parse(openingDate);
+    			convertedClosingDate = inputFormat.parse(closingDate);
+    		}
+    		else // for closing date
+    		{
+    			// String to date
+    			convertedOpeningDate = inputFormat.parse(openingDate);   
+    			convertedClosingDate = formatter.parse(closingDate);
+    		}    		    		
+    		
+    		// Invalid test cases between before & after
+    		if (convertedOpeningDate.after(convertedClosingDate) || 
+    			convertedOpeningDate.before(currentDate) && convertedClosingDate.before(currentDate) ||
+    			convertedOpeningDate.after(currentDate) && !convertedClosingDate.after(convertedOpeningDate))
+    		{
+    			// incorrect sequence of dates, project invalid
+    			return false;
+    		}    		
+			
+    		// either project ongoing or future project
+    		return true;  
+    		
+		}catch (ParseException e)
+		{
+			System.err.println("Error parsing the date: " + e.getMessage());
+		}
+    	
+    	return false;    	
     }
     
     
@@ -653,22 +836,23 @@ public class HDBManager extends User{
     		if(currentProjects.get(i).getProjectName().equals(projectName)) {
     			
     			if(currentProjects.get(i).getVisibility()) {
-
-    				// update the .txt file 
-    				general.editFile(DataFilePath + "/ProjectList.txt", "false", String.valueOf(currentProjects.get(i).getVisibility()), projectName);
-    				
+    				   				
     				// update project.java side
-    				currentProjects.get(i).setVisibility(false);    				
-    				System.out.printf("Updated Project Visibility: '%s' -- OFF.\n", currentProjects.get(i).getProjectName());
+    				currentProjects.get(i).setVisibility(false);    
     				
+    				// update the .txt file 
+    				general.editProjectFile(currentProjects.get(i));
+    				
+    				System.out.printf("Updated Project Visibility: '%s' -- OFF.\n", currentProjects.get(i).getProjectName());    				
     			} 
     			else 
-    			{   				    				
-    				// update the .txt file 
-    				general.editFile(DataFilePath + "/ProjectList.txt", "true", String.valueOf(currentProjects.get(i).getVisibility()), projectName);
-    				
+    			{   			    				
     				// update project.java side
     				currentProjects.get(i).setVisibility(true);
+    				
+    				// update the .txt file 
+    				general.editProjectFile(currentProjects.get(i));
+    				
     				System.out.printf("Updated Project Visibility: '%s' -- ON.\n", currentProjects.get(i).getProjectName());
     			}    			    			
     		}
@@ -876,7 +1060,7 @@ public class HDBManager extends User{
                     		        // Look ahead to see if there is another non-null officer
                     		        for (int j = i + 1; j < currentOfficers.size(); j++) {
                     		            if (currentOfficers.get(j) != null) {
-                    		                officerNames += " & ";
+                    		                officerNames += "&";
                     		                break;
                     		            }
                     		        }
@@ -894,7 +1078,7 @@ public class HDBManager extends User{
                     				int slots = index.getAvailableOfficerSlots();
                     				index.addHDBOfficer(currentOfficer);
                     				String newOfficerNames = officerNames + "&" + officerName;
-                    				general.editFile(DataFilePath + "/ProjectList.txt",String.valueOf(slots-1) , String.valueOf(index.getAvailableOfficerSlots()) ,projectName);
+                    				//general.editFile(DataFilePath + "/ProjectList.txt",String.valueOf(slots-1) , String.valueOf(index.getAvailableOfficerSlots()) ,projectName);
                     				if (officerNames.isEmpty()) {
                     				   // general.editFile(DataFilePath + "/ProjectList.txt", officerName, "", projectName);
                     				} else {

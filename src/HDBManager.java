@@ -207,13 +207,12 @@ public class HDBManager extends User{
         	{
         	// Update Project Name
         	case "0":
-        		        		
-        		// set project name in project.java
-        		currentProjects.get(i).setProjectName(updateContent);
-        		
         		// update to .txt
-        		general.editProjectFile(currentProjects.get(i));
-        		
+        		general.editProjectFile(currentProjects.get(i),updateContent);
+
+				// set project name in project.java
+				currentProjects.get(i).setProjectName(updateContent);
+				
         		System.out.println("Project Name changed to: " + updateContent);
         		break;
         		

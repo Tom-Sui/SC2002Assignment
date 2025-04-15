@@ -75,11 +75,44 @@ public class General {
             Scanner scanner = new Scanner(projectFile);
             while(scanner.hasNextLine()) {
                 buffeString = scanner.nextLine();
-                
-                if (buffeString.contains(project.getProjectName())) {
-                    System.out.println("Processing...");
-                    buffeString = project.toStore();
-                }
+                    if (buffeString.contains(project.getProjectName())) {
+                        System.out.println("Processing...");
+                        buffeString = project.toStore();
+                    }
+                fileContent = fileContent + buffeString + "\n";
+            }
+
+            FileWriter writer = new FileWriter(DataFilePath + "/ProjectList.txt");
+            writer.write(fileContent);
+            writer.close();
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Error occurred while reading OfficerList.txt");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Error occurred when writing " + DataFilePath + "/ProjectList.txt");
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Updates project information in the ProjectList.txt file.
+     * Specific used when updating the project name
+     * @param project the Project object containing updated information
+     */
+    public void editProjectFile(Project project,String projectName) {
+        String buffeString;
+        String fileContent = "";
+        File projectFile = new File(DataFilePath + "/ProjectList.txt");
+        
+        try {
+            Scanner scanner = new Scanner(projectFile);
+            while(scanner.hasNextLine()) {
+                buffeString = scanner.nextLine();
+                    if (buffeString.contains(project.getProjectName())) {
+                        System.out.println("Processing...");
+                        project.setProjectName(projectName);
+                        buffeString = project.toStore();
+                    }
                 fileContent = fileContent + buffeString + "\n";
             }
             
@@ -95,7 +128,6 @@ public class General {
             e.printStackTrace();
         }
     }
-    
     /**
      * Generic file editing method for various file types.
      * 

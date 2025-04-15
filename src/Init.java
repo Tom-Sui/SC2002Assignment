@@ -58,7 +58,7 @@ public class Init {
      * @return ArrayList of HDBManager objects populated with data from the file
      */
     public ArrayList<HDBManager> LoadManagerInfo() {
-        File managerFile = new File("/Data/ManagerList.txt");
+        File managerFile = new File("./Data/ManagerList.txt");
         ArrayList<HDBManager> hdbManagers = new ArrayList<HDBManager>();
         HDBManager hdbManager;
         try {

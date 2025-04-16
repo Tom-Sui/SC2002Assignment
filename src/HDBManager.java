@@ -342,6 +342,19 @@ public class HDBManager extends User{
         		}
         		break;   
         		
+        	case "7":
+        		
+        		int updatedSlots = Integer.parseInt(updateContent);
+        		
+        		// set officer slots in project.java
+        		currentProjects.get(i).setAvailableOfficerSlots(updatedSlots);
+        		
+        		// update to .txt
+        		general.editProjectFile(currentProjects.get(i));
+				
+        		System.out.println("HDB Officer Slots updated to: " + updateContent);
+        		break;
+        		
         	default:
         		System.out.println("!!!Error input!!!");
         		break;        		
@@ -413,11 +426,16 @@ public class HDBManager extends User{
     		boolean isUnique = true;
     		System.out.print(prompt);
     		String inputName = scanner.nextLine();
+    		
+    		// Handle stronger check as unique identifier
+    		String inputPrjName = inputName.toLowerCase().replaceAll("[\\s\\-_/]+", "");
     		    		
     		for (int i=0; i<currentProjects.size(); i++)
     		{
-    			// case-insensitive comparison check
-    			if(currentProjects.get(i).getProjectName().equalsIgnoreCase(inputName))
+    			// Handle stronger check as unique identifier    			
+    			String projectName = currentProjects.get(i).getProjectName().toLowerCase().replaceAll("[\\s\\-_/]+", "");
+    			
+    			if(projectName.equals(inputPrjName))
     			{
     				System.out.println("Project Name has been used. Please try again! \n");
     				isUnique = false;    				
@@ -584,6 +602,31 @@ public class HDBManager extends User{
 		}
     	
     	return false;    	
+    }
+    
+    // Verify valid number of slots
+    public String verifyOfficerSlots(Scanner scanner, String prompt)
+    {
+    	// Error checking if number within range
+		String verifiedMaxSlot = null;
+		do {
+			String slotsInput = this.validateInteger(scanner, prompt);
+			
+			int slots = Integer.parseInt(slotsInput);
+			
+			// minimum 1 slot but maximum 10 slots
+			if(slots > 10 || slots < 1)
+			{
+				System.out.println("Invalid slots. Please try again! \n");
+			}
+			else
+			{
+				verifiedMaxSlot = Integer.toString(slots);
+			}
+			
+		}while(verifiedMaxSlot == null);
+		
+		return verifiedMaxSlot;
     }
     
     

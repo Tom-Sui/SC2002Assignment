@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
+import java.security.GeneralSecurityException;
 import java.sql.Date;
 
 public class App{
@@ -10,7 +11,6 @@ public class App{
     private static String currentUserId = "NULL";
     private static String userType = "NULL";
     private static int userPos = -1;
-    
 
     public static void main(String[] args) {
         String userInput;
@@ -41,8 +41,6 @@ public class App{
         //Initialize projects info into Project class
         ArrayList<Project> projects;
         projects = init.LoadProjectInfo(hdbManagers, hdbOfficers);
-
-
         // hdbInterface.interface(project,hdbManagers,hdbOfficers)
         // Return null if there is maching manager found
         // projects = hdbManagers.get(1).createProject("aNOTHER NAME,TESTING TESTING name,2-Room,2,350000,3-Room,3,450000,2/2/2343,12/12/2343,Jessica,3,Daniel&Emily,true",projects,hdbManagers,hdbOfficers);
@@ -59,6 +57,12 @@ public class App{
         hdbManagers = init.setManagerManagedProjects(hdbManagers,projects);
 
 
+
+        //General general = new General();
+        //general.editProjectFile(projects.get(1),"New Name");
+        //projects.get(1).setProjectName("New Name");
+        //System.exit(0);
+        
         // System.out.println(hdbManagers.get(0).getName());
         // hdbManagers.get(0).deletProject(projects.get(0));
 
@@ -123,7 +127,7 @@ public class App{
                                         logedIn = true;
                                         
                                         ManagerInput manager = new ManagerInput();
-                                        manager.switchFunction(userName, projects, hdbManagers, hdbOfficers);                                        
+                                        manager.switchFunction(userName, projects, hdbManagers, hdbOfficers, applicant);                                        
                                         break;
                                     }
                                 }
@@ -181,7 +185,8 @@ public class App{
                                         ArrayList<Enquiry> enquiries = new ArrayList<>();
                                         applicant.get(i).setMaritalStatus(MaritalStatus.SINGLE);
                                         
-                                        MaritalStatus maritalStatus = MaritalStatus.SINGLE;
+                                        ArrayList<MaritalStatus> allowedGroups = new ArrayList<>();
+                                        allowedGroups.add(MaritalStatus.SINGLE);
                                         
                                         Project dummyProject = new Project(
                                             projectName,
@@ -195,7 +200,7 @@ public class App{
                                             applicants,
                                             officers,
                                             enquiries,
-                                            maritalStatus
+                                            allowedGroups
                                         );
                                         
                                         projectList.add(dummyProject);
@@ -305,7 +310,8 @@ public class App{
                                         ArrayList<Enquiry> enquiries = new ArrayList<>();
                                         applicant.get(i).setMaritalStatus(MaritalStatus.SINGLE);
                                         
-                                        MaritalStatus maritalStatus = MaritalStatus.SINGLE;
+                                        ArrayList<MaritalStatus> allowedGroups = new ArrayList<>();
+                                        allowedGroups.add(MaritalStatus.SINGLE);
                                         
                                         Project dummyProject = new Project(
                                             projectName,
@@ -319,7 +325,7 @@ public class App{
                                             applicants,
                                             officers,
                                             enquiries,
-                                            maritalStatus
+                                            allowedGroups
                                         );
                                         
                                         projectList.add(dummyProject);

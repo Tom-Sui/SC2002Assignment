@@ -1,0 +1,3 @@
+John,S1234567A,35,Single,Acacia Breeze,2-Room,PENDING
+Sarah,T7654321B,40,Married,Raymond Dusk,3-Room,PENDING
+Rachel,S3456789E,25,Single,Raymond Dusk,3-Room,PENDING

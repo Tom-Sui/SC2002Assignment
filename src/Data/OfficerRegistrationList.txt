@@ -1,0 +1,4 @@
+Daniel,T2109876H,Acacia Breeze,APPROVED
+Emily,S6543210I,Raymon Dusk,APPROVED
+David,T1234567J,Raymon Dusk,APPROVED
+Rachel,S3456789E,Acacia Breeze,REJECTED

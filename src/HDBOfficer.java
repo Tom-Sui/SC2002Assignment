@@ -1,6 +1,9 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
-
+import java.time.LocalDate;
+import java.time.ZoneId;
 /**
  * Represents various method that HDB officer access to.
  * <p>
@@ -9,12 +12,47 @@ import java.util.concurrent.ArrayBlockingQueue;
  * </p>
  * 
  */
+
+
 public class HDBOfficer extends Applicant{
     private Project managedProject;
-    private OfficerRegistrationStatus officerRegistrationStatus = OfficerRegistrationStatus.PENDING;
+    private ArrayList<Project> upcomingProjects = new ArrayList<Project>();
+    private Map<Project, OfficerRegistrationStatus> registrationStatusMap = new HashMap<>();
+    //private OfficerRegistrationStatus officerRegistrationStatus = OfficerRegistrationStatus.PENDING;
     private ArrayList<Application> managedApplications = new ArrayList<Application>();
     private boolean isManagingOfficer = false;
 
+    
+    
+    public void checkCurrentProject() {
+    	// Return if the officer is not managing any project.
+    	if (managedProject == null) {
+    		return;
+    	}
+    	LocalDate currentDate = LocalDate.now();
+    	//Convert date type to LocalDate so that we can compare
+        LocalDate applicationClosingDate = managedProject.getApplicationClosingDate().toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate();
+    	if (currentDate.isAfter(applicationClosingDate)) {
+    		managedProject = null;
+    		isManagingOfficer = false;
+    		managedApplications.clear();
+    	}
+    }
+    
+    // TODO: method to check if there are any new project that the officer should be managing. update isManagingOfficer if there are any.
+//    public void checkNewProject() {
+//    	for (Project project : upcomingProjects) {
+//    		if (project.getApplicationOpeningDate())
+//    	}
+//    }
+ 
+    // TODO: method to check if there are any approved projects in registrationStatusMap. if there are, transfer them to upcomingProjects
+    
+    // TODO: method to register for a new project
+    
+    
     /**
      * Default constructor for HDBOfficer.
      */
@@ -116,9 +154,9 @@ public class HDBOfficer extends Applicant{
      *
      * @return the current registration status
      */
-    public OfficerRegistrationStatus getOfficerRegistrationStatus() {
-        return officerRegistrationStatus;
-    }
+//    public OfficerRegistrationStatus getOfficerRegistrationStatus() {
+//        return officerRegistrationStatus;
+//    }
     
     /*
     * @param allow HDBOfficer to view all booking requests from applicants.

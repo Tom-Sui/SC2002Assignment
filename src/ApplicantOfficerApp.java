@@ -36,7 +36,7 @@ public class ApplicantOfficerApp {
 			    "Generate flat selection receipt",
 			    "View Project Details" 
 		));	
-		
+		int totalFeatures = applicantFeatures.size() + officerFeatures.size() + managingOfficerFeatures.size();
 		int choice=-2; //DO NOT SET TO -1 BECAUSE WE USE -1 TO EXIT
 		do {
 			// Display the list of features available
@@ -53,6 +53,9 @@ public class ApplicantOfficerApp {
 			try {
 				System.out.printf("Enter your choice: ");
 				choice = sc.nextInt();
+				if (choice < -1 || choice >totalFeatures) {
+					System.out.println("Invalid choice. Please enter a valid option shown in the list.");
+				}
 				if (choice == 1) {
 			    	System.out.println("\nList of available projects:");
 					System.out.println("============================");
@@ -121,7 +124,7 @@ public class ApplicantOfficerApp {
 					if (choice == 6) {
 						System.out.println("\nView Registration Status:");
 						System.out.println("============================");
-						officer.getOfficerRegistrationStatus();
+						//officer.getOfficerRegistrationStatus();
 					}
 					else if (choice == 7) {
 						//TODO

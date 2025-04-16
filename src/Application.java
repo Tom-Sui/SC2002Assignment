@@ -29,9 +29,11 @@ public class Application {
     
     /** Flag indicating if booking has been requested */
     private boolean bookingRequested;
-    
+
     /** The type of flat being applied for */
-    private FlatType appliedflatType;
+    private FlatType flatType;
+
+    //Constructor
     
     /**
      * Constructs a new Application with the specified details.
@@ -49,7 +51,7 @@ public class Application {
         this.isBooked = false;
         this.bookingRequested = false;
         this.applicationStatus = ApplicationStatus.SUCCESSFUL; //SHOULD BE PENDING. CHANGED TO SUCCESSFUL TO TEST OTHER FEATURES
-        this.appliedflatType = flatType;
+        this.flatType = flatType;
     }
 
     // ========== GETTERS AND SETTERS ==========
@@ -132,8 +134,18 @@ public class Application {
      * @return the FlatType object
      */
     public FlatType getFlatType() {
-        return appliedflatType;
+        return flatType;
     }
+
+    /**
+     * Sets the flat type being applied for.
+     * 
+     * @param flatType the new FlatType object
+     */
+    public void setFlatType(FlatType flatType) {
+        this.flatType = flatType;
+    }
+    
 
     /**
      * Gets the application ID.
@@ -156,7 +168,7 @@ public class Application {
             applicant.getNRIC(), 
             applicant.getAge(), 
             applicant.getMaritalStatus(), 
-            appliedflatType);
+            flatType);
         return applicationDetails;
     }
 }

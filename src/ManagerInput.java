@@ -551,7 +551,8 @@ public class ManagerInput {
             	break;
             	
             // Approve or Reject Applicant’s BTO Application
-            case 9:            	
+            case 9:
+            	manager.approveOrRejectApplication(projects, applicants, userName);
             	break;
             	
             // Approve or Reject Applicant’s Withdrawal Request
@@ -637,7 +638,8 @@ public class ManagerInput {
             	break;
             
             // View Enquiries for ALL Projects
-            case 12:            	
+            case 12:
+            	manager.viewEnquiries(projects);
             	break;
             
             //  View and Reply to Enquiries for Your Projects

@@ -322,5 +322,9 @@ public class Project {
     public ArrayList<Application> getApplications(){
         return applications;
     }
+    
+    public ArrayList<Enquiry> getEnquiries(){
+        return enquiries;
+    }
 
 }

@@ -18,7 +18,7 @@ import java.text.ParseException;
  * 
  */
 public class HDBManager extends User{
-    private String DataFilePath = "./Data";   // TO ADD /src/ FOR ECLIPSE
+    private String DataFilePath = "./src/Data";   // TO ADD /src/ FOR ECLIPSE
     private ArrayList<Project> managedProjects = new ArrayList<Project>();
     General general = new General();
     DateFormat formatter = new SimpleDateFormat("d/M/yyyy");
@@ -1015,6 +1015,8 @@ public class HDBManager extends User{
             System.err.println("Error reading the file: " + e.getMessage());
         }
     }
+    
+    
 
 	/**
 	 * Processes pending officer registrations by approving or rejecting them based on various validation checks.
@@ -1070,6 +1072,7 @@ public class HDBManager extends User{
 
     	OfficerRegistrationStatus status;
     	General general = new General();
+    	Date currentTime = new Date();
     	
     	 String filePath = "./src/Data/OfficerRegistrationList.txt"; // change this if your path is different
 
@@ -1100,14 +1103,23 @@ public class HDBManager extends User{
                     	 if(index != null && index.getHDBManager().getName().equals(userName) && status == OfficerRegistrationStatus.PENDING) {
                     	
                     		 
-                    		 //Check if officer NRIC is in applicant list 
-                    		 Applicant NRICindex = general.findApplicant(applicants, officerNRIC);
+                    		 //Check if officer NRIC is in application list for the project 
+                    		 
+                    		 boolean officerApplied = false;
+                    		 
+                    		 for (Application application : index.getApplications()) {
+                    		        if (application.getApplicant().getNRIC().equalsIgnoreCase(officerNRIC)) {
+                    		            officerApplied = true; // Applicant found
+                    		        }
+                    		    }
+                    		    
                     		 
                     		 
-                    		 //Officer is in applicants
-                    		 if(NRICindex !=null) {
+                    		 //Officer is in application
+                    		 if(officerApplied) {
                     			 rejectRegistration(filePath, officerNRIC);
-                    			 System.out.printf("Officer %s has been rejected from Project %s as he/she is in applicants list\n", officerName,projectName);
+                    			 System.out.printf("Officer %s has been rejected from Project %s as he/she has applied for the project as an applicant\n"
+                    					 , officerName,projectName);
                     			 continue;
                     		 }
                     		 
@@ -1135,8 +1147,13 @@ public class HDBManager extends User{
                     							//Checks if end date date of registeringProject is in between start and end date of current project they are already handling
                     							 boolean endDateConflict = ((index.getApplicationClosingDate().after(project.getApplicationOpeningDate())
                     									 && index.getApplicationClosingDate().before(project.getApplicationClosingDate())) || index.getApplicationClosingDate().equals(project.getApplicationOpeningDate()));
+                    							 
+                    							 boolean anotherDateConflict = project.getApplicationOpeningDate().after(index.getApplicationOpeningDate())
+                    									 && project.getApplicationClosingDate().before(index.getApplicationClosingDate())
+                    									 && !(currentTime.before(index.getApplicationClosingDate())
+                    							 		 && currentTime.after(project.getApplicationClosingDate()));
                     							 //If start date or end date has a conflict, reject registration
-                    							 if( startDateConflict || endDateConflict) {
+                    							 if( startDateConflict || endDateConflict || anotherDateConflict) {
                     								 conflict = true; //Set conflict to true
                     								 rejectRegistration(filePath,officerNRIC);
                     								 System.out.printf("Officer %s has been rejected from Project %s as he/she is already handling another project within the time period\n", officerName,projectName);
@@ -1183,19 +1200,19 @@ public class HDBManager extends User{
                     				rejectRegistration(filePath, officerNRIC);
                     				System.out.printf("Officer %s has been rejected from Project %s as there are no more available slots\n", officerName,projectName);
                     		} else {
-                    			    approveRegistration(filePath, officerNRIC);
+                    			    approveRegistration(filePath, officerNRIC,currentOfficer);
                     				int slots = index.getAvailableOfficerSlots();
-                    				index.addHDBOfficer(currentOfficer);
-                    				String newOfficerNames = officerNames + "&" + officerName;
-                    				//general.editFile(DataFilePath + "/ProjectList.txt",String.valueOf(slots-1) , String.valueOf(index.getAvailableOfficerSlots()) ,projectName);
-                    				if (officerNames.isEmpty()) {
-                    				   // general.editFile(DataFilePath + "/ProjectList.txt", officerName, "", projectName);
+                    				if(index.getHDBOfficer().get(0) == null) {
+                    					ArrayList<HDBOfficer> newOfficers = new ArrayList<>();
+                    					newOfficers.add(currentOfficer);
+                    					index.setHDBOfficer(newOfficers);
                     				} else {
-                    				    general.editFile(DataFilePath + "/ProjectList.txt", newOfficerNames, officerNames, projectName);
+                    					index.addHDBOfficer(currentOfficer);
                     				}
                     				index.setAvailableOfficerSlots(slots-1);
                     				approved = true;
                     				currentOfficer.setManagingOfficer(true);
+                    				general.editProjectFile(index);
                     				System.out.printf("Officer %s has been approved for Project %s\n", officerName,projectName);
                     			 }
                     			 
@@ -1253,8 +1270,9 @@ public class HDBManager extends User{
 	 *
 	 */
     // Approve the officer registration
-    private void approveRegistration(String filePath, String officerNRIC) {
+    private void approveRegistration(String filePath, String officerNRIC, HDBOfficer officer ) {
         general.editOtherFile(filePath,"/OfficerRegistrationList.txt", "APPROVED", "PENDING", officerNRIC);
+        //officer.setOfficerRegistrationStatus(OfficerRegistrationStatus.APPROVED);
     }
     
     /**
@@ -1262,22 +1280,56 @@ public class HDBManager extends User{
 	 * @param applicant Application to be approved or rejected
 	 * @param project Target project
 	 */
-    public void approveOrRejectApplication(Applicant applicant, Project project){
+    public void approveOrRejectApplication(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, String username){
     	
     	/*
-    	 * 
+    	 *
     	 */
+    	
+    	Date currentTime = new Date();
+    			
+    	for (Project project : currentProjects) {
+            // Check if the manager is managing the project
+    		 if (project.getHDBManager().getName().equals(username)) {
 
+    		        // Check if today's date is within the application opening and closing dates
+    		        if (project.getApplicationOpeningDate().compareTo(currentTime) > 0 || project.getApplicationClosingDate().compareTo(currentTime) < 0) {
+    		            continue; // Skip this project if it's not within the application period
+    		        }
+
+            // Process applications for each FlatType separately
+            for (FlatType flatType : project.getFlatTypes()) {
+                // Retrieve the current number of available units for the flat type
+                int availableUnits = flatType.getUnits();
+                int unitCount = availableUnits;
+                
+
+                // Iterate through the applications for the project
+                for (Application application : project.getApplications()) {
+                    // Check if the application's flat type matches the current flat type
+                    if (application.getFlatType() == flatType) {
+                        // Only process applications with PENDING status
+                        if (application.getApplicationStatus() == ApplicationStatus.PENDING) {
+                            if (availableUnits == 0) {
+                                //No units available
+                                application.setApplicationStatus(ApplicationStatus.UNSUCCESSFUL);
+                                System.out.printf("ApplicationID %d for project %s was UNSUCCESSFUL", application.getApplicationId(),application.getProject().getProjectName());
+                            } else if (unitCount > 0){
+                                // Approves x number of applications with x being the number of available units
+                                application.setApplicationStatus(ApplicationStatus.SUCCESSFUL);
+                                System.out.printf("ApplicationID %d for project %s was SUCCESSFUL", application.getApplicationId(),application.getProject().getProjectName());
+                                unitCount -=1;
+                            }
+                        }
+                    
+                }
+
+          
+            }
+        }
+    		 }
+    	}
     }
-	/**
-	 * Reject an application
-	 * @param applicant targeted application
-	 * @param project allocated project
-	 */
-    public void rejectApplication(Applicant applicant, Project project){
-
-    }
-
 	/**
 	 * Processes all pending withdrawal requests from applicants.
 	 * <p>
@@ -1425,5 +1477,23 @@ public class HDBManager extends User{
     //     }
     //     return null;
     // }
+    
+    public void viewEnquiries(ArrayList<Project> currentProjects) {
+    	
+    	for(Project project: currentProjects) {
+    		System.out.printf("Enquiries for Project %s\n", project.getProjectName());
+    		ArrayList<Enquiry> enquiries = project.getEnquiries();
+    		for(Enquiry enquiry: enquiries) {
+    			
+    			System.out.printf("Applicant ID: %d\n", enquiry.getApplicant());
+    			System.out.printf("Message: %s\n", enquiry.getMessage());
+    			if(enquiry.getReply().equals("")) {
+    			System.out.printf("There is no reply yet");
+    			} else {
+    				System.out.printf("Reply: %s\n", enquiry.getReply());
+    			}
+    		}
+    	}
+    }
 
 }

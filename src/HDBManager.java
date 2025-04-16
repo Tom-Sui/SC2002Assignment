@@ -470,7 +470,7 @@ public class HDBManager extends User{
     	}
     }
     
- // Runtime call to check past projects and auto toggle visibility false for that project
+    // Runtime call to check past projects and auto toggle visibility false for that project
     public boolean PastDateCheckerProject(ArrayList<Project> currentProjects, String projectName)
     {
     	for(int i=0; i<currentProjects.size(); i++)

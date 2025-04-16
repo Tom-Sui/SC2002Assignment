@@ -84,7 +84,7 @@ public class ManagerInput {
             
             HDBManager manager = new HDBManager();   
             projects = init.LoadProjectInfo(hdbManagers, hdbOfficers); // restore changed data
-            manager.PastDateChecker(projects);  // verify closing date
+            manager.PastDateChecker(projects);  // verify past projects and ensure visibility OFF
             
             switch(choice) {
             
@@ -273,6 +273,7 @@ public class ManagerInput {
                         				{
                         				// 2 Room 
                         				case 1:
+                        					// validate integer
                         					String sellPriceType1 = manager.validateInteger(scanner, "Enter the updated selling price for 2-Room: \n");
                         					                            				
                             				String currentRoom1 = "2-Room,";                            				
@@ -347,14 +348,14 @@ public class ManagerInput {
                         			
                         		// Change Application Opening Date
                         		case 4:  
-                        			// check valid dates
-                        			// check for past projects (no updating application date)
+                        			// check for past projects (if yes, no updating application date)
                         			if(manager.PastDateCheckerProject(projects, selectedProject))
                         			{
                         				System.out.println("Not allowed to change application period for past projects.");
                         			}
                         			else
-                        			{
+                        			{ 
+                        				// check valid dates
                         				boolean verifiedOpeningDates = false;                            		
                         				String updatedOpeningDate;                        			
                         				do
@@ -379,6 +380,7 @@ public class ManagerInput {
                         			
                         		// Change Application Closing Date
                         		case 5:
+                        			// check for past projects (if yes, no updating application date)
                         			if(manager.PastDateCheckerProject(projects, selectedProject))
                         			{
                         				System.out.println("Not allowed to change application period for past projects.");
@@ -411,6 +413,7 @@ public class ManagerInput {
                         			
                         		// Toggle Visibility (On/Off)
                         		case 6:
+                        			// check for past projects (if yes, no updating visibility)
                         			if(manager.PastDateCheckerProject(projects, selectedProject))
                         			{
                         				System.out.println("Visibility for past projects are always OFF. Not allowed to change.");
@@ -465,6 +468,7 @@ public class ManagerInput {
             	System.out.println("Enter Project Name to Delete: ");
             	String deletedProject = scanner.nextLine();
             	
+            	// check for valid Project
             	Project currentProj = manager.returnProject(projects, deletedProject);
             	
             	if (currentProj != null)
@@ -472,6 +476,7 @@ public class ManagerInput {
             		int checkD = 0;
             		do
             		{
+            			// Confirmation of deletion check
             			System.out.printf("Confirm Deletion of Project: '%s'? (Y/N): ", deletedProject);
             			String confirm = scanner.nextLine();
             			
@@ -505,13 +510,12 @@ public class ManagerInput {
             case 4: 
             	
             	// call all the project only the manager is handling
-            	manager.listSpecificProjects(projects, userName);
-            	
+            	manager.listSpecificProjects(projects, userName);            	
             	
             	System.out.println("Enter Project Name to Toggle: ");
-            	String toggleProject = scanner.nextLine();  
+            	String toggleProject = scanner.nextLine();              	
             	
-            	
+            	// check for valid Project
             	Project checkTogglePrj = manager.returnProject(projects, toggleProject);
             	
             	if(checkTogglePrj != null)

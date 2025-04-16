@@ -348,68 +348,88 @@ public class ManagerInput {
                         		// Change Application Opening Date
                         		case 4:  
                         			// check valid dates
-                        			boolean verifiedOpeningDates = false;                            		
-                        			String updatedOpeningDate;                        			
-                            		do
-                            		{                            			         		
-                            			updatedOpeningDate = manager.verifyDate(scanner, "Update application opening date (dd/mm/yy): \n");
-                            			
-                            			boolean valid = manager.ValidDateCheckerforEditing(updatedOpeningDate, projects.get(i).getApplicationClosingDate().toString(), true);
-                            			
-                            			if (valid)
-                            			{
-                            				verifiedOpeningDates = true;
-                            				manager.editProject(selectedProject, updatedOpeningDate, "4", projects, i);
-                            			}
-                            			else
-                            			{
-                            				System.out.println("Invalid date. Please try again!\n");
-                            			}
-                            			
-                            		}while(verifiedOpeningDates == false);                            		
-                        			
+                        			// check for past projects (no updating application date)
+                        			if(manager.PastDateCheckerProject(projects, selectedProject))
+                        			{
+                        				System.out.println("Not allowed to change application period for past projects.");
+                        			}
+                        			else
+                        			{
+                        				boolean verifiedOpeningDates = false;                            		
+                        				String updatedOpeningDate;                        			
+                        				do
+                        				{                            			         		
+                        					updatedOpeningDate = manager.verifyDate(scanner, "Update application opening date (dd/mm/yy): \n");
+                        					
+                        					boolean valid = manager.ValidDateCheckerforEditing(updatedOpeningDate, projects.get(i).getApplicationClosingDate().toString(), true);
+                        					
+                        					if (valid)
+                        					{
+                        						verifiedOpeningDates = true;
+                        						manager.editProject(selectedProject, updatedOpeningDate, "4", projects, i);
+                        					}
+                        					else
+                        					{
+                        						System.out.println("Invalid date. Please try again!\n");
+                        					}
+                        					
+                        				}while(verifiedOpeningDates == false);                          		
+                        			}                        			
                         			break;
                         			
                         		// Change Application Closing Date
                         		case 5:
-                        			// check valid dates
-                        			boolean verifiedClosingDates = false;                            		
-                        			String updatedClosingDate;                        			
-                            		do
-                            		{                            			         		
-                            			updatedClosingDate = manager.verifyDate(scanner, "Update application closing date (dd/mm/yy): \n");
-                            			
-                            			boolean valid = manager.ValidDateCheckerforEditing(projects.get(i).getApplicationOpeningDate().toString(), updatedClosingDate, false);
-                            			
-                            			if (valid)
-                            			{
-                            				verifiedClosingDates = true;
-                            			}
-                            			else
-                            			{
-                            				System.out.println("Invalid date. Please try again!\n");
-                            			}
-                            			
-                            		}while(verifiedClosingDates == false); 
-                            		                        			                        			
-                                	manager.editProject(selectedProject, updatedClosingDate, "5", projects, i);
+                        			if(manager.PastDateCheckerProject(projects, selectedProject))
+                        			{
+                        				System.out.println("Not allowed to change application period for past projects.");
+                        			}
+                        			else
+                        			{
+                        				// check valid dates
+                        				boolean verifiedClosingDates = false;                            		
+                        				String updatedClosingDate;                        			
+                        				do
+                        				{                            			         		
+                        					updatedClosingDate = manager.verifyDate(scanner, "Update application closing date (dd/mm/yy): \n");
+                        					
+                        					boolean valid = manager.ValidDateCheckerforEditing(projects.get(i).getApplicationOpeningDate().toString(), updatedClosingDate, false);
+                        					
+                        					if (valid)
+                        					{
+                        						verifiedClosingDates = true;
+                        					}
+                        					else
+                        					{
+                        						System.out.println("Invalid date. Please try again!\n");
+                        					}
+                        					
+                        				}while(verifiedClosingDates == false); 
+                        				
+                        				manager.editProject(selectedProject, updatedClosingDate, "5", projects, i);
+                        			}
                         			break;
                         			
                         		// Toggle Visibility (On/Off)
                         		case 6:
-                        			// auto toggling to On/Off
-                        			if(projects.get(i).getVisibility())
+                        			if(manager.PastDateCheckerProject(projects, selectedProject))
                         			{
-                        				// true = ON
-                        				System.out.printf("Current Project Visibility: '%s' -- ON\n", selectedProject);
+                        				System.out.println("Visibility for past projects are always OFF. Not allowed to change.");
                         			}
                         			else
                         			{
-                        				// false = OFF
-                        				System.out.printf("Current Project Visibility '%s' -- OFF\n", selectedProject);
-                        			}
-                        			
-                        			manager.toggleVisibility(projects, projects.get(i).getProjectName());                        			
+                        				// auto toggling to On/Off
+                        				if(projects.get(i).getVisibility())
+                        				{
+                        					// true = ON
+                        					System.out.printf("Current Project Visibility: '%s' -- ON\n", selectedProject);
+                        				}
+                        				else
+                        				{
+                        					// false = OFF
+                        					System.out.printf("Current Project Visibility '%s' -- OFF\n", selectedProject);
+                        				}                        			
+                        				manager.toggleVisibility(projects, projects.get(i).getProjectName());
+                        			}                        			
                         			break;
                         			
                         		case 7:

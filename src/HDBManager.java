@@ -452,7 +452,7 @@ public class HDBManager extends User{
     }
        
     // Runtime call to check past projects and auto toggle visibility false for that project
-    public boolean PastDateChecker(ArrayList<Project> currentProjects)
+    public void PastDateChecker(ArrayList<Project> currentProjects)
     {
     	for(int i=0; i<currentProjects.size(); i++)
     	{
@@ -466,7 +466,23 @@ public class HDBManager extends User{
 				
 				// update the .txt file 
 				general.editProjectFile(currentProjects.get(i));
-				return true;
+    		}
+    	}
+    }
+    
+ // Runtime call to check past projects and auto toggle visibility false for that project
+    public boolean PastDateCheckerProject(ArrayList<Project> currentProjects, String projectName)
+    {
+    	for(int i=0; i<currentProjects.size(); i++)
+    	{
+    		if(currentProjects.get(i).getProjectName().equals(projectName))
+    		{
+    			// check past closing date in project lists
+    			if(currentProjects.get(i).getApplicationOpeningDate().before(currentDate) && 
+    			   currentProjects.get(i).getApplicationClosingDate().before(currentDate))
+    			{    			
+    				return true;
+    			}    			
     		}
     	}
     	return false;

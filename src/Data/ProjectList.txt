@@ -1,7 +1,6 @@
-Acacia,Yishun,2-Room,100,2800000.0,3-Room,111,500000.0,12/3/2011,11/11/2014,Michael,2,Daniel&Emily&Daniel,false
+SioPan,Yishun,2-Room,100,2800000.0,3-Room,111,500000.0,12/3/2011,11/11/2014,Michael,2,Daniel&Emily&Daniel,false
 Raymon Dusk,Orchard,2-Room,120,1000000.0,3-Room,115,5000000.0,12/5/2022,12/12/2026,Jessica,2,Emily,true
 Disney SEA,Changi,2-Room,102,3000000,3-Room,240,6000000,10/4/2028,24/6/2031,Michael,1, ,true
 MessyHead,Yishun,2-Room,103,150000.0,3-Room,370,200300.0,10/5/2025,20/12/2029,Jessica,8,Emily,true
 Sky View,Marina,2-Room,120,2000000,3-Room,265,3000000,8/4/2028,3/6/2030,Jessica,2, ,true
-Dragon,Queenstown,2-Room,500,400000,3-Room,600,800000,1/4/2025,3/7/2026,Michael,4, ,true
-JuiceUp,Hougang,2-Room,533,300000.0,3-Room,455,700000.0,12/1/2024,13/1/2027,Michael,2,Daniel,false
+Dragon,Queenstown,2-Room,500,400000.0,3-Room,600,800000.0,1/4/2025,3/7/2026,Michael,4,Daniel,true

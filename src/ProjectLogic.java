@@ -26,10 +26,10 @@ public class ProjectLogic {
      */
     public static ArrayList<Project> filterProjectsByMaritalStatus(ArrayList<Project> projects, MaritalStatus maritalStatus) {
         ArrayList<Project> filteredProjects = new ArrayList<>();
-
+        
         for (Project project : projects) {
             // If the project's marital status matches the applicant's marital status
-            if (project.getMaritalStatus() == maritalStatus || project.getMaritalStatus() == null) {
+            if (project.getAllowedGroups().contains(maritalStatus) || project.getAllowedGroups().isEmpty()) {
                 filteredProjects.add(project);
             }
         }
@@ -79,7 +79,6 @@ public class ProjectLogic {
 
         for (FlatType flatType : FlatTypeList) {
             // If the flat type's allowed groups contain the applicant's marital status
-            // or if the flat type's allowed groups is null
             if (flatType.getAllowedGroups().contains(maritalStatus)) {
                 filteredFlatTypes.add(flatType);
             }

@@ -1,3 +1,4 @@
+import java.util.ArrayList;
 /**
  * Represents an enquiry made by an applicant about a specific housing project.
  * <p>
@@ -9,39 +10,27 @@
  * @see Project
  */
 public class Enquiry {
-    // /** 
-    //  * @param enquiryID
-    //  * Unique identifier for the enquiry 
-    //  * 
-    //  * @param applicant
-    //  * The applicant who made the enquiry
-    //  * 
-    //  * @param project
-    //  * The project being enquired about
-    //  * 
-    //  * @param message
-    //  * The enquiry message content 
-    //  * 
-    //  * @param reply
-    //  * The official reply to the enquiry 
-    //  */
-    private String enquiryID;
+    private static int enquiryID = 0;
     private Applicant applicant;
     private Project project;
     private String message;
-    private String reply;
+    private ArrayList<Enquiry> replies = new ArrayList<>();
+
+    // ========== CONSTRUCTOR ==========
+    /**
+     * Constructs an Enquiry object with the specified applicant, project, and message.
+     * 
+     * @param applicant the Applicant making the enquiry
+     * @param project the Project being enquired about
+     * @param message the enquiry message content String     */
+    public Enquiry(Applicant applicant, Project project, String message) {
+        enquiryID = enquiryID++;
+        this.applicant = applicant;
+        this.project = project;
+        this.message = message;
+    }
 
     // ========== SETTER METHODS ==========
-    
-    /**
-     * Sets the unique identifier for this enquiry.
-     * 
-     * @param enquiryID the unique ID to assign
-     */
-    public void setEnquiryID(String enquiryID) {
-        this.enquiryID = enquiryID;
-    }
-    
     /**
      * Sets the applicant associated with this enquiry.
      * 
@@ -74,8 +63,8 @@ public class Enquiry {
      * 
      * @param reply the response text
      */
-    public void setReply(String reply) {
-        this.reply = reply;
+    public void setReply(Enquiry reply) {
+        this.replies.add(reply);
     }
 
     // ========== GETTER METHODS ==========
@@ -85,8 +74,8 @@ public class Enquiry {
      * 
      * @return the enquiry ID
      */
-    public String getEnquiryID() {
-        return this.enquiryID;
+    public int getEnquiryID() {
+        return enquiryID;
     }
     
     /**
@@ -121,7 +110,7 @@ public class Enquiry {
      * 
      * @return the response text
      */
-    public String getReply() {
-        return this.reply;
+    public ArrayList<Enquiry> getReplies() {
+        return this.replies;
     }
 }

@@ -185,7 +185,8 @@ public class App{
                                         ArrayList<Enquiry> enquiries = new ArrayList<>();
                                         applicant.get(i).setMaritalStatus(MaritalStatus.SINGLE);
                                         
-                                        MaritalStatus maritalStatus = MaritalStatus.SINGLE;
+                                        ArrayList<MaritalStatus> allowedGroups = new ArrayList<>();
+                                        allowedGroups.add(MaritalStatus.SINGLE);
                                         
                                         Project dummyProject = new Project(
                                             projectName,
@@ -199,11 +200,12 @@ public class App{
                                             applicants,
                                             officers,
                                             enquiries,
-                                            maritalStatus
+                                            allowedGroups
                                         );
                                         
                                         projectList.add(dummyProject);
                                         dummyProject.addHDBOfficer(hdbOfficers.get(i));
+                                        
                                         // Applicant applicant1 = new Applicant(
                                         // 	    "Alice Tan", 
                                         // 	    "S1234567A", 
@@ -246,7 +248,8 @@ public class App{
                                         applicant1.bookFlat(hdbOfficers.get(i));
                                         applicant2.bookFlat(hdbOfficers.get(i));
                                         hdbOfficers.get(i).setManagedProject(dummyProject);
-                                        OfficerApp.start(hdbOfficers.get(i));
+                                        hdbOfficers.get(i).setManagingOfficer(true);
+                                        ApplicantOfficerApp.start(hdbOfficers.get(i),projectList);
                                         userPos = i;
                                         currentUserId = userName;
                                         logedIn = true;
@@ -307,7 +310,8 @@ public class App{
                                         ArrayList<Enquiry> enquiries = new ArrayList<>();
                                         applicant.get(i).setMaritalStatus(MaritalStatus.SINGLE);
                                         
-                                        MaritalStatus maritalStatus = MaritalStatus.SINGLE;
+                                        ArrayList<MaritalStatus> allowedGroups = new ArrayList<>();
+                                        allowedGroups.add(MaritalStatus.SINGLE);
                                         
                                         Project dummyProject = new Project(
                                             projectName,
@@ -321,7 +325,7 @@ public class App{
                                             applicants,
                                             officers,
                                             enquiries,
-                                            maritalStatus
+                                            allowedGroups
                                         );
                                         
                                         projectList.add(dummyProject);
@@ -329,7 +333,7 @@ public class App{
                                         dummyProject.addHDBOfficer(dummyOfficer);
                                         // Launch applicant interface
                                         ApplicantApp applicantApp = new ApplicantApp();
-                                        applicantApp.start(applicant.get(i), projectList);
+                                        ApplicantOfficerApp.start(applicant.get(i), projectList);
                                         
                                         userPos = i;
                                         currentUserId = userName;

@@ -9,7 +9,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  * </p>
  * 
  */
-public class HDBOfficer extends Applicant {
+public class HDBOfficer extends Applicant{
     private Project managedProject;
     private OfficerRegistrationStatus officerRegistrationStatus = OfficerRegistrationStatus.PENDING;
     private ArrayList<Application> managedApplications = new ArrayList<Application>();
@@ -101,13 +101,15 @@ public class HDBOfficer extends Applicant {
     public void registerForProject(Project project) {
 
     }
-
+    
     /**
      * Displays details of the managed project.
      */
-    public void viewProjectDetails() {
+    public void viewProjectDetails(){
+        System.out.println("Manager Name: " + managedProject.getHDBManager().getName());
         System.out.println(managedProject.toString());
     }
+
 
     /**
      * Gets the officer's registration status.
@@ -117,10 +119,12 @@ public class HDBOfficer extends Applicant {
     public OfficerRegistrationStatus getOfficerRegistrationStatus() {
         return officerRegistrationStatus;
     }
-
-    /**
-     * Displays all book requests from applicants.
-     */
+    
+    /*
+    * @param allow HDBOfficer to view all booking requests from applicants.
+    * @return void  
+    * @description - The HDBOfficer can only receive and view requests of applicants that applied to the project he/she is part of */
+    
     public void viewBookRequests() {
         if (managedApplications.size() > 0) {
             for (Application app : managedApplications) {

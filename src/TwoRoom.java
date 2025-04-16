@@ -23,8 +23,7 @@ public class TwoRoom extends FlatType {
      * @param allowedGroup the marital status allowed to apply (typically SINGLE)
      */
     public TwoRoom(int units, double price, MaritalStatus allowedGroup) {
-        super(units, price, allowedGroup, "2-Room");
-        // Use '2-Room' instead of 'TwoRoom' to sync .txt
+        super(units, price, allowedGroup);
     }
     
     /**
@@ -35,7 +34,6 @@ public class TwoRoom extends FlatType {
      * @param allowedGroups list of permitted marital statuses (typically SINGLE)
      */
     public TwoRoom(int units, double price, ArrayList<MaritalStatus> allowedGroups) {
-        super(units, price, allowedGroups, "2-Room");
-        // Use '2-Room' instead of 'TwoRoom' to sync .txt
+        super(units, price, allowedGroups);
     }
 }

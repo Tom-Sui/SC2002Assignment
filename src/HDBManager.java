@@ -18,7 +18,7 @@ import java.text.ParseException;
  * 
  */
 public class HDBManager extends User{
-    private String DataFilePath = "./src/Data";   // TO ADD /src/ FOR ECLIPSE
+    private String DataFilePath = "./Data";   // TO ADD /src/ FOR ECLIPSE
     private ArrayList<Project> managedProjects = new ArrayList<Project>();
     General general = new General();
     DateFormat formatter = new SimpleDateFormat("d/M/yyyy");
@@ -194,7 +194,10 @@ public class HDBManager extends User{
 							int i){
 
         General general = new General();
-
+        
+        ArrayList<FlatType> flatDetail = currentProjects.get(i).getFlatTypes();	
+        String flatTypeName;
+        
         if (managedProjects == null) {
             System.out.println("\nNo managed projects");
             return false;
@@ -229,26 +232,39 @@ public class HDBManager extends User{
         		
         		// update pricing
         	case "2":
-        		
-        		ArrayList<FlatType> flatDetail = currentProjects.get(i).getFlatTypes();		        		
+        		        		
         		String[] flatPricing = updateContent.split(",");
         		// 0 = flat Types
         		// 1 = pricing
         		
-        		// function to identify which flat to update
-        		for (int x = 0; x < flatDetail.size(); x++)
+        		// function to identify which flat to update                
+                for(FlatType flatD : flatDetail)
         		{
-        			if(flatDetail.get(x).getFlatTypeName().equals(flatPricing[0]))
-        			{        		        		        				
-        				// set pricing in project.java
-        				flatDetail.get(x).setPrice(Double.parseDouble(flatPricing[1]));
+        			if(flatD instanceof TwoRoom)
+        			{
+        				flatTypeName = "2-Room";
+        				
+        			}
+        			else if(flatD instanceof ThreeRoom)
+        			{
+        				flatTypeName = "3-Room";
+        			}
+        			else
+        			{
+        				flatTypeName = "Unknown Flat Type";
+        			}
+        			
+        			if(flatTypeName.equals(flatPricing[0]))
+        			{
+        				// set pricing in project.java        				
+        				flatD.setPrice(Double.parseDouble(flatPricing[1]));
         				
         				// update to .txt
         				general.editProjectFile(currentProjects.get(i));
         				
-        				System.out.printf("Pricing of %s is updated to $%s.\n", flatPricing[0], flatDetail.get(x).getPrice());
+        				System.out.printf("Pricing of %s is updated to $%s.\n", flatPricing[0], flatD.getPrice());
         			}
-        		}        		        		
+        		}                       		        		
         		break;
         		
         		// Update Number of Units
@@ -259,19 +275,33 @@ public class HDBManager extends User{
         		// 1 = number of updated units
         		        		
         		// function to identify which flat to update
-        		for (int x = 0; x < flatDetails.size(); x++)
-        		{        			
-        			if (flatDetails.get(x).getFlatTypeName().equals(flatStr[0]))
-        			{        				        				        				        				
-        				// set units in project.java
-        				flatDetails.get(x).setUnits(Integer.parseInt(flatStr[1]));
+        		for(FlatType flatD : flatDetail)
+        		{
+        			if(flatD instanceof TwoRoom)
+        			{
+        				flatTypeName = "2-Room";
         				
-        				// update to .txt 
+        			}
+        			else if(flatD instanceof ThreeRoom)
+        			{
+        				flatTypeName = "3-Room";
+        			}
+        			else
+        			{
+        				flatTypeName = "Unknown Flat Type";
+        			}
+        			
+        			if(flatTypeName.equals(flatStr[0]))
+        			{
+        				// set pricing in project.java        				
+        				flatD.setUnits(Integer.parseInt(flatStr[1]));
+        				
+        				// update to .txt
         				general.editProjectFile(currentProjects.get(i));
         				
-        				System.out.printf("%s is updated to %s units.\n", flatStr[0], flatDetails.get(x).getUnits());
+        				System.out.printf("%s is updated to %s units.\n", flatStr[0], flatD.getUnits());
         			}
-        		}	
+        		}       		
         		break;
         		
         		// Change Application Opening Date
@@ -705,11 +735,32 @@ public class HDBManager extends User{
 		// CALL flat types
 		System.out.println("   - Flat Details:");
 		
-		ArrayList<FlatType> flatDetails = currentProjects.get(i).getFlatTypes();			
-		for (FlatType flatD : flatDetails)
+		ArrayList<FlatType> flatDetails = currentProjects.get(i).getFlatTypes();
+		
+		for(FlatType flatD : flatDetails)
 		{
-			System.out.printf("      - Flat Type: %s, Units: %d, Price: $%.2f\n", flatD.getFlatTypeName(), flatD.getUnits(), flatD.getPrice());			
-		}			
+			String flatTypeName;
+			
+			if(flatD instanceof TwoRoom)
+			{
+				flatTypeName = "2-Room";
+			}
+			else if(flatD instanceof ThreeRoom)
+			{
+				flatTypeName = "3-Room";
+			}
+			else
+			{
+				flatTypeName = "Unknown Flat Type";
+			}
+			
+			System.out.printf("      - Flat Type: %s, Units: %d, Price: $%.2f\n", flatTypeName, flatD.getUnits(), flatD.getPrice());	
+		}
+		
+		//for (FlatType flatD : flatDetails)
+		//{
+			//System.out.printf("      - Flat Type: %s, Units: %d, Price: $%.2f\n", flatD.getFlatTypeName(), flatD.getUnits(), flatD.getPrice());			
+		//}			
 		
 		System.out.printf("   - Application Period: %s to %s \n", currentProjects.get(i).getApplicationOpeningDate(), currentProjects.get(i).getApplicationClosingDate());
 		System.out.printf("   - HDB Manager: %s \n", currentProjects.get(i).getHDBManager().getName());

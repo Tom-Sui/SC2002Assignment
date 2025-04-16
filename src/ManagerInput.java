@@ -520,7 +520,15 @@ public class ManagerInput {
             	
             	if(checkTogglePrj != null)
             	{
-            		manager.toggleVisibility(projects, toggleProject);          	
+            		// check for past projects (if yes, no updating visibility)
+        			if(manager.PastDateCheckerProject(projects, toggleProject))
+        			{
+        				System.out.println("Visibility for past projects are always OFF. Not allowed to change.");
+        			}       
+        			else
+        			{
+        				manager.toggleVisibility(projects, toggleProject);         		
+        			}
             	}
             	else
             	{

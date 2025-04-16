@@ -58,11 +58,10 @@ public class App{
 
 
 
-        // General general = new General();
-        // general.editProjectFile(projects.get(0),"New Name");
-        // projects.get(0).setProjectName("New Name");
-        // System.out.println(projects.get(0).getProjectName());
-        // System.exit(0);
+        General general = new General();
+        general.editProjectFile(projects.get(1),"New Name");
+        projects.get(1).setProjectName("New Name");
+        System.exit(0);
         
         // System.out.println(hdbManagers.get(0).getName());
         // hdbManagers.get(0).deletProject(projects.get(0));

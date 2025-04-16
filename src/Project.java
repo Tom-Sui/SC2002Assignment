@@ -287,15 +287,17 @@ public class Project {
         projectDetails = projectDetails + this.hdbManager.getName() + ",";
 
         projectDetails = projectDetails + String.valueOf(this.availableOfficerSlots) + ",";
-
-        int i = 0;
-        for(HDBOfficer hdbOfficer : this.hdbOfficers){
-
-            if(i++ == hdbOfficers.size() - 1){
-                projectDetails = projectDetails + hdbOfficer.getName() + ",";
-                break;
+        if(this.hdbOfficers.get(0) != null){
+            int i = 0;
+            for(HDBOfficer hdbOfficer : this.hdbOfficers){
+                if(i++ == hdbOfficers.size() - 1){
+                    projectDetails = projectDetails + hdbOfficer.getName() + ",";
+                    break;
+                }
+                projectDetails = projectDetails + hdbOfficer.getName() + "&";
             }
-            projectDetails = projectDetails + hdbOfficer.getName() + "&";
+        }else{
+            projectDetails = projectDetails + " ,";
         }
 
         if(visibility){

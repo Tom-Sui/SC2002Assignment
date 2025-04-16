@@ -24,6 +24,7 @@ public class ApplicantOfficerApp {
 			    "Book Flat", 
 			    "Request Withdrawal"
 		));
+
 		ArrayList<String> officerFeatures = new ArrayList<>(List.of(
 			    "View Project Registration Status", 
 			    "Register for Project"

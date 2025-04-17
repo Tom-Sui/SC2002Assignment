@@ -94,16 +94,6 @@ public class Applicant extends User {
     }
     
     /**
-     * Checks if the applicant is eligible to apply for a project.
-     * 
-     * @param project the project to check eligibility for
-     * @return true if eligible to apply, false otherwise
-     */
-    public boolean canApply(Project project) {
-        return false;
-    }
-    
-    /**
      * Sets the preferred flat type for the applicant.
      * 
      * @param flatType the preferred flat type
@@ -126,15 +116,16 @@ public class Applicant extends User {
      * 
      * @param projects list of all projects to display
      */
-    public void viewAvailableProjects(ArrayList<Project> projects) {
+    public int viewAvailableProjects(ArrayList<Project> projects) {
         int size = projects.size();
         for (int i = 0; i < size; i++) {
             Project currentProject = projects.get(i);
-            if (currentProject.getVisibility() == true) {
+            if (currentProject.getVisibility() == true || pastAppliedProjects.contains(currentProject)) {
                 System.out.println("Project ID: " + (i+1));
                 System.out.println(projects.get(i).toString());
             }	
-        } 	  
+        } 
+        return size;
     }
 
     /**

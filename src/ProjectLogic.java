@@ -35,6 +35,20 @@ public class ProjectLogic {
         }
         return filteredProjects;
     }
+    
+    public static ArrayList<Project> filterProjectsForOfficer(ArrayList<Project> projects, HDBOfficer officer) {
+        ArrayList<Project> filteredProjects = new ArrayList<>();
+        
+        for (Project project : projects) {
+            // Officers can only apply to projects that they are not in charge of.
+            if (!project.getHDBOfficer().contains(officer)) {
+                filteredProjects.add(project);
+            }
+        }
+        return filteredProjects;
+    }
+    
+    
     /**
      * Displays HDB officers details.
      * <p>
@@ -60,30 +74,6 @@ public class ProjectLogic {
         }
         System.out.println();
     }
-    /**
-     * Filters flat types based on marital status eligibility.
-     * <p>
-     * Returns flat types that open to the specified
-     * marital status in their allowed groups.
-     * </p>
-     *
-     * @param FlatTypeList List of flat types to filter
-     * @param maritalStatus The marital status to check for eligibility
-     * @return Filtered list of compatible flat types
-     *
-     * @see FlatType
-     * @see MaritalStatus
-     */
-    public static ArrayList<FlatType> filterFlatTypesByMaritalStatus(ArrayList<FlatType> FlatTypeList, MaritalStatus maritalStatus) {
-        ArrayList<FlatType> filteredFlatTypes = new ArrayList<>();
-
-        for (FlatType flatType : FlatTypeList) {
-            // If the flat type's allowed groups contain the applicant's marital status
-            if (flatType.getAllowedGroups().contains(maritalStatus)) {
-                filteredFlatTypes.add(flatType);
-            }
-        }
-        return filteredFlatTypes;
-    }   
+    
 }
 

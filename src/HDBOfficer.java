@@ -3,6 +3,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.time.LocalDate;
+import java.sql.Date;
 import java.time.ZoneId;
 /**
  * Represents various method that HDB officer access to.
@@ -13,7 +14,6 @@ import java.time.ZoneId;
  * 
  */
 
-
 public class HDBOfficer extends Applicant{
     private Project managedProject;
     private ArrayList<Project> upcomingProjects = new ArrayList<Project>();
@@ -21,8 +21,6 @@ public class HDBOfficer extends Applicant{
     //private OfficerRegistrationStatus officerRegistrationStatus = OfficerRegistrationStatus.PENDING;
     private ArrayList<Application> managedApplications = new ArrayList<Application>();
     private boolean isManagingOfficer = false;
-
-    
     
     public void checkCurrentProject() {
     	// Return if the officer is not managing any project.
@@ -31,9 +29,7 @@ public class HDBOfficer extends Applicant{
     	}
     	LocalDate currentDate = LocalDate.now();
     	//Convert date type to LocalDate so that we can compare
-        LocalDate applicationClosingDate = managedProject.getApplicationClosingDate().toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalDate();
+        LocalDate applicationClosingDate = ((Date) managedProject.getApplicationClosingDate()).toLocalDate();
     	if (currentDate.isAfter(applicationClosingDate)) {
     		managedProject = null;
     		isManagingOfficer = false;
@@ -41,17 +37,39 @@ public class HDBOfficer extends Applicant{
     	}
     }
     
-    // TODO: method to check if there are any new project that the officer should be managing. update isManagingOfficer if there are any.
-//    public void checkNewProject() {
-//    	for (Project project : upcomingProjects) {
-//    		if (project.getApplicationOpeningDate())
-//    	}
-//    }
+    public void checkNewProject() {
+    	LocalDate currentDate = LocalDate.now();
+    	for (Project project : upcomingProjects) {
+    		LocalDate applicationOpeningDate = ((Date) managedProject.getApplicationClosingDate()).toLocalDate();
+    		if (currentDate == applicationOpeningDate) {
+    			managedProject = project;
+    			isManagingOfficer = true;
+    			return;
+    		}
+    	}
+    }
  
     // TODO: method to check if there are any approved projects in registrationStatusMap. if there are, transfer them to upcomingProjects
+    public void checkApprovedProjects() {
+    	if (registrationStatusMap.size() == 0) {
+    		return;
+    	}
+    	registrationStatusMap.forEach((project, status) -> {
+    	    if (status == OfficerRegistrationStatus.APPROVED) {
+    	    	upcomingProjects.add(project);
+    	    }
+    	});
+    }
     
-    // TODO: method to register for a new project
-    
+    // TODO: method to register for a new project. must do the checks
+    /**
+     * Registers the officer for a project.
+     *
+     * @param project the project to register for
+     */
+    public void registerForProject(Project project) {
+    	
+    }
     
     /**
      * Default constructor for HDBOfficer.
@@ -130,15 +148,6 @@ public class HDBOfficer extends Applicant{
     public void setManagedProject(Project project) {
         managedProject = project;
     }
-
-    /**
-     * Registers the officer for a project.
-     *
-     * @param project the project to register for
-     */
-    public void registerForProject(Project project) {
-
-    }
     
     /**
      * Displays details of the managed project.
@@ -154,9 +163,12 @@ public class HDBOfficer extends Applicant{
      *
      * @return the current registration status
      */
-//    public OfficerRegistrationStatus getOfficerRegistrationStatus() {
-//        return officerRegistrationStatus;
-//    }
+    
+    public void viewOfficerRegistrationStatus() {
+    	registrationStatusMap.forEach((project, status) -> {
+    		System.out.printf("Project: %s, Status: %s", project.getProjectName(), status);   	
+    	});
+    }
     
     /*
     * @param allow HDBOfficer to view all booking requests from applicants.

@@ -80,7 +80,7 @@ public class ApplicantApp {
                 System.out.printf("Enter the project number to apply for: ");    
                 int projectNumber = sc.nextInt();
                 Project project = projectList.get(projectNumber-1);
-                ArrayList<FlatType> filteredFlatTypes = ProjectLogic.filterFlatTypesByMaritalStatus(
+                ArrayList<FlatType> filteredFlatTypes = FlatTypeLogic.filterFlatTypesByMaritalStatus(
                     project.getFlatTypes(), applicant.getMaritalStatus());
                 
                 if (filteredFlatTypes.isEmpty()) {

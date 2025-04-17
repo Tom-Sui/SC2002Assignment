@@ -56,6 +56,8 @@ public class App{
         //Initialize manager managed projects
         hdbManagers = init.setManagerManagedProjects(hdbManagers,projects);
         // System.out.println(hdbManagers.get(0).getUserID());
+        // System.out.println(projects.get(0).getHDBManager().getName());
+        // System.exit(0);
         
 
         //General general = new General();

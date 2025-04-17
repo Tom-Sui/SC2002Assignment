@@ -67,15 +67,16 @@ public class Init {
             while (scanner.hasNextLine()) {
                 hdbManager = new HDBManager();
                 String[] data = scanner.nextLine().split(",");
-                hdbManager.setName(data[0]);
-                hdbManager.setNRIC(data[1]);
-                hdbManager.setage(Integer.parseInt(data[2]));
-                if (data[3].equals("Single")) {
+                hdbManager.setUserID(Integer.parseInt(data[0]));
+                hdbManager.setName(data[1]);
+                hdbManager.setNRIC(data[2]);
+                hdbManager.setage(Integer.parseInt(data[3]));
+                if (data[4].equals("Single")) {
                     hdbManager.setMaritalStatus(MaritalStatus.SINGLE);
                 } else {
                     hdbManager.setMaritalStatus(MaritalStatus.MARRIED);
                 }
-                hdbManager.setPassword(data[4]);
+                hdbManager.setPassword(data[5]);
                 hdbManagers.add(hdbManager);
             }
 
@@ -102,15 +103,16 @@ public class Init {
             while (scanner.hasNextLine()) {
                 hdbOfficer = new HDBOfficer();
                 String[] data = scanner.nextLine().split(",");
-                hdbOfficer.setName(data[0]);
-                hdbOfficer.setNRIC(data[1]);
-                hdbOfficer.setage(Integer.parseInt(data[2]));
-                if (data[3].equals("Single")) {
+                hdbOfficer.setUserID(Integer.parseInt(data[0]));
+                hdbOfficer.setName(data[1]);
+                hdbOfficer.setNRIC(data[2]);
+                hdbOfficer.setage(Integer.parseInt(data[3]));
+                if (data[4].equals("Single")) {
                     hdbOfficer.setMaritalStatus(MaritalStatus.SINGLE);
                 } else {
                     hdbOfficer.setMaritalStatus(MaritalStatus.MARRIED);
                 }
-                hdbOfficer.setPassword(data[4]);
+                hdbOfficer.setPassword(data[5]);
                 hdbOfficers.add(hdbOfficer);
             }
             scanner.close();

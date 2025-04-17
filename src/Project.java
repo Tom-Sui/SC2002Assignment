@@ -27,7 +27,7 @@ public class Project {
     private ArrayList<HDBOfficer> hdbOfficers = new ArrayList<HDBOfficer>();
     private ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>();
     private ArrayList<Application> applications = new ArrayList<Application>();
-    private MaritalStatus maritalStatus = null;
+    private ArrayList<MaritalStatus> allowedGroups = new ArrayList<>();
     /**
      * Default constructor for Project.
      */
@@ -52,7 +52,7 @@ public class Project {
 
     public Project(String projectName, String neighborhood, ArrayList<FlatType> flatTypes, Date applicationOpeningDate, Date applicationClosingDate,
     		HDBManager hdbManager, int availableOfficerSlots, boolean visiblity, ArrayList<Applicant> applicants, ArrayList<HDBOfficer> hdbOfficers, ArrayList<Enquiry> enquiries,
-    		MaritalStatus maritalStatus) {
+    		ArrayList<MaritalStatus> allowedGroups) {
     	this.projectName = projectName;
     	this.neighborhood = neighborhood;
     	this.flatTypes = flatTypes;
@@ -64,7 +64,7 @@ public class Project {
     	this.applicants = applicants;
     	this.hdbOfficers = hdbOfficers;
     	this.enquiries = enquiries;
-    	this.maritalStatus = maritalStatus;  	
+    	this.allowedGroups = allowedGroups;  	
     }
     /**
      * Sets the project name.
@@ -195,8 +195,8 @@ public class Project {
     * Gets the allowed marital status.
     * @return Current available marital status
     */
-    public MaritalStatus getMaritalStatus() {
-    	return maritalStatus;
+    public ArrayList<MaritalStatus> getAllowedGroups() {
+    	return allowedGroups;
     }
     /**
     * Gets the available flat types

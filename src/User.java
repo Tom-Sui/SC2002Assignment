@@ -264,12 +264,4 @@ public abstract class User {
      * @param enquiry The enquiry to delete
      */
     public abstract void deletEnquiry(Enquiry enquiry);
-
-    /**
-     * Checks if the user is eligible to apply for a specific project.
-     * 
-     * @param project The project to check eligibility for
-     * @return true if the user can apply, false otherwise
-     */
-    public abstract boolean canApply(Project project);
 }

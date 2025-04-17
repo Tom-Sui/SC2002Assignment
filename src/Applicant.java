@@ -9,8 +9,6 @@ import java.util.ArrayList;
 public class Applicant extends User {
     private Application currentApplication; 
     private ArrayList<Project> pastAppliedProjects = new ArrayList<Project>();
-    private ApplicationStatus applicationStatus;
-    private FlatType bookedFlatType;
     
     /**
      * Default constructor for Applicant.
@@ -111,7 +109,7 @@ public class Applicant extends User {
      * @param flatType the preferred flat type
      */
     public void setFlatType(FlatType flatType) {
-        bookedFlatType = flatType;
+        this.currentApplication.setFlatType(flatType);
     }
     
     /**
@@ -120,7 +118,7 @@ public class Applicant extends User {
      * @return the booked flat type
      */
     public FlatType getFlatType() {
-        return bookedFlatType;
+        return currentApplication.getFlatType();
     }
 
     /**
@@ -171,11 +169,11 @@ public class Applicant extends User {
         currentApplication.setApplicationStatus(ApplicationStatus.PENDINGWITHDRAWAL);
     }
     
-    /**
-     * Requests to book a flat through an HDB officer.
-     * 
-     * @param officer the HDB officer handling the booking
-     */
+    /*
+    * @param allow the user to book flat
+    * @return void
+    * @description - This function will send a booking request to a managing HDB Officer. Only valid if the applicant's application is successful (checked at ApplicantOfficerApp)   */
+
     public void bookFlat(HDBOfficer officer) {
         currentApplication.setBookingRequested(true);
         officer.receiveBookFlatRequest(currentApplication);

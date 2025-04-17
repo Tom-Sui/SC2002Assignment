@@ -34,7 +34,9 @@ public class Application {
     private FlatType flatType;
 
     //Constructor
-    
+    public Application() {
+    	Application.applicationId = applicationId++;
+    };
     /**
      * Constructs a new Application with the specified details.
      * 
@@ -92,6 +94,9 @@ public class Application {
         return isBooked;
     }
     
+    public void setProject(Project project) {
+    	this.project = project;
+    }
     /**
      * Checks if booking has been requested.
      * 
@@ -147,6 +152,9 @@ public class Application {
     }
     
 
+    public void setApplicant(Applicant applicant) {
+    	this.applicant = applicant;
+    }
     /**
      * Gets the application ID.
      * 

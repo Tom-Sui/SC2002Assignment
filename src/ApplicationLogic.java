@@ -76,5 +76,37 @@ public class ApplicationLogic {
         }
         return pastAppliedProjects;
     }
-
-}
+    
+    public static Applicant getApplicant(ArrayList<Applicant> applicantList, String NRIC) {
+    	for (Applicant applicant : applicantList) {
+    		if (applicant.getNRIC().equals(NRIC)) {
+    			return applicant;
+    		}
+    	}
+		return null;
+    }
+    
+    public static Project getProject(ArrayList<Project> projectList, String projectName) {
+    	for (Project project : projectList) {
+    		if (project.getProjectName().equals(projectName)) {
+    			return project;
+    		}
+    	}
+		return null;
+    }
+    
+    public static FlatType getFlatType(Project project, String inputFlatType) {
+    	ArrayList<FlatType> flatTypes = project.getFlatTypes();
+        for (FlatType flatType : flatTypes) {
+            if (flatType instanceof TwoRoom && inputFlatType.equals("2-Room")) {
+            	return flatType;
+            }
+            else if (flatType instanceof ThreeRoom && inputFlatType.equals("3-Room")) {
+                return flatType;
+            }
+        }
+        return null; // not found
+        }
+    }
+        
+    

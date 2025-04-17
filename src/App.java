@@ -56,8 +56,10 @@ public class App{
         //Initialize manager managed projects
         hdbManagers = init.setManagerManagedProjects(hdbManagers,projects);
 
+        //Initialize Application info
+        ArrayList<Application> applications = init.loadApplicationInfo(applicant, projects);
 
-
+        
         //General general = new General();
         //general.editProjectFile(projects.get(1),"New Name");
         //projects.get(1).setProjectName("New Name");

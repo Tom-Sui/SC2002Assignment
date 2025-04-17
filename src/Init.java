@@ -152,6 +152,32 @@ public class Init {
 
         return projects;
     }
+    
+    public ArrayList<Application> loadApplicationInfo(ArrayList<Applicant> applicants, ArrayList<Project> projects){
+        File applicationFile = new File("./Data/ApplicationList.txt");
+        ArrayList<Application> applications = new ArrayList<Application>();
+        Application application;
+        try {
+            Scanner scanner = new Scanner(applicationFile);
+
+            while (scanner.hasNextLine()) {
+            	application = new Application();
+                String[] data = scanner.nextLine().split(",");
+                application.setApplicant(ApplicationLogic.getApplicant(applicants, data[1]));
+                application.setProject(ApplicationLogic.getProject(projects, data[2]));
+                application.setApplicationStatus(ApplicationStatus.valueOf(data[3]));
+                application.setIsBooked(Boolean.parseBoolean(data[4]));
+                application.setBookingRequested(Boolean.parseBoolean(data[5]));
+                application.setFlatType(ApplicationLogic.getFlatType(application.getProject(), data[6]));
+                applications.add(application);
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Error occured while reading ApplicationList.txt");
+            e.printStackTrace();
+        }
+        return applications;
+    }
 
     /**
      * Creates and configures a Project object from raw data.

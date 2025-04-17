@@ -1487,10 +1487,10 @@ public class HDBManager extends User{
     			
     			System.out.printf("Applicant ID: %d\n", enquiry.getApplicant());
     			System.out.printf("Message: %s\n", enquiry.getMessage());
-    			if(enquiry.getReply().equals("")) {
+    			if(enquiry.getReplies().equals("")) {
     			System.out.printf("There is no reply yet");
     			} else {
-    				System.out.printf("Reply: %s\n", enquiry.getReply());
+    				System.out.printf("Reply: %s\n", enquiry.getReplies());
     			}
     		}
     	}

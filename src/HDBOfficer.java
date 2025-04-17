@@ -1,6 +1,10 @@
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
-
+import java.time.LocalDate;
+import java.sql.Date;
+import java.time.ZoneId;
 /**
  * Represents various method that HDB officer access to.
  * <p>
@@ -9,12 +13,94 @@ import java.util.concurrent.ArrayBlockingQueue;
  * </p>
  * 
  */
+
 public class HDBOfficer extends Applicant{
     private Project managedProject;
-    private OfficerRegistrationStatus officerRegistrationStatus = OfficerRegistrationStatus.PENDING;
+    private ArrayList<Project> upcomingProjects = new ArrayList<Project>();
+    private Map<Project, OfficerRegistrationStatus> registrationStatusMap = new HashMap<>();
+    //private OfficerRegistrationStatus officerRegistrationStatus = OfficerRegistrationStatus.PENDING;
     private ArrayList<Application> managedApplications = new ArrayList<Application>();
     private boolean isManagingOfficer = false;
+    
+    public void checkCurrentProject() {
+    	// Return if the officer is not managing any project.
+    	if (managedProject == null) {
+    		return;
+    	}
+    	LocalDate currentDate = LocalDate.now();
+    	//Convert date type to LocalDate so that we can compare
+        LocalDate applicationClosingDate = ((Date) managedProject.getApplicationClosingDate()).toLocalDate();
+    	if (currentDate.isAfter(applicationClosingDate)) {
+    		managedProject = null;
+    		isManagingOfficer = false;
+    		managedApplications.clear();
+    	}
+    }
+    
+    public void checkNewProject() {
+    	LocalDate currentDate = LocalDate.now();
+    	for (Project project : upcomingProjects) {
+    		LocalDate applicationOpeningDate = ((Date) managedProject.getApplicationClosingDate()).toLocalDate();
+    		if (currentDate == applicationOpeningDate) {
+    			managedProject = project;
+    			isManagingOfficer = true;
+    			return;
+    		}
+    	}
+    }
+ 
+    // TODO: method to check if there are any approved projects in registrationStatusMap. if there are, transfer them to upcomingProjects
+    public void checkApprovedProjects() {
+    	if (registrationStatusMap.size() == 0) {
+    		return;
+    	}
+    	registrationStatusMap.forEach((project, status) -> {
+    	    if (status == OfficerRegistrationStatus.APPROVED) {
+    	    	upcomingProjects.add(project);
+    	    }
+    	});
+    }
+    
+    // TODO: method to register for a new project. must do the checks
+    /**
+     * Registers the officer for a project.
+     * <p>
+     * Checks if the officer has already applied for the project as a applicant.
+     * Checks if the officer is applying for a project where their application period is the same the current project and is managing the project.
+     * </p>
+     *
+     * @param project the project to register for
+     * @return true if the officer is registered for the project, false otherwise
+     */
+    public boolean registerForProject(Project project) {
+        ArrayList<Project> pastAppliedProjects = new ArrayList<Project>();
+        pastAppliedProjects = ApplicationLogic.filterByPastAppliedProjects(managedApplications);
+        if (pastAppliedProjects.contains(project))  {
+            return false;
+        }
 
+        final boolean[] canApply = {true};
+        registrationStatusMap.forEach((Project mappedProject, OfficerRegistrationStatus status) -> {
+            // check if the application period of the project is the same as the current project
+            boolean dateFallsWithinApplication = project.getApplicationOpeningDate().after(mappedProject.getApplicationOpeningDate()) && project.getApplicationClosingDate().before(mappedProject.getApplicationClosingDate());
+            boolean dateEquals = project.getApplicationOpeningDate().equals(mappedProject.getApplicationOpeningDate()) 
+                && project.getApplicationClosingDate().equals(mappedProject.getApplicationClosingDate()) 
+                && project.getApplicationClosingDate().equals(mappedProject.getApplicationOpeningDate()) 
+                && project.getApplicationOpeningDate().equals(mappedProject.getApplicationClosingDate());
+            if((dateFallsWithinApplication || dateEquals )&& status == OfficerRegistrationStatus.APPROVED) {
+                canApply[0] = false;
+
+            }
+        });
+
+        if (!canApply[0]) {
+            return false;
+        }
+
+        registrationStatusMap.put(project, OfficerRegistrationStatus.PENDING);
+        return true;
+    }
+    
     /**
      * Default constructor for HDBOfficer.
      */
@@ -92,15 +178,6 @@ public class HDBOfficer extends Applicant{
     public void setManagedProject(Project project) {
         managedProject = project;
     }
-
-    /**
-     * Registers the officer for a project.
-     *
-     * @param project the project to register for
-     */
-    public void registerForProject(Project project) {
-
-    }
     
     /**
      * Displays details of the managed project.
@@ -116,8 +193,11 @@ public class HDBOfficer extends Applicant{
      *
      * @return the current registration status
      */
-    public OfficerRegistrationStatus getOfficerRegistrationStatus() {
-        return officerRegistrationStatus;
+    
+    public void viewOfficerRegistrationStatus() {
+    	registrationStatusMap.forEach((project, status) -> {
+    		System.out.printf("Project: %s, Status: %s", project.getProjectName(), status);   	
+    	});
     }
     
     /*

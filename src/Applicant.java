@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class Applicant extends User {
     private Application currentApplication; 
-    private ArrayList<Project> pastAppliedProjects = new ArrayList<Project>();
+    private ArrayList<Application> pastAppliedProjects = new ArrayList<Application>();
     
     /**
      * Default constructor for Applicant.
@@ -94,16 +94,6 @@ public class Applicant extends User {
     }
     
     /**
-     * Checks if the applicant is eligible to apply for a project.
-     * 
-     * @param project the project to check eligibility for
-     * @return true if eligible to apply, false otherwise
-     */
-    public boolean canApply(Project project) {
-        return false;
-    }
-    
-    /**
      * Sets the preferred flat type for the applicant.
      * 
      * @param flatType the preferred flat type
@@ -122,19 +112,13 @@ public class Applicant extends User {
     }
 
     /**
-     * Displays all available projects that are visible to applicants.
+     * Gets the applicant's past applied projects.
      * 
-     * @param projects list of all projects to display
+     * @return list of past applied projects
      */
-    public void viewAvailableProjects(ArrayList<Project> projects) {
-        int size = projects.size();
-        for (int i = 0; i < size; i++) {
-            Project currentProject = projects.get(i);
-            if (currentProject.getVisibility() == true) {
-                System.out.println("Project ID: " + (i+1));
-                System.out.println(projects.get(i).toString());
-            }	
-        } 	  
+
+    public ArrayList<Application> getPastAppliedProjects() {
+        return pastAppliedProjects;
     }
 
     /**

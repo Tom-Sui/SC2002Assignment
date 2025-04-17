@@ -35,6 +35,40 @@ public class ProjectLogic {
         }
         return filteredProjects;
     }
+    
+    public static ArrayList<Project> filterProjectsForOfficer(ArrayList<Project> projects, HDBOfficer officer) {
+        ArrayList<Project> filteredProjects = new ArrayList<>();
+        
+        for (Project project : projects) {
+            // Officers can only apply to projects that they are not in charge of.
+            if (!project.getHDBOfficer().contains(officer)) {
+                filteredProjects.add(project);
+            }
+        }
+        return filteredProjects;
+    }
+
+
+    
+    /**
+     * Displays all available projects that are visible to applicants.
+     * 
+     * @param projects list of all projects to display
+     */
+    public static int viewAvailableProjects(ArrayList<Project> projects, Applicant applicant) {
+        int size = projects.size();
+        ArrayList<Project> pastAppliedProjects = ApplicationLogic.filterByPastAppliedProjects(applicant.getPastAppliedProjects());
+        for (int i = 0; i < size; i++) {
+            Project currentProject = projects.get(i);
+            if (currentProject.getVisibility() == true || pastAppliedProjects.contains(currentProject)) {
+                System.out.println("Project ID: " + (i+1));
+                System.out.println(projects.get(i).toString());
+            }	
+        } 
+        return size;
+    }
+    
+    
     /**
      * Displays HDB officers details.
      * <p>
@@ -60,30 +94,9 @@ public class ProjectLogic {
         }
         System.out.println();
     }
-    /**
-     * Filters flat types based on marital status eligibility.
-     * <p>
-     * Returns flat types that open to the specified
-     * marital status in their allowed groups.
-     * </p>
-     *
-     * @param FlatTypeList List of flat types to filter
-     * @param maritalStatus The marital status to check for eligibility
-     * @return Filtered list of compatible flat types
-     *
-     * @see FlatType
-     * @see MaritalStatus
-     */
-    public static ArrayList<FlatType> filterFlatTypesByMaritalStatus(ArrayList<FlatType> FlatTypeList, MaritalStatus maritalStatus) {
-        ArrayList<FlatType> filteredFlatTypes = new ArrayList<>();
 
-        for (FlatType flatType : FlatTypeList) {
-            // If the flat type's allowed groups contain the applicant's marital status
-            if (flatType.getAllowedGroups().contains(maritalStatus)) {
-                filteredFlatTypes.add(flatType);
-            }
-        }
-        return filteredFlatTypes;
-    }   
+
+        
+
 }
 

@@ -85,4 +85,33 @@ public class FlatTypeLogic {
             }
         }
     }
+    
+    /**
+     * Filters flat types based on marital status eligibility.
+     * <p>
+     * Returns flat types that open to the specified
+     * marital status in their allowed groups.
+     * </p>
+     *
+     * @param FlatTypeList List of flat types to filter
+     * @param maritalStatus The marital status to check for eligibility
+     * @return Filtered list of compatible flat types
+     *
+     * @see FlatType
+     * @see MaritalStatus
+     */
+    public static ArrayList<FlatType> filterFlatTypesByMaritalStatus(ArrayList<FlatType> FlatTypeList, MaritalStatus maritalStatus) {
+        ArrayList<FlatType> filteredFlatTypes = new ArrayList<>();
+
+        for (FlatType flatType : FlatTypeList) {
+            // If the flat type's allowed groups contain the applicant's marital status
+            if (flatType.getAllowedGroups().contains(maritalStatus)) {
+                filteredFlatTypes.add(flatType);
+            }
+        }
+        return filteredFlatTypes;
+    }   
+    
+    
+    
 }

@@ -9,6 +9,14 @@ public class ApplicantOfficerApp {
 	    HDBOfficer officer = null;
 		if (user instanceof HDBOfficer) { //only need to check if they are HDBOfficer because a HDBOfficer is an applicant
 			officer = (HDBOfficer)user;	
+			/**
+			 * List of checks performed to update officer's managedProject and upcomingProjects
+			 */
+			officer.checkCurrentProject();
+			officer.checkNewProject();
+			officer.checkApprovedProjects();
+			//Filter projects so the officer cannot apply for projects they are managing
+			projectList = ProjectLogic.filterProjectsForOfficer(projectList, officer);
 		}
 		
 		Scanner sc = new Scanner(System.in);	
@@ -24,6 +32,7 @@ public class ApplicantOfficerApp {
 			    "Book Flat", 
 			    "Request Withdrawal"
 		));
+
 		ArrayList<String> officerFeatures = new ArrayList<>(List.of(
 			    "View Project Registration Status", 
 			    "Register for Project"
@@ -36,7 +45,7 @@ public class ApplicantOfficerApp {
 			    "Generate flat selection receipt",
 			    "View Project Details" 
 		));	
-		
+		int totalFeatures = applicantFeatures.size() + officerFeatures.size() + managingOfficerFeatures.size();
 		int choice=-2; //DO NOT SET TO -1 BECAUSE WE USE -1 TO EXIT
 		do {
 			// Display the list of features available
@@ -53,10 +62,13 @@ public class ApplicantOfficerApp {
 			try {
 				System.out.printf("Enter your choice: ");
 				choice = sc.nextInt();
+				if (choice < -1 || choice >totalFeatures) {
+					System.out.println("Invalid choice. Please enter a valid option shown in the list.");
+				}
 				if (choice == 1) {
 			    	System.out.println("\nList of available projects:");
 					System.out.println("============================");
-					applicant.viewAvailableProjects(projectList);
+					ProjectLogic.viewAvailableProjects(projectList, applicant);
 				}
 				else if (choice == 2) {
 					Application currentApplication = applicant.getCurrentApplication();
@@ -80,20 +92,30 @@ public class ApplicantOfficerApp {
 						System.out.println("Cannot apply for project, already applied for a project: " + applicant.getCurrentApplication().getProject().getProjectName());
 						continue;
 					}
-					applicant.viewAvailableProjects(projectList);
-					System.out.printf("Enter the project number to apply for: ");	
-					int projectNumber = sc.nextInt();
-					Project project = projectList.get(projectNumber-1);
-					ArrayList<FlatType> filteredFlatTypes = ProjectLogic.filterFlatTypesByMaritalStatus(project.getFlatTypes(), applicant.getMaritalStatus());
-					if (filteredFlatTypes.isEmpty()){
-						System.out.println("Cannot apply for project, applicant is single: " + project.getProjectName());
+					int noOfProjects = ProjectLogic.viewAvailableProjects(projectList, applicant);
+					if (noOfProjects <= 0) {
+						System.out.println("There are currently no projects you can apply for.");
 						continue;
 					}
-					System.out.println(FlatTypeLogic.displayFlatTypesView(filteredFlatTypes)); 
-					System.out.printf("Enter the flat type number to apply for: ");
-					int flatTypeNumber = sc.nextInt();
-					FlatType flatType = filteredFlatTypes.get(flatTypeNumber-1);
-					applicant.applyForProject(project, flatType);
+					System.out.printf("Enter the project number to apply for: ");	
+					try {
+						int projectNumber = sc.nextInt();
+						Project project = projectList.get(projectNumber-1);
+						ArrayList<FlatType> filteredFlatTypes = FlatTypeLogic.filterFlatTypesByMaritalStatus(project.getFlatTypes(), applicant.getMaritalStatus());
+						if (filteredFlatTypes.isEmpty()){
+							System.out.println("Cannot apply for project, applicant is single: " + project.getProjectName());
+							continue;
+						}
+						System.out.println(FlatTypeLogic.displayFlatTypesView(filteredFlatTypes)); 
+						System.out.printf("Enter the flat type number to apply for: ");
+						int flatTypeNumber = sc.nextInt();
+						FlatType flatType = filteredFlatTypes.get(flatTypeNumber-1);
+						applicant.applyForProject(project, flatType);
+					} catch (IndexOutOfBoundsException e) {
+						System.out.println("Invalid project ID. Please enter a valid project ID.");
+						continue;
+					}
+
 				}
 				else if (choice == 4) {
 					Application currentApplication = applicant.getCurrentApplication();
@@ -102,10 +124,16 @@ public class ApplicantOfficerApp {
 						ArrayList<HDBOfficer> projectOfficers = currentApplication.getProject().getHDBOfficer();
 						ProjectLogic.displayHDBOfficers(projectOfficers);
 						System.out.print("Enter the hdb officer id: ");
-						int officerNumber = sc.nextInt();
-						HDBOfficer chosenOfficer = projectOfficers.get(officerNumber-1);
-						applicant.bookFlat(chosenOfficer);
-						System.out.println(chosenOfficer.toString());
+						try{
+							int officerNumber = sc.nextInt();
+							HDBOfficer chosenOfficer = projectOfficers.get(officerNumber-1);
+							applicant.bookFlat(chosenOfficer);
+							System.out.println(chosenOfficer.toString());
+						}
+						catch (IndexOutOfBoundsException e) {
+						System.out.println("Invalid officer ID. Please enter a valid officer ID.");
+						continue;
+						}
 					}		
 				}
 				else if (choice == 5){ 
@@ -121,11 +149,29 @@ public class ApplicantOfficerApp {
 					if (choice == 6) {
 						System.out.println("\nView Registration Status:");
 						System.out.println("============================");
-						officer.getOfficerRegistrationStatus();
+						officer.viewOfficerRegistrationStatus();
 					}
 					else if (choice == 7) {
 						//TODO
-						continue;
+				    	System.out.println("\nRegister for project");
+						System.out.println("============================");
+						ArrayList<Project> filteredProjects = ProjectLogic.filterProjectsForOfficer(projectList, officer);
+						ProjectLogic.viewAvailableProjects(filteredProjects, officer);
+						System.out.print("Enter the project number to register for: ");
+						try{
+							int projectNumber = sc.nextInt();
+							Project project = filteredProjects.get(projectNumber-1);
+							if (officer.registerForProject(project)) {
+								System.out.println("Registered for project: " + project.getProjectName());
+							}
+							else {
+								System.out.println("Cannot register for project: " + project.getProjectName());
+							}
+						}
+						catch (IndexOutOfBoundsException e) {
+							System.out.println("Invalid project ID. Please enter a valid project ID.");
+							continue;
+						}
 					}
 					if (officer.isManagingOfficer()) {
 						if (choice == 8) {
@@ -139,8 +185,14 @@ public class ApplicantOfficerApp {
 							System.out.println("============================");
 							ApplicationLogic.displayApplications(filteredApplications);
 							System.out.print("Enter the application number to help book their flat: ");
-							int chosenApplication = sc.nextInt();
-							officer.helpBookFlat(filteredApplications.get(chosenApplication-1));
+							try{
+								int chosenApplication = sc.nextInt();
+								officer.helpBookFlat(filteredApplications.get(chosenApplication-1));
+							} catch (IndexOutOfBoundsException e) {
+							System.out.println("Invalid application ID. Please enter a valid application ID.");
+							continue;
+							}
+							
 						}
 						else if (choice == 10) {
 							ArrayList<Application> filteredApplications = ApplicationLogic.filterByBooked(officer.getApplications());

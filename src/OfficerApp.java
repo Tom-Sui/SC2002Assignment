@@ -81,9 +81,11 @@ public class OfficerApp {
 			if (choice == 1) {
 		    	System.out.println("\nView Registration Status:");
 				System.out.println("============================");
-				officer.getOfficerRegistrationStatus();
+				officer.viewOfficerRegistrationStatus();
 			}
 			else if (choice == 2) {
+		    	System.out.println("\nRegister for project");
+				System.out.println("============================");
 				continue;
 				
 			}

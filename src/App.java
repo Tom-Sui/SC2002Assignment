@@ -334,7 +334,6 @@ public class App{
                                         HDBOfficer dummyOfficer = new HDBOfficer("DummyOfficer", "T1234567I", -1, "password", 35, MaritalStatus.MARRIED, dummyProject);
                                         dummyProject.addHDBOfficer(dummyOfficer);
                                         // Launch applicant interface
-                                        ApplicantApp applicantApp = new ApplicantApp();
                                         ApplicantOfficerApp.start(applicant.get(i), projectList);
                                         
                                         userPos = i;

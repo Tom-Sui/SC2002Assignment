@@ -47,6 +47,26 @@ public class ProjectLogic {
         }
         return filteredProjects;
     }
+
+
+    
+    /**
+     * Displays all available projects that are visible to applicants.
+     * 
+     * @param projects list of all projects to display
+     */
+    public static int viewAvailableProjects(ArrayList<Project> projects, Applicant applicant) {
+        int size = projects.size();
+        ArrayList<Project> pastAppliedProjects = ApplicationLogic.filterByPastAppliedProjects(applicant.getPastAppliedProjects());
+        for (int i = 0; i < size; i++) {
+            Project currentProject = projects.get(i);
+            if (currentProject.getVisibility() == true || pastAppliedProjects.contains(currentProject)) {
+                System.out.println("Project ID: " + (i+1));
+                System.out.println(projects.get(i).toString());
+            }	
+        } 
+        return size;
+    }
     
     
     /**
@@ -74,6 +94,9 @@ public class ProjectLogic {
         }
         System.out.println();
     }
-    
+
+
+        
+
 }
 

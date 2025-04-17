@@ -65,33 +65,40 @@ public class HDBOfficer extends Applicant{
     /**
      * Registers the officer for a project.
      * <p>
-     * Checks if the officer is already registered for the project.
-     * Checks if the officer is already managing a project.
-     * Checks if the officer is applying for a project where their application period is the same the current project.
-     * 
+     * Checks if the officer has already applied for the project as a applicant.
+     * Checks if the officer is applying for a project where their application period is the same the current project and is managing the project.
      * </p>
      *
      * @param project the project to register for
+     * @return true if the officer is registered for the project, false otherwise
      */
-    public void registerForProject(Project project) {
-        if (registrationStatusMap.containsKey(project)) {
-            return;
+    public boolean registerForProject(Project project) {
+        ArrayList<Project> pastAppliedProjects = new ArrayList<Project>();
+        pastAppliedProjects = ApplicationLogic.filterByPastAppliedProjects(managedApplications);
+        if (pastAppliedProjects.contains(project))  {
+            return false;
         }
 
-        if (this.getCurrentApplication().getProject() == project) {
-            return;
-        }
-
-        registrationStatusMap.forEach((mappedProject) -> {
+        final boolean[] canApply = {true};
+        registrationStatusMap.forEach((Project mappedProject, OfficerRegistrationStatus status) -> {
             // check if the application period of the project is the same as the current project
             boolean dateFallsWithinApplication = project.getApplicationOpeningDate().after(mappedProject.getApplicationOpeningDate()) && project.getApplicationClosingDate().before(mappedProject.getApplicationClosingDate());
-            boolean dateEquals = project.getApplicationOpeningDate().equals(mappedProject.getApplicationOpeningDate()) && project.getApplicationClosingDate().equals(mappedProject.getApplicationClosingDate()) && project.getApplicationClosingDate.equals(mappedProject.getApplicationOpeningDate) && project.getApplicationOpeningDate.equals(mappedProject.getApplicationClosingDate);
-            if(dateFallsWithinApplication || dateEquals) {
-                return;
+            boolean dateEquals = project.getApplicationOpeningDate().equals(mappedProject.getApplicationOpeningDate()) 
+                && project.getApplicationClosingDate().equals(mappedProject.getApplicationClosingDate()) 
+                && project.getApplicationClosingDate().equals(mappedProject.getApplicationOpeningDate()) 
+                && project.getApplicationOpeningDate().equals(mappedProject.getApplicationClosingDate());
+            if((dateFallsWithinApplication || dateEquals )&& status == OfficerRegistrationStatus.APPROVED) {
+                canApply[0] = false;
+
             }
         });
 
+        if (!canApply[0]) {
+            return false;
+        }
+
         registrationStatusMap.put(project, OfficerRegistrationStatus.PENDING);
+        return true;
     }
     
     /**

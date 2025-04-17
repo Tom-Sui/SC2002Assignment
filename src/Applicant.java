@@ -112,21 +112,13 @@ public class Applicant extends User {
     }
 
     /**
-     * Displays all available projects that are visible to applicants.
+     * Gets the applicant's past applied projects.
      * 
-     * @param projects list of all projects to display
+     * @return list of past applied projects
      */
-    public int viewAvailableProjects(ArrayList<Project> projects) {
-        int size = projects.size();
-        ArrayList<Project> pastAppliedProjects = ApplicationLogic.filterByPastAppliedProjects(this.pastAppliedProjects);
-        for (int i = 0; i < size; i++) {
-            Project currentProject = projects.get(i);
-            if (currentProject.getVisibility() == true || pastAppliedProjects.contains(currentProject)) {
-                System.out.println("Project ID: " + (i+1));
-                System.out.println(projects.get(i).toString());
-            }	
-        } 
-        return size;
+
+    public ArrayList<Application> getPastAppliedProjects() {
+        return pastAppliedProjects;
     }
 
     /**

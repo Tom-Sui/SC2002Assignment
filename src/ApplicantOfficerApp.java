@@ -68,7 +68,7 @@ public class ApplicantOfficerApp {
 				if (choice == 1) {
 			    	System.out.println("\nList of available projects:");
 					System.out.println("============================");
-					applicant.viewAvailableProjects(projectList);
+					ProjectLogic.viewAvailableProjects(projectList, applicant);
 				}
 				else if (choice == 2) {
 					Application currentApplication = applicant.getCurrentApplication();
@@ -92,7 +92,7 @@ public class ApplicantOfficerApp {
 						System.out.println("Cannot apply for project, already applied for a project: " + applicant.getCurrentApplication().getProject().getProjectName());
 						continue;
 					}
-					int noOfProjects = applicant.viewAvailableProjects(projectList);
+					int noOfProjects = ProjectLogic.viewAvailableProjects(projectList, applicant);
 					if (noOfProjects <= 0) {
 						System.out.println("There are currently no projects you can apply for.");
 						continue;
@@ -155,7 +155,23 @@ public class ApplicantOfficerApp {
 						//TODO
 				    	System.out.println("\nRegister for project");
 						System.out.println("============================");
-						continue;
+						ArrayList<Project> filteredProjects = ProjectLogic.filterProjectsForOfficer(projectList, officer);
+						ProjectLogic.viewAvailableProjects(filteredProjects, officer);
+						System.out.print("Enter the project number to register for: ");
+						try{
+							int projectNumber = sc.nextInt();
+							Project project = filteredProjects.get(projectNumber-1);
+							if (officer.registerForProject(project)) {
+								System.out.println("Registered for project: " + project.getProjectName());
+							}
+							else {
+								System.out.println("Cannot register for project: " + project.getProjectName());
+							}
+						}
+						catch (IndexOutOfBoundsException e) {
+							System.out.println("Invalid project ID. Please enter a valid project ID.");
+							continue;
+						}
 					}
 					if (officer.isManagingOfficer()) {
 						if (choice == 8) {

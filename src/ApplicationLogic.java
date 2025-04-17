@@ -76,4 +76,5 @@ public class ApplicationLogic {
         }
         return pastAppliedProjects;
     }
+
 }

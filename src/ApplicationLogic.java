@@ -61,4 +61,19 @@ public class ApplicationLogic {
         }
         System.out.println();
     }
+
+
+    /*
+     * Filters applications that have been applied to past projects.
+     * 
+     * @param applicationList the list of applications to filter
+     * @return ArrayList containing only Projects that have been applied to 
+     */
+    public static ArrayList<Project> filterByPastAppliedProjects(ArrayList<Application> applicationList) {
+        ArrayList<Project> pastAppliedProjects = new ArrayList<>();
+        for (Application application : applicationList) {
+            pastAppliedProjects.add(application.getProject());
+        }
+        return pastAppliedProjects;
+    }
 }

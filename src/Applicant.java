@@ -8,7 +8,7 @@ import java.util.ArrayList;
  */
 public class Applicant extends User {
     private Application currentApplication; 
-    private ArrayList<Project> pastAppliedProjects = new ArrayList<Project>();
+    private ArrayList<Application> pastAppliedProjects = new ArrayList<Application>();
     
     /**
      * Default constructor for Applicant.
@@ -118,6 +118,7 @@ public class Applicant extends User {
      */
     public int viewAvailableProjects(ArrayList<Project> projects) {
         int size = projects.size();
+        ArrayList<Project> pastAppliedProjects = ApplicationLogic.filterByPastAppliedProjects(this.pastAppliedProjects);
         for (int i = 0; i < size; i++) {
             Project currentProject = projects.get(i);
             if (currentProject.getVisibility() == true || pastAppliedProjects.contains(currentProject)) {

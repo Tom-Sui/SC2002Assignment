@@ -64,11 +64,34 @@ public class HDBOfficer extends Applicant{
     // TODO: method to register for a new project. must do the checks
     /**
      * Registers the officer for a project.
+     * <p>
+     * Checks if the officer is already registered for the project.
+     * Checks if the officer is already managing a project.
+     * Checks if the officer is applying for a project where their application period is the same the current project.
+     * 
+     * </p>
      *
      * @param project the project to register for
      */
     public void registerForProject(Project project) {
-    	
+        if (registrationStatusMap.containsKey(project)) {
+            return;
+        }
+
+        if (this.getCurrentApplication().getProject() == project) {
+            return;
+        }
+
+        registrationStatusMap.forEach((mappedProject) -> {
+            // check if the application period of the project is the same as the current project
+            boolean dateFallsWithinApplication = project.getApplicationOpeningDate().after(mappedProject.getApplicationOpeningDate()) && project.getApplicationClosingDate().before(mappedProject.getApplicationClosingDate());
+            boolean dateEquals = project.getApplicationOpeningDate().equals(mappedProject.getApplicationOpeningDate()) && project.getApplicationClosingDate().equals(mappedProject.getApplicationClosingDate()) && project.getApplicationClosingDate.equals(mappedProject.getApplicationOpeningDate) && project.getApplicationOpeningDate.equals(mappedProject.getApplicationClosingDate);
+            if(dateFallsWithinApplication || dateEquals) {
+                return;
+            }
+        });
+
+        registrationStatusMap.put(project, OfficerRegistrationStatus.PENDING);
     }
     
     /**

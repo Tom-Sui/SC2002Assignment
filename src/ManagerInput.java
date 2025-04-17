@@ -104,9 +104,9 @@ public class ManagerInput {
             	{
             		// Error checking for project Name (Ensure no duplicated project name)
             		String projectName = manager.uniqueProjectName(projects, scanner, "Enter a unique project name: \n");
-            		
-            		System.out.println("Enter Select Neighborhood (e.g., Yishun, Boon Lay): ");
-            		String neighborhood = scanner.nextLine(); 
+
+            		// Error checking for string
+            		String neighborhood = manager.validateString(scanner, "Enter Select Neighborhood (e.g., Yishun, Boon Lay): \n"); 
             		
             		// Error checking for valid integer
             		String unitType1 = manager.validateInteger(scanner, "Enter the Number of units for 2-Room: \n");            		            		
@@ -234,9 +234,8 @@ public class ManagerInput {
                                 	break;
                                 	
                                 // Update Neighborhood
-                        		case 1:                                        	
-                                	System.out.println("Enter Updated Neighbourhood: ");                                     	
-                                	String newNeighbourhood = scanner.nextLine();      
+                        		case 1:                                  	
+                                	String newNeighbourhood = manager.validateString(scanner, "Enter updated Neighbourhood: \n");      
                                 	
                                 	manager.editProject(selectedProject, newNeighbourhood, "1", projects, i);
                                 	break;

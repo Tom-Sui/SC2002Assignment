@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.text.ParseException;
+import java.util.regex.Pattern;
 /**
  * Provides functions for HDB Managers to perfrom operations.
  * 
@@ -442,14 +443,43 @@ public class HDBManager extends User{
     			}
     		}
 
-    		if(isUnique)
+    		if(isUnique && inputName != null && !inputName.trim().isEmpty())
     		{
     			verifiedName = inputName; // set verified name if unique
+    		}
+    		else
+    		{
+    			System.out.println("Project Name cannot be empty. Please try again! \n");
     		}
     		
     	}while(verifiedName == null);
 
     	return verifiedName;    	
+    }
+    
+    // verify valid string (no integer, no spaces)
+    public String validateString(Scanner scanner, String prompt)
+    {
+    	String verifiedString = null;
+    	do {
+    		System.out.print(prompt);
+    		String input = scanner.nextLine();
+    		
+    		// check for digits
+    		String regex = ".*\\d.*";
+    		
+    		if(input == null || input.trim().isEmpty() || Pattern.matches(regex, input))
+    		{
+    			System.out.println("Invalid string. Please try again! \n");
+    		}
+    		else
+    		{
+    			verifiedString = input;
+    		}
+    		
+    	}while(verifiedString == null);
+    	
+    	return verifiedString;    	
     }
     
     // verify only integer numbers
@@ -687,7 +717,7 @@ public class HDBManager extends User{
     	for (int i=0; i<currentProjects.size(); i++)
     	{
     		// check for current manager projects only
-    		if (currentProjects.get(i).getHDBManager().getName().equals(userName))
+    		if (currentProjects.get(i).getHDBManager().getNRIC().equals(userName))
     		{
     			// run through to return project within application period 
     			// if within application period and visibility is ON
@@ -908,7 +938,7 @@ public class HDBManager extends User{
     	for (int i=0; i<currentProjects.size(); i++)
     	{
     		// to check for current userName and print out only their projects
-    		if (currentProjects.get(i).getHDBManager().getName().equals(username))
+    		if (currentProjects.get(i).getHDBManager().getNRIC().equals(username))
     		{
     			this.listRequiredProjects(currentProjects, i);
     			count += 1;
@@ -1100,7 +1130,7 @@ public class HDBManager extends User{
                      //Check if manager is managing the current project
  
                     	 //Check if registrationStatus is pending
-                    	 if(index != null && index.getHDBManager().getName().equals(userName) && status == OfficerRegistrationStatus.PENDING) {
+                    	 if(index != null && index.getHDBManager().getNRIC().equals(userName) && status == OfficerRegistrationStatus.PENDING) {
                     	
                     		 
                     		 //Check if officer NRIC is in application list for the project 
@@ -1290,7 +1320,7 @@ public class HDBManager extends User{
     			
     	for (Project project : currentProjects) {
             // Check if the manager is managing the project
-    		 if (project.getHDBManager().getName().equals(username)) {
+    		 if (project.getHDBManager().getNRIC().equals(username)) {
 
     		        // Check if today's date is within the application opening and closing dates
     		        if (project.getApplicationOpeningDate().compareTo(currentTime) > 0 || project.getApplicationClosingDate().compareTo(currentTime) < 0) {

@@ -127,9 +127,9 @@ public class App{
                                         userPos = i;
                                         currentUserId = userName;
                                         logedIn = true;
-                                        
+
                                         ManagerInput manager = new ManagerInput();
-                                        manager.switchFunction(userName, projects, hdbManagers, hdbOfficers, applicant);                                        
+                                        manager.switchFunction(hdbManagers.get(i).getNRIC(), projects, hdbManagers, hdbOfficers, applicant);                                        
                                         break;
                                     }
                                 }

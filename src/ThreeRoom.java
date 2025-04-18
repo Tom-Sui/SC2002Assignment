@@ -23,7 +23,7 @@ public class ThreeRoom extends FlatType {
      * @param allowedGroup the marital status allowed to apply (typically both SINGLE and MARRIED)
      */
     public ThreeRoom(int units, double price, MaritalStatus allowedGroup) {
-        super(units, price, allowedGroup);
+        super(units, price, allowedGroup, "3-Room");
     }
     
     /**
@@ -34,6 +34,6 @@ public class ThreeRoom extends FlatType {
      * @param allowedGroups list of permitted marital statuses (typically contains both SINGLE and MARRIED)
      */
     public ThreeRoom(int units, double price, ArrayList<MaritalStatus> allowedGroups) {
-        super(units, price, allowedGroups);
+        super(units, price, allowedGroups, "3-Room");
     }
 }

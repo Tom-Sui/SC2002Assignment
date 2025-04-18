@@ -22,7 +22,7 @@ public abstract class FlatType {
     
     /**
      * Default constructor (available for subclasses).
-     */
+    */
     public FlatType() {};
     
     /**

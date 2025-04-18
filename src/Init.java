@@ -190,13 +190,12 @@ public class Init {
      * @return Configured Project object, or null if manager is not found
      */
     public Project setProject(String[] data, ArrayList<HDBManager> hdbManager, ArrayList<HDBOfficer> hdbOfficer) {
-        General general = new General();
         SimpleDateFormat formatter = new SimpleDateFormat("d/M/yyyy");
         Project project = new Project();
         project.setProjectName(data[0]);
         project.setNeiborhood(data[1]);
 
-        if (general.findManager(hdbManager, data[data.length - 4]) == null) {
+        if (General.findManager(hdbManager, data[data.length - 4]) == null) {
             System.out.println("No such manager found");
             System.out.println("Return null");
             return null;
@@ -235,7 +234,7 @@ public class Init {
             e.printStackTrace();
         }
 
-        project.setHDBManager(general.findManager(hdbManager, data[data.length - 4]));
+        project.setHDBManager(General.findManager(hdbManager, data[data.length - 4]));
         project.setAvailableOfficerSlots(Integer.parseInt(data[data.length - 3]));
 
         // Set officers
@@ -243,7 +242,7 @@ public class Init {
         ArrayList<HDBOfficer> hdbOfficers = new ArrayList<HDBOfficer>();
         for (int i = 0; i < officerName.length; i++) {
             HDBOfficer tempHDBOfficer = new HDBOfficer();
-            tempHDBOfficer = general.findOfficer(hdbOfficer, officerName[i]);
+            tempHDBOfficer = General.findOfficer(hdbOfficer, officerName[i]);
             hdbOfficers.add(tempHDBOfficer);
         }
         project.setHDBOfficer(hdbOfficers);

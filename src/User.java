@@ -167,51 +167,81 @@ public abstract class User {
      * @param target The field to modify (name, NRIC, age, maritalStatus, or password)
      * @return true if modification succeeds, false otherwise
      */
-    public boolean changeContent(String newContent, String filePath, String target) {
+    public boolean editProfile(String filePath, int target) {
         String fileContent = "";
         String[] buffer;
+        Scanner sc = new Scanner(System.in);
 
         File file = new File(filePath);
         PasswordHashing passwordHashing = new PasswordHashing();
 
         try {
             Scanner scanner = new Scanner(file);
-            fileContent = fileContent + scanner.nextLine() + "\n";
-
+            // fileContent = fileContent + scanner.nextLine() + "\n";
             while (scanner.hasNextLine()) {
                 buffer = scanner.nextLine().split(",");
-                if (buffer[1].equals(this.NRIC)) {
-                    switch (target.replace(" ", "").toLowerCase()) {
-                        case "name":
-                            buffer[0] = newContent;
-                            this.name = newContent;
+                if (buffer[2].equals(this.NRIC)) {
+                    switch (target) {
+                        case 1:
+                            System.out.print("Enter new name: ");
+                            buffer[1] = sc.nextLine();
+                            this.name = buffer[1];
                             break;
-                        case "NRIC":
-                            buffer[1] = newContent;
-                            this.NRIC = newContent;
+                        case 2:
+                            System.out.print("Enter new NRIC: ");
+                            String NRIC = sc.nextLine();
+                            while (true) {
+                                if (NRIC.length() != 9) {
+                                    System.out.print("Invalid NRIC. Please enter a valid NRIC: ");
+                                    NRIC = sc.nextLine();
+                                } else {
+                                    if(NRIC.charAt(0) == 'T' || NRIC.charAt(0) == 'S') {
+                                        break;
+                                    } else {
+                                        System.out.print("Invalid NRIC. Please enter a valid NRIC: ");
+                                        NRIC = sc.nextLine();
+                                    }
+                                }
+                            }
+                            System.out.print("Enter new NRIC: ");
+                            buffer[2] = sc.nextLine();
+                            this.NRIC = buffer[2];
                             break;
-                        case "age":
-                            buffer[2] = newContent;
-                            this.age = Integer.parseInt(newContent);
+                        case 3:
+                            System.out.print("Enter new age: ");
+                            while(true) {
+                                try {
+                                    buffer[3] = sc.nextLine();
+                                    this.age = Integer.parseInt(buffer[3]);
+                                    break;
+                                } catch (NumberFormatException e) {
+                                    System.out.print("Invalid input. Please enter a valid age: ");
+                                }
+                            }
+                            System.out.println("\n===Age change success===\n");
                             break;
-                        case "marritialStatus":
-                            buffer[3] = newContent;
-                            if (newContent.equals("single")) {
+                        case 4:
+                            System.out.print("Enter new marital status (single/married): ");
+                            
+                            buffer[4] = sc.nextLine().toLowerCase();
+                            if (buffer[4].equals("single")) {
                                 this.maritalStatus = MaritalStatus.SINGLE;
-                            } else if (newContent.equals("married")) {
+                            } else if (buffer[4].equals("married")) {
                                 this.maritalStatus = MaritalStatus.MARRIED;
                             }
+                            System.out.println("\n===Marital status change success===\n");
                             break;
-                        case "password":
-                            buffer[4] = passwordHashing.hashingPassword(newContent);
-                            this.password = buffer[4];
+                        case 5:
+                            System.out.println("Enter new password: ");
+                            buffer[5] = passwordHashing.hashingPassword(sc.nextLine());
+                            this.password = buffer[5];
+                            System.out.println("\n===Password change success===\n");
                             break;
                         default:
                             break;
                     }
                 }
-
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i < buffer.length; i++) {
                     fileContent = fileContent + buffer[i] + ",";
                 }
                 fileContent = fileContent + "\n";
@@ -221,7 +251,6 @@ public abstract class User {
             scanner.close();
             writer.close();
 
-            System.err.println("\n===Password change success===\n");
             return true;
         } catch (FileNotFoundException e) {
             System.out.println("Error occured when reading " + filePath);

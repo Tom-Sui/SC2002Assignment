@@ -19,9 +19,9 @@ import java.util.regex.Pattern;
  * 
  */
 public class HDBManager extends User{
-    private String DataFilePath = "./src/Data";   // TO ADD /src/ FOR ECLIPSE
+    private static String DataFilePath = "./src/Data";   // TO ADD /src/ FOR ECLIPSE
     private ArrayList<Project> managedProjects = new ArrayList<Project>();
-    General general = new General();
+    // General general = new General();
     DateFormat formatter = new SimpleDateFormat("d/M/yyyy");
     Date currentDate = new Date();
 
@@ -194,7 +194,7 @@ public class HDBManager extends User{
 							ArrayList<Project> currentProjects,
 							int i){
 
-        General general = new General();
+        // General general = new General();
         
         ArrayList<FlatType> flatDetail = currentProjects.get(i).getFlatTypes();	
         
@@ -211,7 +211,7 @@ public class HDBManager extends User{
         	// Update Project Name
         	case "0":
         		// update to .txt
-        		general.editProjectFile(currentProjects.get(i),updateContent);
+        		General.editProjectFile(currentProjects.get(i),updateContent);
 
 				// set project name in project.java
 				currentProjects.get(i).setProjectName(updateContent);
@@ -225,7 +225,7 @@ public class HDBManager extends User{
         		// set neighborhood in project.java
         		currentProjects.get(i).setNeiborhood(updateContent);
         		// update to .txt
-        		general.editProjectFile(currentProjects.get(i));
+        		General.editProjectFile(currentProjects.get(i));
         		
         		System.out.println("Neighbour changed to: " + updateContent);
         		break;
@@ -246,7 +246,7 @@ public class HDBManager extends User{
         				flatD.setPrice(Double.parseDouble(flatPricing[1]));
         				
         				// update to .txt
-        				general.editProjectFile(currentProjects.get(i));
+        				General.editProjectFile(currentProjects.get(i));
         				
         				System.out.printf("Pricing of %s is updated to $%s.\n", flatPricing[0], flatD.getPrice());
         			}
@@ -269,7 +269,7 @@ public class HDBManager extends User{
         				flatD.setUnits(Integer.parseInt(flatStr[1]));
         				
         				// update to .txt
-        				general.editProjectFile(currentProjects.get(i));
+        				General.editProjectFile(currentProjects.get(i));
         				
         				System.out.printf("%s is updated to %s units.\n", flatStr[0], flatD.getUnits());
         			}
@@ -285,7 +285,7 @@ public class HDBManager extends User{
         			currentProjects.get(i).setApplicationOpeningDate(newDate);
         			
         			// update to .txt 
-    				general.editProjectFile(currentProjects.get(i));
+    				General.editProjectFile(currentProjects.get(i));
     				
         			System.out.println("Opening date changed to: " + updateContent);        			
         			
@@ -304,7 +304,7 @@ public class HDBManager extends User{
         			currentProjects.get(i).setApplicationClosingDate(newDate);
         			
         			// update to .txt 
-    				general.editProjectFile(currentProjects.get(i));
+    				General.editProjectFile(currentProjects.get(i));
         			
         			System.out.println("Closing date changed to: " + updateContent);
         			
@@ -322,7 +322,7 @@ public class HDBManager extends User{
         		currentProjects.get(i).setAvailableOfficerSlots(updatedSlots);
         		
         		// update to .txt
-        		general.editProjectFile(currentProjects.get(i));
+        		General.editProjectFile(currentProjects.get(i));
 				
         		System.out.println("HDB Officer Slots updated to: " + updateContent);
         		break;
@@ -514,7 +514,7 @@ public class HDBManager extends User{
 				currentProjects.get(i).setVisibility(false);    
 				
 				// update the .txt file 
-				general.editProjectFile(currentProjects.get(i));
+				General.editProjectFile(currentProjects.get(i));
     		}
     	}
     }
@@ -931,7 +931,7 @@ public class HDBManager extends User{
     				currentProjects.get(i).setVisibility(false);    
     				
     				// update the .txt file 
-    				general.editProjectFile(currentProjects.get(i));
+    				General.editProjectFile(currentProjects.get(i));
     				
     				System.out.printf("Updated Project Visibility: '%s' -- OFF.\n", currentProjects.get(i).getProjectName());    				
     			} 
@@ -941,7 +941,7 @@ public class HDBManager extends User{
     				currentProjects.get(i).setVisibility(true);
     				
     				// update the .txt file 
-    				general.editProjectFile(currentProjects.get(i));
+    				General.editProjectFile(currentProjects.get(i));
     				
     				System.out.printf("Updated Project Visibility: '%s' -- ON.\n", currentProjects.get(i).getProjectName());
     			}    			    			
@@ -1052,7 +1052,7 @@ public class HDBManager extends User{
     public void approveOrRejectOfficerRegistration(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, ArrayList<HDBOfficer> HDBOfficers, String userName){
 
     	OfficerRegistrationStatus status;
-    	General general = new General();
+    	// General general = new General();
     	Date currentTime = new Date();
     	
     	 String filePath = "./src/Data/OfficerRegistrationList.txt"; // change this if your path is different
@@ -1075,7 +1075,7 @@ public class HDBManager extends User{
                      status = OfficerRegistrationStatus.valueOf(registrationStatus.toUpperCase());
                      
                      //Find the index of project with projectName
-                     Project index = general.findProject(currentProjects, projectName);
+                     Project index = General.findProject(currentProjects, projectName);
                      
                      
                      //Check if manager is managing the current project
@@ -1154,7 +1154,7 @@ public class HDBManager extends User{
                     		 
                     		if(conflict) continue;//If conflict is true, it will go to next officer in RegistrationList
                     		
-                    		HDBOfficer currentOfficer = general.findOfficer(HDBOfficers, officerName);
+                    		HDBOfficer currentOfficer = General.findOfficer(HDBOfficers, officerName);
                     		
                     		ArrayList<HDBOfficer> currentOfficers = index.getHDBOfficer();
                     		String officerNames = "";
@@ -1193,7 +1193,7 @@ public class HDBManager extends User{
                     				index.setAvailableOfficerSlots(slots-1);
                     				approved = true;
                     				currentOfficer.setManagingOfficer(true);
-                    				general.editProjectFile(index);
+                    				General.editProjectFile(index);
                     				System.out.printf("Officer %s has been approved for Project %s\n", officerName,projectName);
                     			 }
                     			 
@@ -1225,12 +1225,12 @@ public class HDBManager extends User{
 	 * @throws IllegalArgumentException if officerNRIC is empty
 	 * @throws IOException if there is an error updating the registration file
 	 *
-	 * @see General#editOtherFile(String, String, String, String, String)
+	 * @see General#editFile(String, String, String, String, String)
 	 *
 	 */
 
     private void rejectRegistration(String filePath, String officerNRIC) {
-        general.editOtherFile(filePath,"/OfficerRegistrationList.txt", "REJECTED", "PENDING", officerNRIC);
+        General.editFile(filePath + "/OfficerRegistrationList.txt", "REJECTED", "PENDING", officerNRIC);
     }
 	/**
 	 * Approve an officer's registration.
@@ -1247,12 +1247,12 @@ public class HDBManager extends User{
 	 * @throws IllegalArgumentException if officerNRIC is empty
 	 * @throws IOException if there is an error updating the registration file
 	 *
-	 * @see General#editOtherFile(String, String, String, String, String)
+	 * @see General#editFiel(String, String, String, String, String)
 	 *
 	 */
     // Approve the officer registration
     private void approveRegistration(String filePath, String officerNRIC, HDBOfficer officer ) {
-        general.editOtherFile(filePath,"/OfficerRegistrationList.txt", "APPROVED", "PENDING", officerNRIC);
+        General.editFile(filePath + "/OfficerRegistrationList.txt", "APPROVED", "PENDING", officerNRIC);
         //officer.setOfficerRegistrationStatus(OfficerRegistrationStatus.APPROVED);
     }
     

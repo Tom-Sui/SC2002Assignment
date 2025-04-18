@@ -91,15 +91,14 @@ public class PasswordHashing {
 
         try {
             Scanner scanner = new Scanner(file);
-            fileContent = fileContent + scanner.nextLine() + "\n";
-            System.out.println(scanner.hasNextLine());
+            // fileContent = fileContent + scanner.nextLine() + "\n";
             while(scanner.hasNextLine()) {
                 buffer = scanner.nextLine().split(",");
                 System.out.println(buffer[0]);
 
-                buffer[4] = hashingPassword(buffer[4]);
+                buffer[5] = hashingPassword(buffer[5]);
 
-                for(int i = 0; i < 5; i++) {
+                for(int i = 0; i < buffer.length; i++) {
                     System.out.println(fileContent);
                     fileContent = fileContent + buffer[i] + ",";
                 }

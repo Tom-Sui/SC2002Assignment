@@ -60,8 +60,9 @@ public class App{
         ArrayList<Application> applications = init.loadApplicationInfo(applicant, projects);
 
         
-        //General general = new General();
-        //general.editProjectFile(projects.get(1),"New Name");
+        // General general = new General();
+        // General.editProjectFile(projects.get(1),"New Name");
+        // System.exit(0);
         //projects.get(1).setProjectName("New Name");
         // System.exit(0);
         
@@ -348,10 +349,6 @@ public class App{
                                 System.out.println("Incorrect password or incorrect ID");
                                 System.out.println("====================================");
                             }
-                            // logedIn = false;
-                            // userType = "NULL";
-                            // userName = "NULL";
-                            // userPos = -1;
                             break;
                         default:
                             break;
@@ -362,39 +359,32 @@ public class App{
                             System.out.println("You have to login first");
                             break;
                         }
-                        //for now will be calling direct from User class
-                        // System.out.println("Enter new password ");
-                        // String newPassword = scanner.nextLine();
-                        // System.out.println("Enter new password again: ");
-                        // while (!newPassword.equals(scanner.nextLine())) {
-                        //     System.out.println("!!!Wrong password!!!");
-                        //     System.out.println("Enter new password ");
-                        //     newPassword = scanner.nextLine();
-                        //     System.out.println("Enter new password again: ");
-                        // }
                         System.out.println("======Instructions======");
-                        System.out.println("1. password");
-                        System.out.println("2. name");
-                        System.out.println("3. NRIC");
-                        System.out.println("4. age");
-                        System.out.println("5. marritialStatus(singale/married)");
+                        System.out.println("1. name");
+                        System.out.println("2. NRIC");
+                        System.out.println("3. age");
+                        System.out.println("4. marritialStatus(singale/married)");
+                        System.out.println("5. password");
                         System.out.println("========================");
-                        String changeTarget = scanner.nextLine();
-                        System.out.println("Enter content:");
+                        int changeTarget = scanner.nextInt();
                         switch (userType){
-                            case "hdb manager":
-                                hdbManagers.get(userPos).changeContent(scanner.nextLine(),filePath + "/ManagerList.txt",changeTarget);
+                            case "hdb manager","1":
+                                hdbManagers.get(userPos).editProfile(filePath + "/ManagerList.txt",changeTarget);
                                 break;
-                            case "hdb officer":
-                                hdbOfficers.get(userPos).changeContent(scanner.nextLine(),filePath + "/OfficerList.txt",changeTarget);
+                            case "hdb officer","2":
+                                hdbOfficers.get(userPos).editProfile(filePath + "/OfficerList.txt",changeTarget);
                                 break;
-                            case "applicant":
-                                applicant.get(userPos).changeContent(scanner.nextLine(),filePath + "/ApplicantList.txt",changeTarget);
+                            case "applicant","3":
+                                applicant.get(userPos).editProfile(filePath + "/ApplicantList.txt",changeTarget);
                                 break;
                             default:
                                 System.out.println("Error occured == could not find user type");
                                 break;
                         }
+                        userType = "NULL";
+                        userName = "NULL";
+                        userPos = -1;
+                        logedIn = false;
                     break;
                 case "4":
                     logedIn = false;
@@ -420,7 +410,6 @@ public class App{
         System.out.println("2. login");
         System.out.println("3. edit profile");
         System.out.println("4. logout");
-        System.out.println("9. quit");
         System.out.println("========================");
     }
 }

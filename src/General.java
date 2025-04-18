@@ -177,12 +177,14 @@ public class General {
 
         try {
             Scanner scanner = new Scanner(projectFile);
-            FileWriter writer = new FileWriter(filePath);
+
 
             while(scanner.hasNextLine()) {
                 fileContent = fileContent + scanner.nextLine() + "\n";
             }
             fileContent = fileContent + content + "\n";
+            
+            FileWriter writer = new FileWriter(filePath);
             writer.write(fileContent);
 
             writer.close();

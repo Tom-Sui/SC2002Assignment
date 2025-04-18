@@ -32,7 +32,31 @@ public class Project {
      * Default constructor for Project.
      */
     public Project() {};
+    
+    public Project(Project other) {
+        this.projectName = other.projectName;
+        this.neighborhood = other.neighborhood;
 
+        // Deep copy of flatTypes
+        this.flatTypes = new ArrayList<>(other.getFlatTypes());
+        // Deep copy of dates (Date is mutable, so copy needed)
+        this.applicationOpeningDate = new Date(other.applicationOpeningDate.getTime());
+        this.applicationClosingDate = new Date(other.applicationClosingDate.getTime());
+
+        this.hdbManager = other.hdbManager; // Assuming this is shared (shallow copy)
+        this.availableOfficerSlots = other.availableOfficerSlots;
+        this.visibility = other.visibility;
+
+        // Shallow copy: Assuming Applicants, Officers, Enquiries, Applications are managed elsewhere
+        this.applicants = new ArrayList<>(other.applicants);
+        this.hdbOfficers = new ArrayList<>(other.hdbOfficers);
+        this.enquiries = new ArrayList<>(other.enquiries);
+        this.applications = new ArrayList<>(other.applications);
+
+        // Shallow copy is likely fine for enums like MaritalStatus
+        this.allowedGroups = new ArrayList<>(other.allowedGroups);
+    }
+    
     /**
      * Constructs a Project with full details.
      *

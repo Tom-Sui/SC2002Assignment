@@ -30,7 +30,19 @@ public class ProjectLogic {
         for (Project project : projects) {
             // If the project's marital status matches the applicant's marital status
             if (project.getAllowedGroups().contains(maritalStatus) || project.getAllowedGroups().isEmpty()) {
-                filteredProjects.add(project);
+            	Project filteredProject = new Project(project);
+
+                // Filter the flat types
+                ArrayList<FlatType> filteredFlats = new ArrayList<>();
+                for (FlatType flatType : project.getFlatTypes()) {
+                    if (flatType.getAllowedGroups().contains(maritalStatus) || flatType.getAllowedGroups().isEmpty()) {
+                        filteredFlats.add(flatType);
+                    }
+                }
+
+                // Update the flat types of the filtered project
+                filteredProject.setFlatType(filteredFlats);
+                filteredProjects.add(filteredProject);
             }
         }
         return filteredProjects;

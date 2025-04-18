@@ -7,6 +7,7 @@ public class ApplicantOfficerApp {
 	public static void start(User user, ArrayList<Project> projectList){
 		Applicant applicant = (Applicant)user;
 	    HDBOfficer officer = null;
+		projectList = ProjectLogic.filterProjectsByMaritalStatus(projectList, user.getMaritalStatus());
 		if (user instanceof HDBOfficer) { //only need to check if they are HDBOfficer because a HDBOfficer is an applicant
 			officer = (HDBOfficer)user;	
 			/**
@@ -20,7 +21,6 @@ public class ApplicantOfficerApp {
 		}
 		
 		Scanner sc = new Scanner(System.in);	
-		projectList = ProjectLogic.filterProjectsByMaritalStatus(projectList, user.getMaritalStatus());
 		// Display applicant details so that he/she can better understand the criteria they meet for the projects
 		System.out.printf("Name: %s\n", applicant.getName());
 		System.out.printf("Age: %d\n", applicant.getAge());
@@ -100,7 +100,7 @@ public class ApplicantOfficerApp {
 					System.out.printf("Enter the project number to apply for: ");	
 					try {
 						int projectNumber = sc.nextInt();
-						Project project = projectList.get(projectNumber-1);
+						Project project = projectList.get(projectNumber);
 						ArrayList<FlatType> filteredFlatTypes = FlatTypeLogic.filterFlatTypesByMaritalStatus(project.getFlatTypes(), applicant.getMaritalStatus());
 						if (filteredFlatTypes.isEmpty()){
 							System.out.println("Cannot apply for project, applicant is single: " + project.getProjectName());
@@ -109,7 +109,7 @@ public class ApplicantOfficerApp {
 						System.out.println(FlatTypeLogic.displayFlatTypesView(filteredFlatTypes)); 
 						System.out.printf("Enter the flat type number to apply for: ");
 						int flatTypeNumber = sc.nextInt();
-						FlatType flatType = filteredFlatTypes.get(flatTypeNumber-1);
+						FlatType flatType = filteredFlatTypes.get(flatTypeNumber);
 						applicant.applyForProject(project, flatType);
 					} catch (IndexOutOfBoundsException e) {
 						System.out.println("Invalid project ID. Please enter a valid project ID.");
@@ -162,6 +162,8 @@ public class ApplicantOfficerApp {
 							int projectNumber = sc.nextInt();
 							Project project = filteredProjects.get(projectNumber-1);
 							if (officer.registerForProject(project)) {
+								String officerRegistration = String.format("%s,%s,%s", officer.getNRIC(), project.getProjectName(), OfficerRegistrationStatus.APPROVED);
+								General.editFile("./Data/OfficerRegistrationList.txt", officerRegistration);
 								System.out.println("Registered for project: " + project.getProjectName());
 							}
 							else {

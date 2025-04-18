@@ -38,6 +38,6 @@ public class TwoRoom extends FlatType {
     }
     
 	public String getFlatTypeName() {
-		return "3-Room";
+		return "2-Room";
 	}
 }

@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 /**
  * Represents an enquiry made by an applicant about a specific housing project.
  * <p>
@@ -11,60 +10,35 @@ import java.util.ArrayList;
  */
 public class Enquiry {
     private static int enquiryID = 0;
-    private Applicant applicant;
-    private Project project;
+    private String userNric; 
+    private String projectName;
     private String message;
-    private ArrayList<Enquiry> replies = new ArrayList<>();
+    private Enquiry reply;
 
     // ========== CONSTRUCTOR ==========
     /**
      * Constructs an Enquiry object with the specified applicant, project, and message.
      * 
-     * @param applicant the Applicant making the enquiry
-     * @param project the Project being enquired about
+     * @param userNric the Applicant making the enquiry
+     * @param projectName the Project being enquired about
      * @param message the enquiry message content String     */
-    public Enquiry(Applicant applicant, Project project, String message) {
+    public Enquiry(String userNric, String projectName, String message) {
         enquiryID = enquiryID++;
-        this.applicant = applicant;
-        this.project = project;
+        this.userNric = userNric;
+        this.projectName = projectName;
         this.message = message;
     }
 
-    // ========== SETTER METHODS ==========
-    /**
-     * Sets the applicant associated with this enquiry.
-     * 
-     * @param applicant the Applicant making the enquiry
-     */
-    public void setApplicant(Applicant applicant) {
-        this.applicant = applicant;
-    }
-    
-    /**
-     * Sets the project this enquiry is about.
-     * 
-     * @param project the Project being enquired about
-     */
-    public void setProject(Project project) {
-        this.project = project;
-    }
-    
-    /**
-     * Sets the enquiry message content.
-     * 
-     * @param message the enquiry text
-     */
-    public void setMessage(String message) {
-        this.message = message;
-    }
-    
     /**
      * Sets the official reply to this enquiry.
      * 
      * @param reply the response text
      */
     public void setReply(Enquiry reply) {
-        this.replies.add(reply);
+        if (reply != null) {
+            System.out.println("");
+        }
+        this.reply = reply;
     }
 
     // ========== GETTER METHODS ==========
@@ -81,19 +55,19 @@ public class Enquiry {
     /**
      * Gets the applicant who made this enquiry.
      * 
-     * @return the Applicant object
+     * @return the user nric
      */
-    public Applicant getApplicant() {
-        return this.applicant;
+    public String getUserNric() {
+        return this.userNric;
     }
     
     /**
      * Gets the project being enquired about.
      * 
-     * @return the Project object
+     * @return the project name
      */
-    public Project getProject() {
-        return this.project;
+    public String getProjectName() {
+        return this.projectName;
     }
     
     /**
@@ -101,7 +75,7 @@ public class Enquiry {
      * 
      * @return the enquiry text
      */
-    public String getMessage() {  // Fixed method name from setMessage to getMessage
+    public String getMessage() {
         return this.message;
     }
     
@@ -110,7 +84,7 @@ public class Enquiry {
      * 
      * @return the response text
      */
-    public ArrayList<Enquiry> getReplies() {
-        return this.replies;
+    public Enquiry getReply() {
+        return this.reply;
     }
 }

@@ -6,9 +6,10 @@ import java.util.ArrayList;
  * @see FlatType
  * @see ApplicantApp
  */
-public class Applicant extends User {
+public class Applicant extends User, implements EnquiryCreator{
     private Application currentApplication; 
     private ArrayList<Application> pastAppliedProjects = new ArrayList<Application>();
+    private ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>();
     
     /**
      * Default constructor for Applicant.
@@ -51,57 +52,16 @@ public class Applicant extends User {
                     int age, MaritalStatus maritalStatus) {
         super(name, NRIC, userID, password, age, maritalStatus);
     }
-    
-    /**
-     * Creates a new enquiry about a project.
-     * 
-     * @param project the project being enquired about
-     * @param message the enquiry message
-     * @return the created Enquiry object
-     */
-    public Enquiry createEnquiry(Project project, String message) {
-        Enquiry[] enquiry = new Enquiry[10];
-        return enquiry[0];
-    }
-    
+
     /**
      * Retrieves all enquiries made by the applicant.
      * 
      * @return array of Enquiry objects
      */
-    public Enquiry[] viewEnquiries() {
-        Enquiry[] enquiry = new Enquiry[10];
-        return enquiry;
+    public ArrayList<Enquiry> viewEnquiries() {
+        return enquiries;
     }
-    
-    /**
-     * Edits an existing enquiry with a new message.
-     * 
-     * @param enquiry the enquiry to modify
-     * @param newMessage the updated message content
-     */
-    public void editEnquiry(Enquiry enquiry, String newMessage) {
-        // Implementation goes here
-    }
-    
-    /**
-     * Deletes an existing enquiry.
-     * 
-     * @param enquiry the enquiry to delete
-     */
-    public void deletEnquiry(Enquiry enquiry) {
-        // Implementation goes here
-    }
-    
-    /**
-     * Sets the preferred flat type for the applicant.
-     * 
-     * @param flatType the preferred flat type
-     */
-    public void setFlatType(FlatType flatType) {
-        this.currentApplication.setFlatType(flatType);
-    }
-    
+
     /**
      * Gets the applicant's preferred flat type.
      * 

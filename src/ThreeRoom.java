@@ -36,4 +36,8 @@ public class ThreeRoom extends FlatType {
     public ThreeRoom(int units, double price, ArrayList<MaritalStatus> allowedGroups) {
         super(units, price, allowedGroups);
     }
+
+	public String getFlatTypeName() {
+		return "3-Room";
+	}
 }

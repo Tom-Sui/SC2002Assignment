@@ -1,4 +1,4 @@
-public interface EnquireInterface {
+public interface EnquiryInterface {
 
     public default Enquiry createEnquiry(Applicant applicant, Project project, String message) {
         return new Enquiry(applicant, project, message);

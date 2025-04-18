@@ -104,9 +104,9 @@ public class ManagerInput {
             	{
             		// Error checking for project Name (Ensure no duplicated project name)
             		String projectName = manager.uniqueProjectName(projects, scanner, "Enter a unique project name: \n");
-            		
-            		System.out.println("Enter Select Neighborhood (e.g., Yishun, Boon Lay): ");
-            		String neighborhood = scanner.nextLine(); 
+
+            		// Error checking for string
+            		String neighborhood = manager.validateString(scanner, "Enter Select Neighborhood (e.g., Yishun, Boon Lay): \n"); 
             		
             		// Error checking for valid integer
             		String unitType1 = manager.validateInteger(scanner, "Enter the Number of units for 2-Room: \n");            		            		
@@ -138,39 +138,22 @@ public class ManagerInput {
             			
             		}while(verifiedDates == false);
             		
-            		// Error checking for MAX slot (specific type case)
-            		String verifiedMaxSlot = null;
-            		do {
-            			String slotsInput = manager.validateInteger(scanner, "Set Available HDB Officer Slots (Max 10): \n");
-            			
-            			int slots = Integer.parseInt(slotsInput);
-            			
-            			// at least 1 slot but at most 10 slots
-            			if(slots > 10 || slots < 1)
-            			{
-            				System.out.println("Invalid slots. Please try again! \n");
-            			}
-            			else
-            			{
-            				verifiedMaxSlot = Integer.toString(slots);
-            			}
-            			
-            		}while(verifiedMaxSlot == null);           		
-            		            		
-            		
+            		// Error checking for MAX slot
+            		String verifiedMaxSlot = manager.verifyOfficerSlots(scanner, "Set Available HDB Officer Slots (Max 10): \n");
+
             		// Error checking for visibility (specific type case)
             		String verifiedVisibility = null;            		
             		do {
-            			System.out.println("Set visibility of project ('true' = ON, 'false' = OFF): ");
+            			System.out.println("Set visibility of project (on/off): ");
             			String inputV = scanner.nextLine();                		
             			
             			switch(inputV)
             			{
-            			case "true":
+            			case "on":
             				verifiedVisibility = "true";
             				break;
             				
-            			case "false":
+            			case "off":
             				verifiedVisibility = "false";
             				break;
             				
@@ -233,7 +216,8 @@ public class ManagerInput {
                         		System.out.println("4. Change Application Opening Date");
                         		System.out.println("5. Change Application Closing Date");
                         		System.out.println("6. Toggle Visibility (On/Off)");
-                        		System.out.println("7. Quit\n");
+                        		System.out.println("7. Update Number of Officer Slots");
+                        		System.out.println("8. Quit\n");
                         		
                         		System.out.println("Select the Choice: ");
                         		choice2 = scanner.nextInt();
@@ -250,9 +234,8 @@ public class ManagerInput {
                                 	break;
                                 	
                                 // Update Neighborhood
-                        		case 1:                                        	
-                                	System.out.println("Enter Updated Neighbourhood: ");                                     	
-                                	String newNeighbourhood = scanner.nextLine();      
+                        		case 1:                                  	
+                                	String newNeighbourhood = manager.validateString(scanner, "Enter updated Neighbourhood: \n");      
                                 	
                                 	manager.editProject(selectedProject, newNeighbourhood, "1", projects, i);
                                 	break;
@@ -435,7 +418,14 @@ public class ManagerInput {
                         			}                        			
                         			break;
                         			
+                        		// update officer slots
                         		case 7:
+                        			String verifiedMaxSlot = manager.verifyOfficerSlots(scanner, "Set Available HDB Officer Slots (Max 10): \n");
+                        			
+                        			manager.editProject(selectedProject, verifiedMaxSlot, "7", projects, i);                        			
+                        			break;
+                        			
+                        		case 8:
                         			break;
                         			
                         		default:
@@ -443,7 +433,7 @@ public class ManagerInput {
                         			break;                        		
                         		}            					
             					
-            				}while(choice2 != 7);
+            				}while(choice2 != 8);
             				checkE = 1; // exit to manager main page
             				break; // break out of for loop
             			}            		
@@ -560,7 +550,8 @@ public class ManagerInput {
             	break;
             	
             // Approve or Reject Applicant’s BTO Application
-            case 9:            	
+            case 9:
+            	manager.approveOrRejectApplication(projects, applicants, userName);
             	break;
             	
             // Approve or Reject Applicant’s Withdrawal Request
@@ -646,7 +637,8 @@ public class ManagerInput {
             	break;
             
             // View Enquiries for ALL Projects
-            case 12:            	
+            case 12:
+            	manager.viewEnquiries(projects);
             	break;
             
             //  View and Reply to Enquiries for Your Projects

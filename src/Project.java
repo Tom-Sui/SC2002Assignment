@@ -284,17 +284,17 @@ public class Project {
         }
     	projectDetails = projectDetails + formatter.format(this.applicationOpeningDate) + ",";
     	projectDetails = projectDetails + formatter.format(this.applicationClosingDate) + ",";
-        projectDetails = projectDetails + this.hdbManager.getName() + ",";
+        projectDetails = projectDetails + this.hdbManager.getNRIC() + ",";
 
         projectDetails = projectDetails + String.valueOf(this.availableOfficerSlots) + ",";
         if(this.hdbOfficers.get(0) != null){
             int i = 0;
             for(HDBOfficer hdbOfficer : this.hdbOfficers){
                 if(i++ == hdbOfficers.size() - 1){
-                    projectDetails = projectDetails + hdbOfficer.getName() + ",";
+                    projectDetails = projectDetails + hdbOfficer.getNRIC() + ",";
                     break;
                 }
-                projectDetails = projectDetails + hdbOfficer.getName() + "&";
+                projectDetails = projectDetails + hdbOfficer.getNRIC() + "&";
             }
         }else{
             projectDetails = projectDetails + " ,";
@@ -321,6 +321,10 @@ public class Project {
     */
     public ArrayList<Application> getApplications(){
         return applications;
+    }
+    
+    public ArrayList<Enquiry> getEnquiries(){
+        return enquiries;
     }
 
 }

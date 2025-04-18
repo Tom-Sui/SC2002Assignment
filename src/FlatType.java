@@ -21,7 +21,7 @@ public abstract class FlatType {
     
     /**
      * Default constructor (available for subclasses).
-     */
+    */
     public FlatType() {};
     
     /**
@@ -83,4 +83,10 @@ public abstract class FlatType {
      * @return ArrayList of permitted marital statuses
      */
     public ArrayList<MaritalStatus> getAllowedGroups() { return allowedGroups; }
+
+    /**
+     * Gets the flat type name.
+     * @return the flat type name
+     */
+    public abstract String getFlatTypeName();
 }

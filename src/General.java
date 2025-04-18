@@ -170,12 +170,12 @@ public class General {
      * Finds an HDBManager by name.
      * 
      * @param hdbManager list of HDBManagers to search
-     * @param name name to search for
+     * @param checker identity to search for
      * @return the matching HDBManager or null if not found
      */
-    public HDBManager findManager(ArrayList<HDBManager> hdbManager, String name) {
+    public HDBManager findManager(ArrayList<HDBManager> hdbManager, String checker) {
         for(HDBManager i : hdbManager) {
-            if(name.equals(i.getName())) {
+            if(checker.equals(i.getNRIC())) {
                 return i;
             }
         }
@@ -186,12 +186,12 @@ public class General {
      * Finds an HDBOfficer by name.
      * 
      * @param hdbOfficer list of HDBOfficers to search
-     * @param name name to search for
+     * @param checker identity to search for
      * @return the matching HDBOfficer or null if not found
      */
-    public HDBOfficer findOfficer(ArrayList<HDBOfficer> hdbOfficer, String name) {
+    public HDBOfficer findOfficer(ArrayList<HDBOfficer> hdbOfficer, String checker) {
         for(HDBOfficer i : hdbOfficer) {
-            if(name.equals(i.getName())) {
+            if(checker.equals(i.getNRIC())) {
                 return i;
             }
         }

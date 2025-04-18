@@ -23,7 +23,7 @@ public class TwoRoom extends FlatType {
      * @param allowedGroup the marital status allowed to apply (typically SINGLE)
      */
     public TwoRoom(int units, double price, MaritalStatus allowedGroup) {
-        super(units, price, allowedGroup, "2-Room");
+        super(units, price, allowedGroup);
     }
     
     /**
@@ -34,6 +34,10 @@ public class TwoRoom extends FlatType {
      * @param allowedGroups list of permitted marital statuses (typically SINGLE and MARRIED)
      */
     public TwoRoom(int units, double price, ArrayList<MaritalStatus> allowedGroups) {
-        super(units, price, allowedGroups, "2-Room");
+        super(units, price, allowedGroups);
     }
+    
+	public String getFlatTypeName() {
+		return "3-Room";
+	}
 }

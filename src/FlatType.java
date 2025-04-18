@@ -18,7 +18,6 @@ public abstract class FlatType {
     private int units;
     private double price;
     private ArrayList<MaritalStatus> allowedGroups = new ArrayList<MaritalStatus>();
-    public String flatTypeName;
     
     /**
      * Default constructor (available for subclasses).
@@ -34,11 +33,10 @@ public abstract class FlatType {
      * @param flatTypeName the classification name (e.g., "2-Room", "3-Room")
      * @throws IllegalArgumentException if units or price are non-positive
      */
-    public FlatType(int units, double price, MaritalStatus allowedGroup, String flatTypeName) {
+    public FlatType(int units, double price, MaritalStatus allowedGroup) {
         this.units = units;
         this.price = price;
         this.allowedGroups.add(allowedGroup);
-        this.flatTypeName = flatTypeName;
     }
     
     /**
@@ -50,11 +48,10 @@ public abstract class FlatType {
      * @param flatTypeName the classification name (e.g., "2-Room", "3-Room")
      * @throws IllegalArgumentException if units or price are non-positive
      */
-    public FlatType(int units, double price, ArrayList<MaritalStatus> allowedGroups, String flatTypeName) {
+    public FlatType(int units, double price, ArrayList<MaritalStatus> allowedGroups) {
         this.units = units;
         this.price = price;
         this.allowedGroups = allowedGroups;
-        this.flatTypeName = flatTypeName;
     }
     
     /**
@@ -91,5 +88,5 @@ public abstract class FlatType {
      * Gets the flat type name.
      * @return the flat type name
      */
-    public String getFlatTypeName() { return flatTypeName; }
+    public abstract String getFlatTypeName();
 }

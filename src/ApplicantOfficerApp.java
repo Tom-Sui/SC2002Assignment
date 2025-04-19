@@ -111,6 +111,7 @@ public class ApplicantOfficerApp {
 						int flatTypeNumber = sc.nextInt();
 						FlatType flatType = filteredFlatTypes.get(flatTypeNumber);
 						applicant.applyForProject(project, flatType);
+						System.out.println("Project application has been sent.");
 					} catch (IndexOutOfBoundsException e) {
 						System.out.println("Invalid project ID. Please enter a valid project ID.");
 						continue;

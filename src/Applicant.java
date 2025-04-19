@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents an applicant user in the system.
@@ -8,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Applicant extends User {
     private Application currentApplication; 
-    private ArrayList<Application> pastAppliedProjects = new ArrayList<Application>();
+    private List<Application> pastApplications = new ArrayList<>();
     
     /**
      * Default constructor for Applicant.
@@ -24,17 +25,15 @@ public class Applicant extends User {
      * @param password the applicant's password
      * @param age the applicant's age
      * @param maritalStatus the applicant's marital status
-     * @param appliedProject the project the applicant is applying to
-     * @param pastAppliedProjects list of previously applied projects
-     * @param applicationStatus current application status
-     * @param bookedFlatType the type of flat booked
+     * @param currentApplication the application the applicant is applying to
+     * @param pastApplications list of previous applications
      */
     public Applicant(String name, String NRIC, int userID, String password, int age, 
-                    MaritalStatus maritalStatus, Project appliedProject,  
-                    ArrayList<Project> pastAppliedProjects, ApplicantStatus applicationStatus, 
-                    FlatType bookedFlatType) {
+                    MaritalStatus maritalStatus, Application currentApplication,  
+                    List<Application> pastApplications) {
         super(name, NRIC, userID, password, age, maritalStatus);
-        //TODO FILL IN THE REST OF THE ATTRIBUTES
+        this.currentApplication = currentApplication;
+        this.pastApplications = pastApplications;
     }
     
     /**
@@ -99,7 +98,9 @@ public class Applicant extends User {
      * @param flatType the preferred flat type
      */
     public void setFlatType(FlatType flatType) {
-        this.currentApplication.setFlatType(flatType);
+	   if (currentApplication != null) {
+	        currentApplication.setFlatType(flatType);
+	    }
     }
     
     /**
@@ -112,13 +113,13 @@ public class Applicant extends User {
     }
 
     /**
-     * Gets the applicant's past applied projects.
+     * Gets the applicant's past applications.
      * 
-     * @return list of past applied projects
+     * @return list of past applied applications
      */
 
-    public ArrayList<Application> getPastAppliedProjects() {
-        return pastAppliedProjects;
+    public List<Application> getPastApplications() {
+        return pastApplications;
     }
 
     /**
@@ -128,12 +129,7 @@ public class Applicant extends User {
      * @param flatType the preferred flat type
      */
     public void applyForProject(Project project, FlatType flatType) {
-        System.out.println("Applied for project: " + project.getProjectName());
-        System.out.println("Flat type: " + flatType.toString());
-        Application application = new Application(this, project, flatType);
-        project.addApplication(application);
-        currentApplication = application;
-        System.out.println("Application ID: " + application.getApplicationId());
+        ApplicationService.applyProject(this, project, flatType);
     }
     
     /**
@@ -159,8 +155,7 @@ public class Applicant extends User {
     * @description - This function will send a booking request to a managing HDB Officer. Only valid if the applicant's application is successful (checked at ApplicantOfficerApp)   */
 
     public void bookFlat(HDBOfficer officer) {
-        currentApplication.setBookingRequested(true);
-        officer.receiveBookFlatRequest(currentApplication);
+    	ApplicationService.bookFlat(currentApplication, officer);
     }
 
     /**

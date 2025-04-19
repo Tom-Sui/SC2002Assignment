@@ -249,23 +249,11 @@ public class HDBOfficer extends Applicant{
      * @param application the application to be processed
      */
     public void helpBookFlat(Application application) {
-        FlatType chosenFlatType = application.getFlatType();
-        ArrayList<FlatType> flatTypes = managedProject.getFlatTypes();
-        int remainingUnits = FlatTypeLogic.returnFilteredFlatTypeUnits(flatTypes, chosenFlatType);
-        if (remainingUnits >= 1) {
-            // Updating applicant and his application process
-            application.setIsBooked(true);
-            application.setBookingRequested(false);
-            application.getApplicant().setFlatType(chosenFlatType);
-            application.setApplicationStatus(ApplicationStatus.BOOKED);
-        
-            // Updating units in project
-            FlatTypeLogic.updateFilteredFlatTypeUnits(flatTypes, chosenFlatType);
-            System.out.println("Booking successful!");
-        }
-        else {
-            System.out.println("Booking unsuccessful. Chosen flat type has no more units.");
-        }
+        if (ApplicationService.processBooking(application, managedProject)) {
+        	System.out.println("Booking successful!");
+        	return;
+        }            
+        System.out.println("Booking unsuccessful. Chosen flat type has no more units.");
     }
 
     /**

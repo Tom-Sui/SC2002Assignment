@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 /**
  * Provides logic operations on Project objects.
  * <p>
@@ -68,16 +70,26 @@ public class ProjectLogic {
      * @param projects list of all projects to display
      */
     public static int viewAvailableProjects(ArrayList<Project> projects, Applicant applicant) {
-        int size = projects.size();
-        ArrayList<Project> pastAppliedProjects = ApplicationLogic.filterByPastAppliedProjects(applicant.getPastAppliedProjects());
-        for (int i = 0; i < size; i++) {
-            Project currentProject = projects.get(i);
-            if (currentProject.getVisibility() == true || pastAppliedProjects.contains(currentProject)) {
-                System.out.println("Project ID: " + (i+1));
-                System.out.println(projects.get(i).toString());
-            }	
-        } 
-        return size;
+        List<Application> pastApplications = applicant.getPastApplications();
+        List<Project> pastAppliedProjects = pastApplications.stream()
+        	    .map(Application::getProject)  // extract the project from each application
+        	    .collect(Collectors.toCollection(ArrayList::new));
+        
+        System.out.println("Past applied projects:");
+        for (Project project : pastAppliedProjects) {
+            System.out.println(project.toString());
+        }
+        
+        System.out.println("Newly available projects:");
+        int idx = 0;
+        
+        for (Project newProject : projects) {
+        	 System.out.println("Project ID: " + (idx+1));
+             System.out.println(projects.get(idx).toString());
+             idx++;
+        }
+        
+        return idx;
     }
     
     

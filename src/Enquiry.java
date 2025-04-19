@@ -13,7 +13,7 @@ public class Enquiry {
     private String userNric; 
     private String projectName;
     private String message;
-    private Enquiry reply;
+    private int replyID;
 
     // ========== CONSTRUCTOR ==========
     /**
@@ -32,13 +32,14 @@ public class Enquiry {
     /**
      * Sets the official reply to this enquiry.
      * 
-     * @param reply the response text
+     * @param replyID the response text
      */
-    public void setReply(Enquiry reply) {
-        if (reply != null) {
-            System.out.println("");
+    public void setReplyID(int replyID) {
+        if (replyID == 0) {
+            System.out.println("Reply ID cannot be 0");
+            return;
         }
-        this.reply = reply;
+        this.replyID = replyID;
     }
 
     // ========== GETTER METHODS ==========
@@ -82,9 +83,53 @@ public class Enquiry {
     /**
      * Gets the official reply to this enquiry.
      * 
-     * @return the response text
+     * @return the response id if it exists, otherwise null
      */
-    public Enquiry getReply() {
-        return this.reply;
+    public int getReplyID(){
+        return this.replyID;
+    }
+
+    public String toString() {
+        return "Enquiry ID: " + enquiryID + "\n" +
+               "User Nric: " + userNric + "\n" +
+               "Project Name: " + projectName + "\n" +
+               "Message: " + message + "\n";
+    }
+
+    // ========== SETTER METHODS ==========
+    /**
+     * Sets the enquiry ID.
+     * 
+     * @param enquiryID the new enquiry ID
+     */
+    public void setEnquiryID(int enquiryID) {
+        this.enquiryID = enquiryID;
+    }
+
+    /**
+     * Sets the user nric.
+     * 
+     * @param userNric the new user nric
+     */
+    public void setUserNric(String userNric) {
+        this.userNric = userNric;
+    }
+
+    /**
+     * Sets the project name.
+     * 
+     * @param projectName the new project name
+     */
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    /**
+     * Sets the message.
+     * 
+     * @param message the new message
+     */
+    public void setMessage(String message) {
+        this.message = message;
     }
 }

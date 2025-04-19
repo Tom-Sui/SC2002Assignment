@@ -152,14 +152,6 @@ public abstract class User {
     }
 
     /**
-     * Placeholder method for enquiry creation (to be implemented by subclasses).
-     * @return Always returns false in base implementation
-     */
-    public boolean createEnquiry() {
-        return false;
-    }
-
-    /**
      * Modifies user information in the specified file.
      * 
      * @param newContent The new value to set

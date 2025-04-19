@@ -14,13 +14,11 @@ import java.time.ZoneId;
  * 
  */
 
-public class HDBOfficer extends Applicant implements EnquiryCreator, EnquiryReply{
+public class HDBOfficer extends Applicant {
     private Project managedProject;
     private ArrayList<Project> upcomingProjects = new ArrayList<Project>();
     private Map<Project, OfficerRegistrationStatus> registrationStatusMap = new HashMap<>();
-    //private OfficerRegistrationStatus officerRegistrationStatus = OfficerRegistrationStatus.PENDING;
     private ArrayList<Application> managedApplications = new ArrayList<Application>();
-    private ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>();
     private boolean isManagingOfficer = false;
     
     public void checkCurrentProject() {
@@ -125,16 +123,6 @@ public class HDBOfficer extends Applicant implements EnquiryCreator, EnquiryRepl
     }
 
     /**
-     * Retrieves all enquiries.
-     *
-     * @return an array of enquiries
-     */
-    public ArrayList<Enquiry> viewEnquiries() {
-        return enquiries;
-    }
-
-
-    /**
      * Checks if the officer can apply for a project.
      *
      * @param project the project to check
@@ -186,14 +174,6 @@ public class HDBOfficer extends Applicant implements EnquiryCreator, EnquiryRepl
             }
         }
     }
-
-    /**
-     * Replies to an enquiry.
-     *
-     * @param enquiry the enquiry to reply to
-     * @param reply the reply message
-     */
-    public void replyToEnquiry(Enquiry enquiry, String reply) {}
 
     /**
      * Gets all managed applications.

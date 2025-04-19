@@ -6,10 +6,9 @@ import java.util.ArrayList;
  * @see FlatType
  * @see ApplicantApp
  */
-public class Applicant extends User, implements EnquiryCreator{
+public class Applicant extends User{
     private Application currentApplication; 
     private ArrayList<Application> pastAppliedProjects = new ArrayList<Application>();
-    private ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>();
     
     /**
      * Default constructor for Applicant.
@@ -51,15 +50,6 @@ public class Applicant extends User, implements EnquiryCreator{
     public Applicant(String name, String NRIC, int userID, String password, 
                     int age, MaritalStatus maritalStatus) {
         super(name, NRIC, userID, password, age, maritalStatus);
-    }
-
-    /**
-     * Retrieves all enquiries made by the applicant.
-     * 
-     * @return array of Enquiry objects
-     */
-    public ArrayList<Enquiry> viewEnquiries() {
-        return enquiries;
     }
 
     /**
@@ -140,4 +130,6 @@ public class Applicant extends User, implements EnquiryCreator{
     public void setCurrentApplication(Application currentApplication) {
         this.currentApplication = currentApplication;
     }
+
 }
+

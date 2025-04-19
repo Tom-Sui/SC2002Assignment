@@ -279,4 +279,29 @@ public class Init {
         }
         return hdbManagers;
     }
+     
+    public ArrayList<Enquiry> loadEnquiryInfo(ArrayList<Applicant> applicants, ArrayList<Project> projects){
+        File enquiryFile = new File("./Data/EnquiryList.txt");
+        ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>();
+        Enquiry enquiry;
+        try {
+            Scanner scanner = new Scanner(enquiryFile);
+
+            while (scanner.hasNextLine()){
+                enquiry = new Enquiry();
+                String[] data = scanner.nextLine().split(",");
+                enquiry.setEnquiryID(Integer.parseInt(data[0]));
+                enquiry.setUserNric(data[1]);
+                enquiry.setProjectName(data[2]);
+                enquiry.setMessage(data[3]);
+                enquiry.setReplyID(Integer.parseInt(data[4]));
+                enquiries.add(enquiry);
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Error occured while reading EnquiryList.txt");
+            e.printStackTrace();
+        }
+        return enquiries;
+    }
 }

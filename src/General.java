@@ -19,7 +19,7 @@ import java.util.Scanner;
  */
 public class General {
     /** Default path for data files */
-    private static String DataFilePath = "./src/Data";
+    private static String DataFilePath = "./Data";
 
     /**
      * Edits a file by replacing specific content in a target row.

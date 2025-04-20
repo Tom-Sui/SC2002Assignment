@@ -12,7 +12,7 @@ import java.util.Scanner;
 // Handles Project-related functions to txt
 public class ProjectManager extends BaseProjectManager{
 	
-	private String DataFilePath = "./src/Data";   // TO ADD /src/ FOR ECLIPSE
+	private String DataFilePath = "./Data";   // TO ADD /src/ FOR ECLIPSE
 	
 	// Constructor
 	public ProjectManager(General general, ArrayList<Project> managedProjects)

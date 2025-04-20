@@ -4,7 +4,7 @@ import java.util.Scanner;
 
 public class App{
     //To keep track who is loged in
-    private static String filePath = "./src/Data";  // TO ADD /src/ FOR ECLIPSE
+    private static String filePath = "./Data";  // TO ADD /src/ FOR ECLIPSE
     private static boolean logedIn = false;
     private static String currentUserId = "NULL";
     private static String userType = "NULL";

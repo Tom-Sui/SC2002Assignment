@@ -16,7 +16,7 @@ import java.util.Scanner;
  */
 public class Init {
 	
-	private String DataFilePath = "./src/Data";   // TO ADD /src/ FOR ECLIPSE
+	private String DataFilePath = "./Data";   // TO ADD /src/ FOR ECLIPSE
     /**
      * Loads applicant information from the ApplicantList.txt file.
      * 

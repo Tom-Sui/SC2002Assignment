@@ -132,4 +132,13 @@ public class Enquiry {
     public void setMessage(String message) {
         this.message = message;
     }
+
+    /**
+     * Checks if the enquiry has a reply.
+     * 
+     * @return true if the enquiry has a reply, false otherwise
+     */
+    public boolean hasReply() {
+        return replyID != 0;
+    }
 }

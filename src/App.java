@@ -1,8 +1,6 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
-import java.security.GeneralSecurityException;
-import java.sql.Date;
 
 public class App{
     //To keep track who is loged in
@@ -57,7 +55,7 @@ public class App{
         hdbManagers = init.setManagerManagedProjects(hdbManagers,projects);
 
         //Initialize Application info
-        ArrayList<Application> applications = init.loadApplicationInfo(applicant, projects);
+        //ArrayList<Application> applications = init.loadApplicationInfo(applicant, projects);
 
         
         // General general = new General();

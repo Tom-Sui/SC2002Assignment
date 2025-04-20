@@ -19,7 +19,7 @@ import java.util.Scanner;
  */
 public class General {
     /** Default path for data files */
-    private String DataFilePath = "./Data";
+    private static String DataFilePath = "./Data";
 
     /**
      * Edits a file by replacing specific content in a target row.
@@ -69,28 +69,29 @@ public class General {
     public static void editProjectFile(Project project) {
         String buffeString;
         String fileContent = "";
-        File projectFile = new File("./Data/ProjectList.txt");
+        File projectFile = new File(DataFilePath + "/ProjectList.txt");
         
         try {
             Scanner scanner = new Scanner(projectFile);
             while(scanner.hasNextLine()) {
                 buffeString = scanner.nextLine();
                     if (buffeString.contains(project.getProjectName())) {
-                        System.out.println("Processing...");
+                        
+                    	System.out.println("Processing...");
                         buffeString = project.toStore();
                     }
                 fileContent = fileContent + buffeString + "\n";
             }
 
-            FileWriter writer = new FileWriter("./Data/ProjectList.txt");
+            FileWriter writer = new FileWriter(DataFilePath + "/ProjectList.txt");
             writer.write(fileContent);
             writer.close();
             scanner.close();
         } catch (FileNotFoundException e) {
-            System.out.println("Error occurred while reading ./Data/ProjectList.txt");
+            System.out.println("Error occurred while reading ./ProjectList.txt");
             e.printStackTrace();
         } catch (IOException e) {
-            System.out.println("Error occurred when writing ./Data/ProjectList.txt");
+            System.out.println("Error occurred when writing ./ProjectList.txt");
             e.printStackTrace();
         }
     }
@@ -102,7 +103,7 @@ public class General {
     public static void editProjectFile(Project project,String projectName) {
         String buffeString;
         String fileContent = "";
-        File projectFile = new File("./Data/ProjectList.txt");
+        File projectFile = new File(DataFilePath + "/ProjectList.txt");
         
         try {
             Scanner scanner = new Scanner(projectFile);
@@ -116,15 +117,15 @@ public class General {
                 fileContent = fileContent + buffeString + "\n";
             }
             
-            FileWriter writer = new FileWriter("./Data/ProjectList.txt");
+            FileWriter writer = new FileWriter(DataFilePath + "/ProjectList.txt");
             writer.write(fileContent);
             writer.close();
             scanner.close();
         } catch (FileNotFoundException e) {
-            System.out.println("Error occurred while reading ./Data/ProjectList.txt");
+            System.out.println("Error occurred while reading ./ProjectList.txt");
             e.printStackTrace();
         } catch (IOException e) {
-            System.out.println("Error occurred when writing ./Data/ProjectList.txt");
+            System.out.println("Error occurred when writing ./ProjectList.txt");
             e.printStackTrace();
         }
     }
@@ -197,6 +198,34 @@ public class General {
             e.printStackTrace();
         }
     }
+    
+    public static void editOtherFile(String filePath, String fileType, String newContent, String target, String targetRow) {
+        String buffeString;
+        String fileContent = "";
+        File projectFile = new File(filePath);
+
+        try {
+            Scanner scanner = new Scanner(projectFile);
+            while(scanner.hasNextLine()) {
+                buffeString = scanner.nextLine();
+                if (buffeString.contains(targetRow)) {
+                    buffeString = buffeString.replace(target, newContent);
+                }
+                fileContent = fileContent + buffeString + "\n";
+            }
+            FileWriter writer = new FileWriter(DataFilePath + fileType);
+            writer.write(fileContent);
+            writer.close();
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Error occurred while reading OfficerList.txt");
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Error occurred when writing " + filePath);
+            e.printStackTrace();
+        }
+    }
+    
     // ========== SEARCH METHODS ==========
     /**
      * Finds an HDBManager by name.

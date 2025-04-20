@@ -15,14 +15,15 @@ import java.util.Scanner;
  * and project information.
  */
 public class Init {
-    
+	
+	private String DataFilePath = "./Data";   // TO ADD /src/ FOR ECLIPSE
     /**
      * Loads applicant information from the ApplicantList.txt file.
      * 
      * @return ArrayList of Applicant objects populated with data from the file
      */
     public ArrayList<Applicant> LoadUserInfo() {
-        File applicantFile = new File("./Data/ApplicantList.txt");
+        File applicantFile = new File(DataFilePath + "/ApplicantList.txt");
         ArrayList<Applicant> applicants = new ArrayList<Applicant>();
         Applicant applicant;
         try {
@@ -58,14 +59,14 @@ public class Init {
      * @return ArrayList of HDBManager objects populated with data from the file
      */
     public ArrayList<HDBManager> LoadManagerInfo() {
-        File managerFile = new File("./Data/ManagerList.txt");
+        File managerFile = new File(DataFilePath + "/ManagerList.txt");
         ArrayList<HDBManager> hdbManagers = new ArrayList<HDBManager>();
         HDBManager hdbManager;
         try {
             Scanner scanner = new Scanner(managerFile);
 
             while (scanner.hasNextLine()) {
-                hdbManager = new HDBManager();
+                hdbManager = ManagerFactory.defaultManager();
                 String[] data = scanner.nextLine().split(",");
                 hdbManager.setUserID(Integer.parseInt(data[0]));
                 hdbManager.setName(data[1]);
@@ -94,7 +95,7 @@ public class Init {
      * @return ArrayList of HDBOfficer objects populated with data from the file
      */
     public ArrayList<HDBOfficer> LoadOfficerInfo() {
-        File officerFile = new File("./Data/OfficerList.txt");
+        File officerFile = new File(DataFilePath + "/OfficerList.txt");
         ArrayList<HDBOfficer> hdbOfficers = new ArrayList<HDBOfficer>();
         HDBOfficer hdbOfficer;
         try {
@@ -132,7 +133,7 @@ public class Init {
      * @return ArrayList of Project objects populated with data from the file
      */
     public ArrayList<Project> LoadProjectInfo(ArrayList<HDBManager> hdbManager, ArrayList<HDBOfficer> hdbOfficer) {
-        File projectFile = new File("./Data/ProjectList.txt");
+        File projectFile = new File(DataFilePath + "/ProjectList.txt");
         ArrayList<Project> projects = new ArrayList<Project>();
         try {
             Scanner scanner = new Scanner(projectFile);
@@ -156,7 +157,7 @@ public class Init {
     }
     
     public ArrayList<Application> loadApplicationInfo(ArrayList<Applicant> applicants, ArrayList<Project> projects){
-        File applicationFile = new File("./Data/ApplicationList.txt");
+        File applicationFile = new File(DataFilePath + "/ApplicationList.txt");
         ArrayList<Application> applications = new ArrayList<Application>();
         Application application;
         try {

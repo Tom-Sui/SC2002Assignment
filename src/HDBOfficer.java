@@ -282,6 +282,12 @@ public class HDBOfficer extends Applicant{
     public void setManagingOfficer(boolean isManagingOfficer) {
         this.isManagingOfficer = isManagingOfficer;
     }
+    
+    public void setOfficerRegistrationStatus(Project project, OfficerRegistrationStatus status) {
+    	if(registrationStatusMap.containsKey(project)) {
+    		registrationStatusMap.put(project, status);
+    	}
+    }
 
     /**
      * Returns a string representation of the officer.

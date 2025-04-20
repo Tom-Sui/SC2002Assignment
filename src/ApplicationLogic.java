@@ -96,17 +96,13 @@ public class ApplicationLogic {
     }
     
     public static FlatType getFlatType(Project project, String inputFlatType) {
-    	ArrayList<FlatType> flatTypes = project.getFlatTypes();
-        for (FlatType flatType : flatTypes) {
-            if (flatType instanceof TwoRoom && inputFlatType.equals("2-Room")) {
-            	return flatType;
-            }
-            else if (flatType instanceof ThreeRoom && inputFlatType.equals("3-Room")) {
+        for (FlatType flatType : project.getFlatTypes()) {
+            if (flatType.matchesTypeName(inputFlatType)) {
                 return flatType;
             }
         }
-        return null; // not found
-        }
+        return null; // Not found
     }
+}
         
     

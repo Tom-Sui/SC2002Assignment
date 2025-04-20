@@ -89,4 +89,9 @@ public abstract class FlatType {
      * @return the flat type name
      */
     public abstract String getFlatTypeName();
+    
+    public boolean matchesTypeName(String name) {
+        return getFlatTypeName().equalsIgnoreCase(name);
+    }
+
 }

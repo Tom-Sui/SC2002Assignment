@@ -13,8 +13,10 @@ import java.util.Scanner;
 public class ManagerInput {
 	
 	Scanner scanner = new Scanner(System.in);
-	Init init = new Init();
-	int choice;
+	int choice;	
+	
+	Init init = new Init();	
+	HDBManager manager = ManagerFactory.defaultManager(); 
 	/**
      * Displays and processes the manager menu system.
      * <p>
@@ -81,8 +83,7 @@ public class ManagerInput {
             System.out.println("Enter your choice:");
             choice = scanner.nextInt();
             scanner.nextLine();
-            
-            HDBManager manager = new HDBManager();   
+             
             projects = init.LoadProjectInfo(hdbManagers, hdbOfficers); // restore changed data
             manager.PastDateChecker(projects);  // verify past projects and ensure visibility OFF
             
@@ -97,10 +98,7 @@ public class ManagerInput {
             case 1:
             	
             	// check if any active projects
-            	Project currentActiveProj = manager.currentActiveProject(projects, userName, false);
-            	
-            	// no active project
-            	if (currentActiveProj == null)
+            	if (manager.currentActiveProject(projects, userName, false) == null)
             	{
             		// Error checking for project Name (Ensure no duplicated project name)
             		String projectName = manager.uniqueProjectName(projects, scanner, "Enter a unique project name: \n");
@@ -201,7 +199,7 @@ public class ManagerInput {
             		// Check which project to edit
             		for (int i=0; i<projects.size(); i++)
             		{
-            			if (projects.get(i).getProjectName().equals(selectedProject)) // found the projectID to update 
+            			if (projects.get(i).getHDBManager().getNRIC().equals(userName) && projects.get(i).getProjectName().equals(selectedProject)) // found the projectID to update
             			{            				
             				found = true;    
             				int choice2;
@@ -230,7 +228,8 @@ public class ManagerInput {
                         		case 0:
                         			String newProjectName = manager.uniqueProjectName(projects, scanner, "Enter a unique project name to update: \n");
                         			                           	
-                                	manager.editProject(selectedProject, newProjectName, "0", projects, i);
+                                	manager.editProject(selectedProject, newProjectName, "0", projects, i);                                	
+                                	selectedProject = newProjectName;
                                 	break;
                                 	
                                 // Update Neighborhood
@@ -403,26 +402,40 @@ public class ManagerInput {
                         			}
                         			else
                         			{
-                        				// auto toggling to On/Off
-                        				if(projects.get(i).getVisibility())
+                        				// check if any active projects
+                        				if (manager.currentActiveProject(projects, userName, false) == null) // no active project
                         				{
-                        					// true = ON
-                        					System.out.printf("Current Project Visibility: '%s' -- ON\n", selectedProject);
+                        					// auto toggling to On/Off
+                        					if(projects.get(i).getVisibility())
+                        					{
+                        						// true = ON
+                        						System.out.printf("Current Project Visibility: '%s' -- ON\n", selectedProject);
+                        					}
+                        					else
+                        					{
+                        						// false = OFF
+                        						System.out.printf("Current Project Visibility '%s' -- OFF\n", selectedProject);
+                        					}                       			
+                        					manager.toggleVisibility(projects, projects.get(i).getProjectName(), userName);
                         				}
                         				else
                         				{
-                        					// false = OFF
-                        					System.out.printf("Current Project Visibility '%s' -- OFF\n", selectedProject);
-                        				}                        			
-                        				manager.toggleVisibility(projects, projects.get(i).getProjectName());
+                        					System.out.println("Only 1 active project allowed.\n");
+                        				}
                         			}                        			
                         			break;
                         			
                         		// update officer slots
                         		case 7:
-                        			String verifiedMaxSlot = manager.verifyOfficerSlots(scanner, "Set Available HDB Officer Slots (Max 10): \n");
-                        			
-                        			manager.editProject(selectedProject, verifiedMaxSlot, "7", projects, i);                        			
+                        			if(manager.PastDateCheckerProject(projects, selectedProject))
+                        			{
+                        				System.out.println("Not allowed to update officer slots for past projects.");
+                        			}
+                        			else
+                        			{
+                        				String verifiedMaxSlot = manager.verifyOfficerSlots(scanner, "Set Available HDB Officer Slots (Max 10): \n");                        				
+                        				manager.editProject(selectedProject, verifiedMaxSlot, "7", projects, i);                       			
+                        			}
                         			break;
                         			
                         		case 8:
@@ -517,7 +530,7 @@ public class ManagerInput {
         			}       
         			else
         			{
-        				manager.toggleVisibility(projects, toggleProject);         		
+        				manager.toggleVisibility(projects, toggleProject, userName);         		
         			}
             	}
             	else
@@ -561,7 +574,6 @@ public class ManagerInput {
             	
             // Generate Reports of Applicants
             case 11:  
-            	FlatType selectedFlatType = null;
             	String maritalStatusFilter = null;
             	Integer minAge = null, maxAge = null;
             	int choice3;
@@ -642,7 +654,8 @@ public class ManagerInput {
             	break;
             
             //  View and Reply to Enquiries for Your Projects
-            case 13:            	
+            case 13:        
+            	manager.replyToEnquiry(projects, userName, scanner);
             	break;
             	
             case 14:
@@ -655,7 +668,7 @@ public class ManagerInput {
             
 		}while(choice != 14);
 		
-		System.out.println("Quit Successful!");
+		System.out.println("Quit Successful!\n");
 		
 		return;
 	}

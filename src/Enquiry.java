@@ -15,6 +15,8 @@ public class Enquiry {
     private Project project;
     private String message;
     private ArrayList<Enquiry> replies = new ArrayList<>();
+    private String reply;
+    private boolean hasReplied;
 
     // ========== CONSTRUCTOR ==========
     /**
@@ -28,6 +30,8 @@ public class Enquiry {
         this.applicant = applicant;
         this.project = project;
         this.message = message;
+        this.reply = "";
+        this.hasReplied = false;
     }
 
     // ========== SETTER METHODS ==========
@@ -65,6 +69,14 @@ public class Enquiry {
      */
     public void setReply(Enquiry reply) {
         this.replies.add(reply);
+    }
+    
+    public void setStringReply(String stringReply) {
+    	this.reply = stringReply;
+    }
+    
+    public void setReplyBoolean(boolean replyBoolean) {
+    	this.hasReplied = replyBoolean;
     }
 
     // ========== GETTER METHODS ==========
@@ -112,5 +124,13 @@ public class Enquiry {
      */
     public ArrayList<Enquiry> getReplies() {
         return this.replies;
+    }
+    
+    public String getStringReply() {
+    	return reply;
+    }
+    
+    public boolean getReplyBoolean() {
+    	return this.hasReplied;
     }
 }

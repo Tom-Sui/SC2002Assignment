@@ -55,7 +55,7 @@ public class App{
         hdbManagers = init.setManagerManagedProjects(hdbManagers,projects);
 
         //Initialize Application info
-        //ArrayList<Application> applications = init.loadApplicationInfo(applicant, projects);
+        ArrayList<Application> applications = init.loadApplicationInfo(applicant, projects);
 
         
         // General general = new General();

@@ -109,6 +109,11 @@ public class HDBManager extends User{
     	projectManager.toggleVisibility(currentProjects, projectName, username);
     }
     
+    public void updateMaritalStatus(ArrayList<Project> currentProjects)
+    {
+    	projectManager.updateMaritalStatus(currentProjects);
+    }
+    
     public ArrayList<Project> createProject(String projectDetails,ArrayList<HDBManager> hdbManager, ArrayList<HDBOfficer> hdbOfficer)
     {
     	return projectManager.createProject(projectDetails, hdbManager, hdbOfficer);

@@ -84,8 +84,9 @@ public class ManagerInput {
             choice = scanner.nextInt();
             scanner.nextLine();
              
-            projects = init.LoadProjectInfo(hdbManagers, hdbOfficers); // restore changed data
-            manager.PastDateChecker(projects);  // verify past projects and ensure visibility OFF
+            projects = init.LoadProjectInfo(hdbManagers, hdbOfficers); // Restore modified data, if any
+            manager.PastDateChecker(projects);  // Verify past projects and ensure visibility OFF
+            manager.updateMaritalStatus(projects); // Update marital status to check during runtime
             
             switch(choice) {
             

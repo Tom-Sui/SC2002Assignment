@@ -22,8 +22,11 @@ public interface I_ProjectManager {
     // Method to toggle the visibility of a specific project.
     void toggleVisibility(ArrayList<Project> currentProjects, String projectName, String username);
     
-    // Method to perform a bulk check for past deadlines across all projects in the list.
+    // Method to perform a check for past deadlines across all projects in the list.
     void PastDateChecker(ArrayList<Project> currentProjects);
+    
+    // Method to set status across all projects in the list
+    void updateMaritalStatus(ArrayList<Project> currentProjects);
 
     // Method to create a new project and add it to the system.
     ArrayList<Project> createProject(String projectDetails, ArrayList<HDBManager> hdbManager, ArrayList<HDBOfficer> hdbOfficer);

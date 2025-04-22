@@ -67,6 +67,12 @@ public abstract class FlatType {
     public void setPrice(double price) { this.price = price; }
     
     /**
+     * Sets the marital status of the project
+     * @param set MaritalStatus condition
+     */
+    public void setAllowedGroups(ArrayList<MaritalStatus> allowedGroups){ this.allowedGroups = allowedGroups; }
+    
+    /**
      * Gets the number of available units.
      * @return current number of units
      */

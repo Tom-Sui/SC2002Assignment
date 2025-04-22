@@ -297,7 +297,8 @@ public abstract class BaseProjectManager implements I_ProjectManager, I_ListOutP
 				
 		for (FlatType flatD : flatDetails)
 		{
-			System.out.printf("      - Flat Type: %s, Units: %d, Price: $%.2f\n", flatD.getFlatTypeName(), flatD.getUnits(), flatD.getPrice());			
+			System.out.printf("      - Flat Type: %s, Units: %d, Price: $%.2f\n", flatD.getFlatTypeName(), flatD.getUnits(), flatD.getPrice());		
+			System.out.printf("        - Eligible Group(s): %s\n", flatD.getAllowedGroups());
 		}			
 		
 		System.out.printf("   - Application Period: %s to %s \n", currentProjects.get(i).getApplicationOpeningDate(), currentProjects.get(i).getApplicationClosingDate());
@@ -404,6 +405,38 @@ public abstract class BaseProjectManager implements I_ProjectManager, I_ListOutP
     	return false;
     }
     
-}
+    // Runtime call to update marital status for current flat types
+    @Override
+    public void updateMaritalStatus(ArrayList<Project> currentProjects) {
+    	// To update if needed
+        String twoRoom = "2-Room";
+        String threeRoom = "3-Room";
 
+        // Iterate through all projects
+        for (Project project : currentProjects) {
+            ArrayList<FlatType> flatDetails = project.getFlatTypes();
+
+            // Iterate through all flat types in that specific project
+            for (FlatType flatType : flatDetails) {
+                ArrayList<MaritalStatus> allowedGroups = new ArrayList<>();
+
+                // check the flat type name and units (in case, 0 unit)
+                if (flatType.getFlatTypeName().equals(twoRoom)) {
+                    if (flatType.getUnits() > 0) {
+                        // 2-Room allows both SINGLE and MARRIED
+                        allowedGroups.add(MaritalStatus.SINGLE);
+                        allowedGroups.add(MaritalStatus.MARRIED);
+                    }
+                } else if (flatType.getFlatTypeName().equals(threeRoom)) {
+                    if (flatType.getUnits() > 0) {
+                        // 3-Room allows only MARRIED
+                        allowedGroups.add(MaritalStatus.MARRIED);
+                    }
+                }
+                // Update the allowed groups for that specific flat type
+                flatType.setAllowedGroups(allowedGroups);
+            }
+        }
+    }
+}
 

@@ -157,6 +157,13 @@ public class Project {
     public void setVisibility(boolean visibility) {
     	this.visibility = visibility;
     }
+    /**
+     * Sets the marital status of the project
+     * @param set MaritalStatus condition
+     */
+    public void setAllowedGroups(ArrayList<MaritalStatus> allowedGroups){
+    	this.allowedGroups = allowedGroups;
+    }    
 
     //get methods
     /**

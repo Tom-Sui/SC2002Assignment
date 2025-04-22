@@ -5,131 +5,217 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-import javax.print.event.PrintJobAdapter;
-
+/**
+ * Provides general utility methods for file operations and object searching.
+ * <p>
+ * This class handles file editing operations for various data files and provides
+ * search functionality for different system entities.
+ * </p>
+ * 
+ * @see Project
+ * @see HDBManager
+ * @see HDBOfficer
+ * @see Applicant
+ */
 public class General {
-    private String DataFilePath = "./Data";
-    //This function will only add the new content at the end of the file
-    //If modified any of the txt files (e.g. ApplicantList.txt)
-    //Do run initializing function again to load new contents
-    
-    public void editFile(String filePath, String newContent, String target, String targetRow){
+    // private static String DataFilePath = "./Data";
+    /**
+     * Updates project information in the ProjectList.txt file.
+     * 
+     * @param project the Project object containing updated information
+     */
+    public static void editProjectFile(Project project) {
         String buffeString;
         String fileContent = "";
-        File projectFile = new File(filePath);
-
-        try{
+        File projectFile = new File("./Data/ProjectList.txt");
+        
+        try {
             Scanner scanner = new Scanner(projectFile);
-            while(scanner.hasNextLine()){
+            while(scanner.hasNextLine()) {
                 buffeString = scanner.nextLine();
-                if (buffeString.contains(targetRow)){
-                    System.out.println("write into file");
-                    buffeString = buffeString.replace(target, newContent);
-                }
+                    if (buffeString.contains(project.getProjectName())) {
+                        
+                    	System.out.println("Processing...");
+                        buffeString = project.toStore();
+                    }
                 fileContent = fileContent + buffeString + "\n";
             }
-            FileWriter writer = new FileWriter(DataFilePath + "/ProjectList.txt");
+
+            FileWriter writer = new FileWriter("./Data/ProjectList.txt");
             writer.write(fileContent);
             writer.close();
             scanner.close();
-        }catch (FileNotFoundException e){
-            System.out.println("Error occured while reading OfficerList.txt");
+        } catch (FileNotFoundException e) {
+            System.out.println("Error occurred while reading ./ProjectList.txt");
             e.printStackTrace();
-        }catch(IOException e){
-            System.out.println("Error occured when writing " + filePath);
+        } catch (IOException e) {
+            System.out.println("Error occurred when writing ./ProjectList.txt");
             e.printStackTrace();
         }
     }
-
-    public void editProjectFile(Project project){
+    /**
+     * Updates project information in the ProjectList.txt file.
+     * Specific used when updating the project name
+     * @param project the Project object containing updated information
+     * @param projectName the new project name
+     */
+    public static void editProjectFile(Project project,String projectName) {
         String buffeString;
         String fileContent = "";
-        File projectFile = new File(DataFilePath +  "/ProjectList.txt");
-        try{
-
+        File projectFile = new File("./Data/ProjectList.txt");
+        
+        try {
             Scanner scanner = new Scanner(projectFile);
-            while(scanner.hasNextLine()){
+            while(scanner.hasNextLine()) {
                 buffeString = scanner.nextLine();
-                if (buffeString.contains(project.getProjectName())){
-                    System.out.println("Updating new changes...");
-                    buffeString = project.toStore();
-                }
+                    if (buffeString.contains(project.getProjectName())) {
+                        System.out.println("Processing...");
+                        project.setProjectName(projectName);
+                        buffeString = project.toStore();
+                    }
                 fileContent = fileContent + buffeString + "\n";
             }
             
-            FileWriter writer = new FileWriter(DataFilePath + "/ProjectList.txt");
+            FileWriter writer = new FileWriter("./Data/ProjectList.txt");
             writer.write(fileContent);
             writer.close();
             scanner.close();
-
-        }catch (FileNotFoundException e){
-            System.out.println("Error occured while reading OfficerList.txt");
+        } catch (FileNotFoundException e) {
+            System.out.println("Error occurred while reading ./ProjectList.txt");
             e.printStackTrace();
-        }catch(IOException e){
-            System.out.println("Error occured when writing " + DataFilePath + "/ProjectList.txt");
+        } catch (IOException e) {
+            System.out.println("Error occurred when writing ./ProjectList.txt");
             e.printStackTrace();
         }
     }
-    
-    public void editOtherFile(String filePath, String fileType, String newContent, String target, String targetRow){
+    /**
+     * Generic file editing method for various file types.
+     * 
+     * @param filePath path to the file to edit
+     * @param content new content to insert
+     * editOtherFile
+     */
+    public static void editFile(String filePath, String content) {
+        String fileContent = "";
+        File projectFile = new File(filePath);
+
+        try {
+            Scanner scanner = new Scanner(projectFile);
+
+
+            while(scanner.hasNextLine()) {
+                fileContent = fileContent + scanner.nextLine() + "\n";
+            }
+            fileContent = fileContent + content + "\n";
+            
+            FileWriter writer = new FileWriter(filePath);
+            writer.write(fileContent);
+
+            writer.close();
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Error occurred while reading " + filePath);
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Error occurred when writing " + filePath);
+            e.printStackTrace();
+        }
+    }
+    /**
+     * Generic file editing method for various file types.
+     * 
+     * @param filePath path to the file to edit
+     * @param newContent new content to insert
+     * @param target target string to replace
+     * @param targetRow row containing the target string
+     */
+    // public static void editOtherFile(String filePath, String newContent, String target, String targetRow) {
+    public static void editFile(String filePath, String newContent, String target, String targetRow) {
         String buffeString;
         String fileContent = "";
         File projectFile = new File(filePath);
 
-        try{
+        try {
             Scanner scanner = new Scanner(projectFile);
-            // fileContent = fileContent + scanner.nextLine() + "\n";
-            //This may having issue if some
-            while(scanner.hasNextLine()){
+            while(scanner.hasNextLine()) {
                 buffeString = scanner.nextLine();
-                //check if search target in the String
-                if (buffeString.contains(targetRow)){
-                    //System.out.println(target);
+                if (buffeString.contains(targetRow)) {
                     buffeString = buffeString.replace(target, newContent);
                 }
                 fileContent = fileContent + buffeString + "\n";
             }
-            FileWriter writer = new FileWriter(DataFilePath + fileType);
+            FileWriter writer = new FileWriter(filePath);
             writer.write(fileContent);
             writer.close();
             scanner.close();
-        }catch (FileNotFoundException e){
-            System.out.println("Error occured while reading OfficerList.txt");
+        } catch (FileNotFoundException e) {
+            System.out.println("Error occurred while reading OfficerList.txt");
             e.printStackTrace();
-        }catch(IOException e){
-            System.out.println("Error occured when writing " + filePath);
+        } catch (IOException e) {
+            System.out.println("Error occurred when writing " + filePath);
             e.printStackTrace();
         }
+    }
+    
+    // ========== SEARCH METHODS ==========
+    /**
+     * Finds an HDBManager by name.
+     * 
+     * @param hdbManager list of HDBManagers to search
+     * @param checker identity to search for
+     * @return the matching HDBManager or null if not found
+     */
+    public static HDBManager findManager(ArrayList<HDBManager> hdbManager, String checker) {
+        for(HDBManager i : hdbManager) {
+            if(checker.equals(i.getNRIC())) {
+                return i;
+            }
+        }
+        return null;
     }
 
-    public HDBManager findManager(ArrayList<HDBManager> hdbManager,String name){
-        for(HDBManager i : hdbManager){
-            if(name.equals(i.getName())){
+    /**
+     * Finds an HDBOfficer by name.
+     * 
+     * @param hdbOfficer list of HDBOfficers to search
+     * @param checker identity to search for
+     * @return the matching HDBOfficer or null if not found
+     */
+    public static HDBOfficer findOfficer(ArrayList<HDBOfficer> hdbOfficer, String checker) {
+        for(HDBOfficer i : hdbOfficer) {
+            if(checker.equals(i.getNRIC())) {
                 return i;
             }
         }
         return null;
     }
-    public HDBOfficer findOfficer(ArrayList<HDBOfficer> hdbOfficer,String name){
-        for(HDBOfficer i : hdbOfficer){
-            if(name.equals(i.getName())){
-                return i;
-            }
-        }
-        return null;
-    }
-    public Project findProject(ArrayList<Project> project,String projectName){
-        for(Project i : project){
-            if(projectName.equals(i.getProjectName())){
+
+    /**
+     * Finds a Project by name.
+     * 
+     * @param project list of Projects to search
+     * @param projectName project name to search for
+     * @return the matching Project or null if not found
+     */
+    public static Project findProject(ArrayList<Project> project, String projectName) {
+        for(Project i : project) {
+            if(projectName.equals(i.getProjectName())) {
                 return i;
             }
         }
         return null;
     }
     
-    public Applicant findApplicant(ArrayList<Applicant> applicant,String NRIC){
-        for(Applicant i : applicant){
-            if(NRIC.equals(i.getNRIC())){
+    /**
+     * Finds an Applicant by NRIC.
+     * 
+     * @param applicant list of Applicants to search
+     * @param NRIC NRIC to search for
+     * @return the matching Applicant or null if not found
+     */
+    public static Applicant findApplicant(ArrayList<Applicant> applicant, String NRIC) {
+        for(Applicant i : applicant) {
+            if(NRIC.equals(i.getNRIC())) {
                 return i;
             }
         }

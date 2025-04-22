@@ -1,762 +1,370 @@
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.Date;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.io.BufferedReader;
-import java.io.FileReader;
 
+/**
+ * This class extends the User class and implements various interfaces
+ * for project management, input validation, and registration processes.
+ * <p>
+ * The HDBManager class provides methods to create, edit, delete projects, manage officer and applicant
+ * registrations, validate inputs, and handle enquiries related to housing projects.
+ * </p>
+ * 
+ * @see User
+ * @see I_ProjectManager
+ * @see I_ListOutProjects
+ * @see I_InputValidator
+ * @see I_ManagerOfficerRegistration
+ * @see I_ManagerApplicantRegistration
+ */
 public class HDBManager extends User{
-    private String DataFilePath = "./src/Data";   // TO ADD /src/ FOR ECLIPSE
-    private ArrayList<Project> managedProjects = new ArrayList<Project>();
-    General general = new General();
 
-    //set managed projects
-    public void setManagedProjects(Project project){
-        this.managedProjects.add(project);
+	// Depends on abstraction classes
+	private final I_ProjectManager projectManager;
+	private final I_ListOutProjects listOutProjects;
+	private final I_InputValidator inputValidator;
+	private final I_ManagerOfficerRegistration managerOfficerRegistration;
+	private final I_ManagerApplicantRegistration managerApplicantRegistration;
+	private final I_Enquiry enquiry;
+    /**
+     * Default constructor for HDBManager.
+     *
+     * @param projectManager object for managing projects
+     * @param listOutProjects object for listing out projects
+     * @param inputValidator object for handling input validation
+     * @param managerOfficerRegistration object for handling officer registrations
+     * @param managerApplicantRegistration object for handling officer registrations
+     * @param enquiry enquiry object for handling enquiries
+     */
+    public HDBManager(I_ProjectManager projectManager, I_ListOutProjects listOutProjects, 
+    				  I_InputValidator inputValidator, I_ManagerOfficerRegistration managerOfficerRegistration,
+    				  I_ManagerApplicantRegistration managerApplicantRegistration, I_Enquiry enquiry)
+    {
+    	this.projectManager = projectManager;
+    	this.listOutProjects = listOutProjects;
+    	this.inputValidator = inputValidator;
+    	this.managerOfficerRegistration = managerOfficerRegistration;
+    	this.managerApplicantRegistration = managerApplicantRegistration;
+    	this.enquiry = enquiry;
     }
+    
+    
+    
+    // Abstract methods that must be implemented by subclasses
 
-    public ArrayList<Project> getProject(){
-        if (this.managedProjects == null) {
-            System.out.println("Current manager has no managed projects");
-            return null;
-        }
-        return this.managedProjects;
-    }
-
-    //Abstract function
-    public Enquiry createEnquiry(Project project, String message){
-        Enquiry[] enquiry = new Enquiry[10];
+    /**
+     * Creates a new enquiry for a specific project.
+     * 
+     * @param project The project the enquiry relates to
+     * @param message The enquiry message content
+     * @return The created Enquiry object
+     */
+    public Enquiry createEnquiry(Project project, String message) {
+    	Enquiry[] enquiry = new Enquiry[10];
         return enquiry[0];
-    }
-    public Enquiry[] viewEnquiries(){
-        Enquiry[] enquiry = new Enquiry[10];
+    };
+
+    /**
+     * Retrieves all enquiries associated with this user.
+     * @return An array of Enquiry objects
+     */
+    public Enquiry[] viewEnquiries() {
+    	Enquiry[] enquiry = new Enquiry[10];
         return enquiry;
-    }
-    public void editEnquiry(Enquiry enquiry, String newMessage){
-
-    }
-    public void deletEnquiry(Enquiry enquiry){
-
-    }
-    public boolean canApply(Project project){
-        return false;
-    }
-
-
-    //HDB manager functions
-    //Yet: update the program to track managed project dates
-    public ArrayList<Project> createProject(String projectDetails, ArrayList<Project> projects,ArrayList<HDBManager> hdbManager, ArrayList<HDBOfficer> hdbOfficer){
-        String filecontent = "";
-
-        File officerFile = new File(DataFilePath + "/ProjectList.txt");
-        Init init = new Init();
-
-        try{
-            Scanner scanner = new Scanner(officerFile);
-
-            while(scanner.hasNextLine()){
-                filecontent = filecontent + scanner.nextLine() + "\n";
-            }
-            filecontent = filecontent + projectDetails;
-
-            String[] buffer = projectDetails.split(",");
-
-            Project project = init.setProject(buffer, hdbManager, hdbOfficer);
-
-            if(project == null){
-                scanner.close();
-                return init.LoadProjectInfo(hdbManager,hdbOfficer);
-            }
-
-            this.managedProjects.add(project);
-
-            FileWriter writer = new FileWriter(DataFilePath + "/ProjectList.txt");
-            writer.write(filecontent);
-            writer.close();
-            scanner.close();
-            return init.LoadProjectInfo(hdbManager,hdbOfficer);
-        }catch (FileNotFoundException e){
-            System.out.println("Error occured while reading ProjectList.txt");
-            e.printStackTrace();
-            return init.LoadProjectInfo(hdbManager,hdbOfficer);
-        }catch(IOException e){
-            System.out.println("Error occured while writing into ProjectList.txt");
-            e.printStackTrace();
-            return init.LoadProjectInfo(hdbManager,hdbOfficer);
-        }
-    }
-
-    //If call this function
-    //Do remember to run init.LoadProjectInfo() to restore the changed project info
-    public boolean editProject(String projectName, String updateContent
-							, String target, ArrayList<Project> currentProjects
-							, int i
-							, ArrayList<HDBManager> hdbManager
-							,ArrayList<HDBOfficer> hdbOfficer){
-
-        General general = new General();
-
-        if (managedProjects == null) {
-            System.out.println("\nNo managed projects");
-            return false;
-        }
-        
-        else
-        {
-			DateFormat formatter = new SimpleDateFormat("d/M/yyyy");
-        	// checking is done in Manager Main
-        	switch(target)
-        	{
-        	// Update Project Name
-        	case "0":
-        		general.editFile(DataFilePath + "/ProjectList.txt", updateContent,projectName,projectName);
-        		
-        		// set project name in project.java
-        		currentProjects.get(i).setProjectName(updateContent);        		
-        		System.out.println("Project Name changed to: " + updateContent);
-        		break;
-        		
-        		// Update Neighborhood
-        	case "1":
-        		general.editFile(DataFilePath + "/ProjectList.txt", updateContent, currentProjects.get(i).getNeiborhood(), projectName);
-        		
-        		// set neighborhood in project.java
-        		currentProjects.get(i).setNeiborhood(updateContent);
-        		
-        		System.out.println("Neighbour changed to: " + updateContent);
-        		break;
-        		
-        		// update pricing
-        	case "2":
-        		ArrayList<FlatType> flatDetail = currentProjects.get(i).getFlatTypes();		        		
-        		String[] flatPricing = updateContent.split(",");
-        		// 0 = flat Types
-        		// 1 = pricing
-        		
-        		// function to identify which flat to update
-        		for (int x = 0; x < flatDetail.size(); x++)
-        		{
-        			if(flatDetail.get(x).getFlatTypeName().equals(flatPricing[0]))
-        			{
-        				// get old content to update
-        				String oldContents = flatDetail.get(x).getFlatTypeName() + "," + flatDetail.get(x).getUnits() + "," + String.format("%.0f", flatDetail.get(x).getPrice());
-        				String updatedContents = flatDetail.get(x).getFlatTypeName() + "," + flatDetail.get(x).getUnits() + "," + flatPricing[1];
-        		        				
-        				// update to .txt
-        				general.editFile(DataFilePath + "/ProjectList.txt", updatedContents, oldContents, projectName);
-        				
-        				// set pricing in project.java
-        				flatDetail.get(x).setPrice(Double.parseDouble(flatPricing[1]));
-        				
-        				System.out.printf("Pricing of %s is updated to $%s.\n", flatPricing[0], flatDetail.get(x).getPrice());
-        			}
-        		}        		        		
-        		break;
-        		
-        		// Update Number of Units
-        	case "3":        		        		
-        		ArrayList<FlatType> flatDetails = currentProjects.get(i).getFlatTypes();		        		
-        		String[] flatStr = updateContent.split(",");
-        		// 0 = flat Types
-        		// 1 = number of updated units
-        		        		
-        		// function to identify which flat to update
-        		for (int x = 0; x < flatDetails.size(); x++)
-        		{        			
-        			if (flatDetails.get(x).getFlatTypeName().equals(flatStr[0]))
-        			{
-        				// get old content to update
-        				String oldContent = flatDetails.get(x).getFlatTypeName() + "," + flatDetails.get(x).getUnits();
-        				
-        				// update to .txt 
-        				general.editFile(DataFilePath + "/ProjectList.txt", updateContent, oldContent, projectName);
-        				
-        				// set units in project.java
-        				flatDetails.get(x).setUnits(Integer.parseInt(flatStr[1]));
-        				
-        				System.out.printf("%s is updated to %s units.\n", flatStr[0], flatDetails.get(x).getUnits());
-        			}
-        		}	
-        		break;
-        		
-        		// Change Application Opening Date
-        	case "4":
-        		general.editFile(DataFilePath + "/ProjectList.txt", 
-								updateContent, 
-								formatter.format(currentProjects.get(i).getApplicationOpeningDate()).toString(),
-								projectName);
-        		
-        		// set application date in project.java
-        		//currentProjects.get(i).setApplicationOpeningDate(updateContent);
-        		
-        		System.out.println("Opening date changed to: " + updateContent);
-        		break;
-        		
-        		// Change Application Closing Date
-        	case "5":
-				// System.out.println(formatter.format(currentProjects.get(i).getApplicationClosingDate()));
-        		general.editFile(DataFilePath + "/ProjectList.txt", 
-								updateContent, 
-								formatter.format(currentProjects.get(i).getApplicationClosingDate()).toString(), 
-								projectName);
-        		
-        		// set application date in project.java
-        		
-        		
-        		System.out.println("Closing date changed to: " + updateContent);
-        		break;        		
-        		
-        	/*
-        		// Change Manager in-Charge
-        	case "7":
-        		
-        		//DONE: add the project to another manager
-        		//DONE: delet project from current manager
-        		if(general.findManager(hdbManager, updateContent)!= null){
-        			general.findManager(hdbManager, updateContent).setManagedProjects(this.deletProject(general.findProject(this.managedProjects,projectName)));
-        		}else{
-        			System.out.println("New manager does not exist");
-        			break;
-        		}
-        		
-        		//DONE: change project manager name
-        		general.editFile(DataFilePath + "/ProjectList.txt", updateContent,this.getName(),projectName);
-        		break;
-        		
-        	*/        		
-        		
-        	default:
-        		System.out.println("!!!Error input!!!");
-        		break;        		
-        	}        	
-        	return true;
-        }
-    }
+    };
     
-    public Project deletProject(Project targetProject){
-        // ArrayList<Project> tempProject = new Project[this.managedProjects.size() - 1];
-        File projectFile = new File("./src/Data/ProjectList.txt");
-        String fileContent = "";
-        String buffer;
-        try{
-            Scanner scanner = new Scanner(projectFile);
-            while(scanner.hasNextLine()){
-                buffer = scanner.nextLine();
-                String[] data = buffer.split(",");
+    /**
+     * Modifies an existing enquiry.
+     * 
+     * @param enquiry The enquiry to modify
+     * @param newMessage The new message content
+     */
+    public void editEnquiry(Enquiry enquiry, String newMessage) {};
 
-                if(data[0].equals(targetProject.getProjectName())){
-                    continue;
-                }
-                fileContent = fileContent + buffer + "\n";
-            }
-            FileWriter writer = new FileWriter("./src/Data/ProjectList.txt");
-            writer.write(fileContent);
-            writer.close();
-            scanner.close();
-        }catch (FileNotFoundException e){
-            System.out.println("Error occured while reading ProjectLists.txt");
-            e.printStackTrace();
-            return null;
-        }catch(IOException e){
-            System.out.println("Error occured when writing ProjectLists.txt");
-            e.printStackTrace();
-        }
-
-        if(this.managedProjects == null){
-            System.out.println("No project managed");
-            return targetProject;
-        }
-
-        this.managedProjects.remove(targetProject);
-        System.out.println("Project " + targetProject.getProjectName() + " removed");
-        return null;
+    /**
+     * Deletes an existing enquiry.
+     * @param enquiry The enquiry to delete
+     */
+    public void deletEnquiry(Enquiry enquiry) {};
+    
+    /**
+     * Sets the managed projects for the HDB Manager.
+     * 
+     * @param project The project to manage
+     */
+    public void setManagedProjects(Project project)
+    {
+    	projectManager.setManagedProjects(project);
     }
-    
-    
- // to check if Project is valid -- return that specific project using projectName (Unique indicator)
-    public Project returnProject(ArrayList<Project> currentProjects, String projectName) {
-    	
-    	for (int i=0; i<currentProjects.size(); i++)
-    	{
-    		// check if project is valid
-    		if (currentProjects.get(i).getProjectName().equals(projectName))
-    		{  
-    			// return valid project
-    			return currentProjects.get(i);
-    		}
-    	}    	
-    	// invalid project	
-    	return null;
+    /**
+     * Checks if a project has a past date.
+     * 
+     * @param currentProjects The list of current projects in the system
+     */
+    public void PastDateChecker(ArrayList<Project> currentProjects)
+    {
+    	projectManager.PastDateChecker(currentProjects);
     }    
-    
-    // return Current Active Project (filter manager name)
+    /**
+     * Checks if a project has a past date.
+     * 
+     * @param currentProjects The list of current projects in the system
+     * @param projectName The name of the project to check
+     * @return true if the project has a past date, false otherwise
+     */
+    public boolean PastDateCheckerProject(ArrayList<Project> currentProjects, String projectName)
+    {
+    	return projectManager.PastDateCheckerProject(currentProjects, projectName);
+    }    
+    /**
+     * Returns the current active project for a specific user.
+     * 
+     * @param currentProjects The list of current projects in the system
+     * @param userName The NRIC of the HDB Manager or Project Officer managing the project
+     * @param printCheck Flag to indicate whether to print the project details
+     * @return The current active Project object for the specified user
+     */
     public Project currentActiveProject(ArrayList<Project> currentProjects, String userName, boolean printCheck)
     {
-    	Date currentTime = new Date();
-    	
-    	for (int i=0; i<currentProjects.size(); i++)
-    	{
-    		// check for current manager projects only
-    		if (currentProjects.get(i).getHDBManager().getName().equals(userName))
-    		{
-    			// run through to return project within application period 
-    			// if within application period and visibility is ON
-    			if (!currentTime.before(currentProjects.get(i).getApplicationOpeningDate()) && !currentTime.after(currentProjects.get(i).getApplicationClosingDate()) && currentProjects.get(i).getVisibility() == true)
-    			{
-    				if(printCheck)
-    				{	// print active project only when true
-    					this.listRequiredProjects(currentProjects, i);    					
-    				}
-    				// return project within application period
-    				return currentProjects.get(i);
-    			}
-    		}
-    	}    	
-    	if(printCheck)
-    	{
-    		System.out.println("No Active Project at the moment!\n");    		
-    	}
-    	return null;    	
-    }
-    
-    // return Boolean to check if Project passed in is within the application period (ProjectName as indicator to which project)
-    public boolean isWithinApplicationPeriod(ArrayList<Project> currentProjects, String projectName)
+    	return projectManager.currentActiveProject(currentProjects, userName, printCheck);
+    }    
+    /**
+     * Returns a project object based on the project name.
+     * 
+     * @param currentProjects The list of current projects in the system
+     * @param projectName The name of the project to return
+     * @return The Project object associated with the given project name
+     */
+    public Project returnProject(ArrayList<Project> currentProjects, String projectName)
     {
-    	Date currentTime = new Date();
-    	
-    	for(int i=0; i<currentProjects.size(); i++)
-    	{
-    		// find the project
-    		if(currentProjects.get(i).getProjectName().equals(projectName))
-    		{
-    			// Check if the current time is within the application period
-    			return !currentTime.before(currentProjects.get(i).getApplicationOpeningDate()) && !currentTime.after(currentProjects.get(i).getApplicationClosingDate());
-    		}
-    	}    	
-    	return false; // project not found
+    	return projectManager.returnProject(currentProjects, projectName);
     }
-    
-    // General Function: print out all the required projects (Place inside loop, with index specified)
-    public void listRequiredProjects(ArrayList<Project> currentProjects, int i) {
-    	
-		System.out.printf("Project Name: %s | Neighborhood: %s | Visibility: %s \n", currentProjects.get(i).getProjectName(), currentProjects.get(i).getNeiborhood(), currentProjects.get(i).getVisibility());  
-		
-		// CALL flat types
-		System.out.println("   - Flat Details:");
-		
-		ArrayList<FlatType> flatDetails = currentProjects.get(i).getFlatTypes();			
-		for (FlatType flatD : flatDetails)
-		{
-			System.out.printf("      - Flat Type: %s, Units: %d, Price: $%.2f\n", flatD.getFlatTypeName(), flatD.getUnits(), flatD.getPrice());			
-		}			
-		
-		System.out.printf("   - Application Period: %s to %s \n", currentProjects.get(i).getApplicationOpeningDate(), currentProjects.get(i).getApplicationClosingDate());
-		System.out.printf("   - HDB Manager: %s \n", currentProjects.get(i).getHDBManager().getName());
-		System.out.printf("   - Available HDB Officer Slots: %s \n", currentProjects.get(i).getAvailableOfficerSlots());
-		
-		// Officer in ArrayList, need a loop to get each name
-		System.out.print("   - HDB Officer In-Charge:");
-		for (int k=0; k < currentProjects.get(i).getHDBOfficer().size(); k++)
-		{
-			if (currentProjects.get(i).getHDBOfficer().get(k) != null)
-			{
-				System.out.printf(" %s ", currentProjects.get(i).getHDBOfficer().get(k).getName());  		    					
-			}
-			else
-			{
-				System.out.print(" Not set");
-				break;
-			}
-		}    			   			
-		System.out.println("\n");    		
+    /**
+     * Lists all existing projects in the system.
+     * 
+     * @param currentProjects The list of current projects in the system
+     */
+    public void listAllExistingProjects(ArrayList<Project> currentProjects)
+    {
+    	listOutProjects.listAllExistingProjects(currentProjects);
     }
-    
-    
-    // print out all the existing projects
-    public void listAllExistingProjects(ArrayList<Project> currentProjects) {
-    	
-    	System.out.println("=== List of All Existing Projects ===\n");
-    	for (int i=0; i<currentProjects.size(); i++)
-    	{
-    		this.listRequiredProjects(currentProjects, i);
-    	}
-    	
-    	System.out.printf("Total Projects: %d\n", currentProjects.size());
-    	System.out.println("=============================== \n");
-    }
-    
-    
-    // print out only manager-in-charge projects (filter manager name)
+    /**
+     * Lists all projects associated with a specific user.
+     * 
+     * @param currentProjects The list of current projects in the system
+     * @param username The NRIC of the HDB Manager or Project Officer managing the project
+     */
     public void listSpecificProjects(ArrayList<Project> currentProjects, String username)
     {
-    	int count=0;
-    	System.out.println("=== List of All Your Existing Projects ===\n");
-    	
-    	for (int i=0; i<currentProjects.size(); i++)
-    	{
-    		// to check for current userName and print out only their projects
-    		if (currentProjects.get(i).getHDBManager().getName().equals(username))
-    		{
-    			this.listRequiredProjects(currentProjects, i);
-    			count += 1;
-    		}
-    	}
-    	
-		System.out.printf("Total Projects: %d\n", count);
-		System.out.println("=============================== \n");
+    	listOutProjects.listSpecificProjects(currentProjects, username);
+    }    
+    /**
+     * Toggles the visibility of a project for a specific user.
+     * 
+     * @param currentProjects The list of current projects in the system
+     * @param projectName The name of the project to toggle visibility for
+     * @param username The NRIC of the HDB Manager or Project Officer managing the project
+     */
+    public void toggleVisibility(ArrayList<Project> currentProjects, String projectName, String username)
+    {
+    	projectManager.toggleVisibility(currentProjects, projectName, username);
     }
-
-    // return boolean visibility to check for Applicant & HDB Manager
-    public void toggleVisibility(ArrayList<Project> currentProjects, String projectName){
-    	
-    	//We are only toggling the visibility of the project that the manager wants to toggle
-    	for (int i=0; i<currentProjects.size(); i++) {
-    		if(currentProjects.get(i).getProjectName().equals(projectName)) {
-    			
-    			if(currentProjects.get(i).getVisibility()) {
-
-    				// update the .txt file 
-    				general.editFile(DataFilePath + "/ProjectList.txt", "false", String.valueOf(currentProjects.get(i).getVisibility()), projectName);
-    				
-    				// update project.java side
-    				currentProjects.get(i).setVisibility(false);    				
-    				System.out.printf("Updated Project Visibility: '%s' -- OFF.\n", currentProjects.get(i).getProjectName());
-    				
-    			} 
-    			else 
-    			{   				    				
-    				// update the .txt file 
-    				general.editFile(DataFilePath + "/ProjectList.txt", "true", String.valueOf(currentProjects.get(i).getVisibility()), projectName);
-    				
-    				// update project.java side
-    				currentProjects.get(i).setVisibility(true);
-    				System.out.printf("Updated Project Visibility: '%s' -- ON.\n", currentProjects.get(i).getProjectName());
-    			}    			    			
-    		}
-    	}    	
+    /**
+     * Updates the marital status of applicants in the system.
+     * 
+     * @param currentProjects The list of current projects in the system
+     */
+    public void updateMaritalStatus(ArrayList<Project> currentProjects)
+    {
+    	projectManager.updateMaritalStatus(currentProjects);
+    }
+    /**
+     * Creates a new project in the system.
+     * 
+     * @param projectDetails The details of the project to create
+     * @param hdbManager The list of HDB managers in the system
+     * @param hdbOfficer The list of HDB officers in the system
+     * @return The created Project object
+     */
+    public ArrayList<Project> createProject(String projectDetails,ArrayList<HDBManager> hdbManager, ArrayList<HDBOfficer> hdbOfficer)
+    {
+    	return projectManager.createProject(projectDetails, hdbManager, hdbOfficer);
+    }
+    /**
+     * Edits a project in the system.
+     * 
+     * @param updateContent The content to update
+     * @param target The target project to edit
+     * @param currentProjects The list of current projects in the system
+     * @param i The index of the project to edit
+     * @return true if the project was successfully edited, false otherwise
+     */
+    public boolean editProject(String updateContent, String target, ArrayList<Project> currentProjects, int i)
+    {
+    	return projectManager.editProject(updateContent, target, currentProjects, i);
+    }
+    /**
+     * Deletes a project from the system.
+     * 
+     * @param targetProject The project to delete
+     * @return The deleted project object
+     */
+    public Project deletProject(Project targetProject)
+    {
+    	return projectManager.deletProject(targetProject);
+    }
+    /**
+     * Ensures a project name is unique by checking against existing projects
+     * 
+     * @param currentProjects list of current projects (must not be null, used to verify project references)
+     * @param scanner scanner object
+     * @param prompt prompt message
+     * @return returns a unique project name input from the user
+     */
+    // Input validation
+    public String uniqueProjectName(ArrayList<Project> currentProjects, Scanner scanner, String prompt)
+    {
+    	return inputValidator.uniqueProjectName(currentProjects, scanner, prompt);
+    }
+    /**
+     * Validates and returns a string input from the user
+     * @param scanner scanner object
+     * @param prompt prompt message
+     * @return returns a string input from the user
+     */
+    public String validateString(Scanner scanner, String prompt)
+    {
+    	return inputValidator.validateString(scanner, prompt);
+    }
+    /**
+     * Validates and returns an integer input (as a string) from the user
+     * @param scanner scanner object
+     * @param prompt prompt message
+     * @return returns an integer input (as a string) from the user
+     */
+    public String validateInteger(Scanner scanner, String prompt)
+    {
+    	return inputValidator.validateInteger(scanner, prompt);
+    }
+    /**
+     * Verifies and returns a valid date input from the user
+     * @param scanner scanner object
+     * @param prompt prompt message
+     * @return returns a valid date input from the user
+     */
+    public String verifyDate(Scanner scanner, String prompt)
+    {
+    	return inputValidator.verifyDate(scanner, prompt);
+    }
+    /**
+     * Checks if the given opening and closing dates are logically valid
+     * @param openingDate opening date
+     * @param closingDate closing date
+     * @return returns true if the given opening and closing dates are logically valid, false otherwise
+     */ 
+    public boolean ValidDateChecker(String openingDate, String closingDate)
+    {
+    	return inputValidator.ValidDateChecker(openingDate, closingDate);
+    }
+    /**
+     * Validates a date specifically for editing purposes
+     * @param openingDate opening date
+     * @param closingDate closing date
+     * @param forOpening true if the date is for opening, false if for closing
+     * @return returns true if the date is valid, false otherwise
+     */
+    public boolean ValidDateCheckerforEditing(String openingDate, String closingDate, boolean forOpening)
+    {
+    	return inputValidator.ValidDateCheckerforEditing(openingDate, closingDate, forOpening);
+    }
+    /**
+     * Verifies and returns a valid number of officer slots input from the user
+     * @param scanner scanner object
+     * @param prompt prompt message
+     * @return returns a valid number of officer slots input from the user
+     */
+    public String verifyOfficerSlots(Scanner scanner, String prompt)
+    {
+    	return inputValidator.verifyOfficerSlots(scanner, prompt);
+    }
+        
+    
+    // Manager Officer Registration
+    /**
+     * Views the list of officer registrations.
+     */
+    public void viewOfficerRegistrationList()
+    {
+    	managerOfficerRegistration.viewOfficerRegistrationList();
+    }
+    /**
+     * Approves or rejects officer registration requests.
+     * 
+     * @param currentProjects The list of current projects in the system
+     * @param applicants The list of applicants in the system
+     * @param HDBOfficers The list of HDB officers in the system
+     * @param userName The NRIC of the HDB Manager or Project Officer managing the project
+     */
+    public void approveOrRejectOfficerRegistration(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, ArrayList<HDBOfficer> HDBOfficers, String userName)
+    {
+    	managerOfficerRegistration.approveOrRejectOfficerRegistration(currentProjects, applicants, HDBOfficers, userName);
     }
     
-    public void viewOfficerRegistrationList() {
-    	
-    	String filePath = "./src/Data/OfficerRegistrationList.txt"; // change this if your path is different
-
-        try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-            String line;
-            
-            int i =1;
-            
-            while ((line = br.readLine()) != null) {
-                // Split the line by comma
-            	
-                String[] parts = line.split(",");
-
-                if (parts.length == 4) {
-                    String officerName = parts[0].trim();
-                    String officerNRIC = parts[1].trim();
-                    String projectName = parts[2].trim();
-                    String registrationStatus = parts[3].trim();
-
-                    // Do something with registrationStatus
-                    System.out.printf("%d. %s|%s|%s|%s\n", i,officerName,officerNRIC,projectName,registrationStatus); 
-                } 
-                i++;
-            }
-        } catch (IOException e) {
-            System.err.println("Error reading the file: " + e.getMessage());
-        }
-
-    	
-    	
+    /**
+     * Approves or rejects officer withdrawal requests.
+     * @param currentProjects the list of current projects in the system
+     * @param applicants the list of applicants in the system   
+     * @param username  the username of the HDB Manager or Project Officer managing the project
+     */
+    // Manager Applicant Registration
+    public void approveOrRejectApplication(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, String username)
+    {
+    	managerApplicantRegistration.approveOrRejectApplication(currentProjects, applicants, username);
     }
-    public void approveOrRejectOfficerRegistration(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, ArrayList<HDBOfficer> HDBOfficers, String userName){
-
-    	
-    	
-    	/*When function called, we will run through officerRegistration list, first for loop will be size of officer list
-    	 * Will check if status is pending
-    	 * 		If no, go next officer
-    	 * 		If yes, get officer NRIC and projectName
-    	 * 
-    	 * 
-    	 * Check if manager is managing project
-    	 * Check if request is pending
-    	 * Check if officer is in applicants /If yes need reject
-    	 * Check if officer is handling another project within date
-    	 * 		Check if officer is handling another project in projectlist
-    	 * 			If no, approve
-    	 * 			If yes, get project endDate check currentProject's startDate or get project startDate and currentProject's endDate
-    	 * 			Check if startDate of registeredProject is before endDate of alreadyRegisteredProject
-    	 * 			Check if startDate or endDate of RegisteringProject is in between startDate and endDate of alreadyRegisteredProject
-    	 * Check if there is slot for the project
-    	 * 
-    	 */
-    	OfficerRegistrationStatus status;
-    	General general = new General();
-    	
-    	 String filePath = "./src/Data/OfficerRegistrationList.txt"; // change this if your path is different
-
-         try (BufferedReader br = new BufferedReader(new FileReader(filePath))) {
-             String line;
-             
-             //Run through each officer registration
-             while ((line = br.readLine()) != null) {
-                 String[] parts = line.split(",");
-                 
-                 boolean approved = false;
-                 
-
-                 if (parts.length == 4) {
-                     String officerName = parts[0].trim(); 
-                     String officerNRIC = parts[1].trim();
-                     String projectName = parts[2].trim();
-                     String registrationStatus = parts[3].trim();
-                     status = OfficerRegistrationStatus.valueOf(registrationStatus.toUpperCase());
-                     
-                     //Find the index of project with projectName
-                     Project index = general.findProject(currentProjects, projectName);
-                     
-                     
-                     //Check if manager is managing the current project
- 
-                    	 //Check if registrationStatus is pending
-                    	 if(index != null && index.getHDBManager().getName().equals(userName) && status == OfficerRegistrationStatus.PENDING) {
-                    	
-                    		 
-                    		 //Check if officer NRIC is in applicant list 
-                    		 Applicant NRICindex = general.findApplicant(applicants, officerNRIC);
-                    		 
-                    		 
-                    		 //Officer is in applicants
-                    		 if(NRICindex !=null) {
-                    			 rejectRegistration(filePath, officerNRIC);
-                    			 System.out.printf("Officer %s has been rejected from Project %s as he/she is in applicants list\n", officerName,projectName);
-                    			 continue;
-                    		 }
-                    		 
-                    		 //To indicate when to break loop to go to next officerRegistration if officer is rejected
-                    		 boolean conflict = false;
-                    		 
-                    		 
-                    		 
-                    			 
-                    		 //Loop through projects and get managers 
-                    		 for(Project project : currentProjects) {
-                    			 
-                    				//Check that the current project is not the project they are registering for 
-                    				 if(!project.getProjectName().equals(projectName)) {
-                    					 //Get officers for the current project
-                    					 ArrayList<HDBOfficer> officers = project.getHDBOfficer();
-                    					 //Go through each officer in the project to check if the officer is handling the current project
-                    					 for(HDBOfficer officer : officers) {
-                    						 //If officer is in this project, check date
-                    						 if(officer != null && officer.getName().equals(officerName)){
-                    							 
-                    							 //Checks if start date of registeringProject is in between start and end date of current project they are already handling 
-                    							 boolean startDateConflict = ((index.getApplicationOpeningDate().after(project.getApplicationOpeningDate()) 
-                    									 && index.getApplicationOpeningDate().before(project.getApplicationClosingDate())) || index.getApplicationOpeningDate().equals(project.getApplicationClosingDate()));
-                    							//Checks if end date date of registeringProject is in between start and end date of current project they are already handling
-                    							 boolean endDateConflict = ((index.getApplicationClosingDate().after(project.getApplicationOpeningDate())
-                    									 && index.getApplicationClosingDate().before(project.getApplicationClosingDate())) || index.getApplicationClosingDate().equals(project.getApplicationOpeningDate()));
-                    							 //If start date or end date has a conflict, reject registration
-                    							 if( startDateConflict || endDateConflict) {
-                    								 conflict = true; //Set conflict to true
-                    								 rejectRegistration(filePath,officerNRIC);
-                    								 System.out.printf("Officer %s has been rejected from Project %s as he/she is already handling another project within the time period\n", officerName,projectName);
-                    								 break;
-                    							 }
-                    							 
-                    					}
-                    				 }
-                    					 
-                    				 if(conflict) break; //If conflict is set to true, it will go out of the projects loop
-                    				 
-                    					
-                    	
-                    				}	 
-                    				 
-                    			 }
-                    		 
-                    		if(conflict) continue;//If conflict is true, it will go to next officer in RegistrationList
-                    		
-                    		HDBOfficer currentOfficer = general.findOfficer(HDBOfficers, officerName);
-                    		
-                    		ArrayList<HDBOfficer> currentOfficers = index.getHDBOfficer();
-                    		String officerNames = "";
-                    		
-                    		for (int i = 0; i < currentOfficers.size(); i++) {
-                    		    HDBOfficer officer = currentOfficers.get(i);
-                    		    if (officer != null) {
-                    		        officerNames += officer.getName();
-                    		        // Add "&" if it's not the last non-null officer
-                    		        // Look ahead to see if there is another non-null officer
-                    		        for (int j = i + 1; j < currentOfficers.size(); j++) {
-                    		            if (currentOfficers.get(j) != null) {
-                    		                officerNames += " & ";
-                    		                break;
-                    		            }
-                    		        }
-                    		    }
-                    		}
-                    	
-                    		
-                    		
-                    			 
-                    		if(index.getAvailableOfficerSlots() == 0) {
-                    				rejectRegistration(filePath, officerNRIC);
-                    				System.out.printf("Officer %s has been rejected from Project %s as there are no more available slots\n", officerName,projectName);
-                    		} else {
-                    			    approveRegistration(filePath, officerNRIC);
-                    				int slots = index.getAvailableOfficerSlots();
-                    				index.addHDBOfficer(currentOfficer);
-                    				String newOfficerNames = officerNames + "&" + officerName;
-                    				general.editFile(DataFilePath + "/ProjectList.txt",String.valueOf(slots-1) , String.valueOf(index.getAvailableOfficerSlots()) ,projectName);
-                    				if (officerNames.isEmpty()) {
-                    				   // general.editFile(DataFilePath + "/ProjectList.txt", officerName, "", projectName);
-                    				} else {
-                    				    general.editFile(DataFilePath + "/ProjectList.txt", newOfficerNames, officerNames, projectName);
-                    				}
-                    				index.setAvailableOfficerSlots(slots-1);
-                    				approved = true;
-                    				currentOfficer.setManagingOfficer(true);
-                    				System.out.printf("Officer %s has been approved for Project %s\n", officerName,projectName);
-                    			 }
-                    			 
-                    			 
-                    		 } 
-                    	 }
-                     
-
-                 
-             }
-         } catch (IOException e) {
-             System.err.println("Error reading the file: " + e.getMessage());
-         }
-
+    /**
+     * Processes an applicant's withdrawal request and updates the relevant records.
+     * @param currentProjects the list of current projects in the system
+     * @param applicants applicants to process (must not be null)
+     */
+    public void approveWithdrawal(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants)
+    {
+    	managerApplicantRegistration.approveWithdrawal(currentProjects, applicants);
     }
-    private void rejectRegistration(String filePath, String officerNRIC) {
-        general.editOtherFile(filePath,"/OfficerRegistrationList.txt", "REJECTED", "PENDING", officerNRIC);
-    }
-
-    // Approve the officer registration
-    private void approveRegistration(String filePath, String officerNRIC) {
-        general.editOtherFile(filePath,"/OfficerRegistrationList.txt", "APPROVED", "PENDING", officerNRIC);
+    /** 
+     * Generates a report of applicants based on specified filters.
+     * <p>
+     * This method allows a manager to generate a report of applicants by providing filters such as marital status and age range.
+     * * </p>
+     * 
+     * @param applicants The list of applicants in the system
+     * @param maritalStatusFilter The marital status filter for the report
+     * @param minAge The minimum age filter for the report
+     * @param maxAge The maximum age filter for the report
+     * 
+    */
+    public void generateApplicantReport(ArrayList<Applicant> applicants, String maritalStatusFilter, Integer minAge, Integer maxAge)
+    {
+    	managerApplicantRegistration.generateApplicantReport(applicants, maritalStatusFilter, minAge, maxAge);
     }
     
-    
-    public void approveOrRejectApplication(Applicant applicant, Project project){
-    	
-    	/*
-    	 * 
-    	 */
-    	
-
+    // Enquiries
+    /**
+     * Views the list of enquiries for a specific project.
+     * 
+     * @param currentProjects The list of current projects in the system
+     */
+    public void viewEnquiries(ArrayList<Project> currentProjects)
+    {
+    	managerOfficerRegistration.viewEnquiries(currentProjects);    	
     }
-    public void rejectApplication(Applicant applicant, Project project){
-
-    }
-    public void approveWithdrawal(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants){
-        // filter for applicant PENDINGWITHDRAWAL application 
-        // set application status to WITHDRAWN
-        // remove application from applicant
-        // remove application from project
-        // check if bookedflat 
-        // minus from available units 
-    	
-    	//Run through each applicant
-    	for(Applicant applicant : applicants) {
-    		
-    		//Get the application of the current applicant
-    		Application application = applicant.getCurrentApplication();
-    		
-    		//Check if applicant has an application and if application is PENDINGWITHDRAWAL
-    		if(application != null && application.getApplicationStatus() == ApplicationStatus.PENDINGWITHDRAWAL) {
-    			Project project = application.getProject(); //Get the project of the application
-    			FlatType flatType = application.getFlatType(); //Get flatType that was applied for
-    			
-    			
-    			//Set application status to withdrawn
-    			application.setApplicationStatus(ApplicationStatus.WITHDRAWN);
-    			
-    			//Remove from project's application list
-    			project.getApplications().remove(application);
-    			
-    			
-    			//Clear from applicant
-    			applicant.setCurrentApplication(null);
-    	
-    			ArrayList<FlatType> flatTypes = project.getFlatTypes(); // changes to .getFlatTypes from .getFlatTypesList
-    			
-    			
-    			//Check if a flat was booked
-    			if(application.getIsBooked()) {
-    				FlatTypeLogic.updateIncreaseFilteredFlatTypeUnits(flatTypes, flatType);
-    			}
-    			
-    			System.out.printf("Withdrawn application for applicant %s (NRIC: %s)\\n", 
-                        applicant.getName(), applicant.getNRIC());
-    		}
-    		
-    		
-    	}
-
-
-
-    }
-    
-    public void generateApplicantReport(ArrayList<Applicant> applicants, String maritalStatusFilter, Integer minAge, Integer maxAge){
-    	
-    	System.out.println("=== Applicant report ===");
-    	System.out.println("Name | Project | Flat Type | Age | Marital Status");
-    	
-    	for(Applicant applicant : applicants) {
-    		
-    		//Filter by marital status
-    		if(maritalStatusFilter != null && !applicant.getMaritalStatus().toString().equalsIgnoreCase(maritalStatusFilter)) {
-    			continue;
-    		}
-    		
-    		//Filter by age
-    		int age = applicant.getAge();
-    		if((minAge != null && age<minAge) || (maxAge != null && age>maxAge)) {
-    			continue;
-    		}
-    		
-    		
-    		Application application = applicant.getCurrentApplication();
-    		if(application ==null) {
-    			continue;}
-    			
-    		String projectName = application.getProject().getProjectName();
-    		String flatTypeStr = application.getFlatType().toString(); // Assuming FlatType has a toString method
-            int age2 = applicant.getAge();
-            String maritalStatus = applicant.getMaritalStatus().toString();
-                
-            System.out.printf("%s | %s | %s | %d | %s\n", 
-                        applicant.getName(), projectName, flatTypeStr, age2, maritalStatus);
-    			
-    		}
-    	}
-    
-    public void replyToEnquiry(Enquiry enquiry, String reply){
-
-    }
-
-    // private Project findProject(String projectName){
-    //     if(this.managedProjects != null){
-    //         for(Project project: this.managedProjects){
-    //             if(project.getProjectName().equals(projectName)){
-    //                 return project;
-    //             }
-    //         }
-    //     }
-    //     return null;
-    // }
-
+    /**
+     * Replies to an enquiry for a specific project.
+     * 
+     * @param currentProjects The list of current projects in the system
+     * @param NRIC The NRIC of the HDB Manager or Project Officer managing the project
+     * @param scanner Scanner object for user input
+     */
+    public void replyToEnquiry(ArrayList<Project> currentProjects, String NRIC, Scanner scanner)
+    {
+    	enquiry.replyToEnquiry(currentProjects, NRIC, scanner);
+    }    
 }

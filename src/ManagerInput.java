@@ -2,18 +2,65 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 // For Manager Interfaces
-
+/**
+ * Provides the command-line interface for HDB managers to interact with the system.
+ * <p>
+ * This class handles all manager operations including project management, application processing,
+ * and report generation through a command line interface.
+ * </p>
+ * 
+ */
 public class ManagerInput {
 	
 	Scanner scanner = new Scanner(System.in);
-	Init init = new Init();
-	int choice;
+	int choice;	
 	
-	public void switchFunction(String userName, ArrayList<Project> projects, ArrayList<HDBManager> hdbManagers, ArrayList<HDBOfficer> hdbOfficers, ArrayList<Applicant> applicants)
+	HDBManager manager = ManagerFactory.defaultManager(); 
+	/**
+     * Displays and processes the manager menu system.
+     * <p>
+     * This method presents a comprehensive menu system and handles all manager operations
+     * including project creation, editing, deletion, and various approval workflows.
+     * </p>
+     *
+     * @param userName The username of the currently logged-in manager
+     * @param hdbManagers List of all HDB managers
+     * @param hdbOfficers List of all HDB officers
+     * @param applicants List of all applicants
+     *
+     * The system provides these functions:
+     * <ol start="0">
+     *   <li>View Current Active Project</li>
+     *   <li>Create a New BTO Project</li>
+     *   <li>Edit an Existing BTO Project</li>
+     *   <li>Delete a BTO Project</li>
+     *   <li>Toggle Project Visibility</li>
+     *   <li>View All Created Projects</li>
+     *   <li>View Personal Projects</li>
+     *   <li>View Officer Registrations</li>
+     *   <li>Approve/Reject Officer Registrations</li>
+     *   <li>Approve/Reject BTO Applications</li>
+     *   <li>Approve/Reject Withdrawal Requests</li>
+     *   <li>Generate Applicant Reports</li>
+     *   <li>View All Enquiries</li>
+     *   <li>View/Reply to Project Enquiries</li>
+     *   <li>Quit</li>
+     * </ol>
+     *
+     * @throws IllegalArgumentException if invalid inputs are provided
+     * @throws NullPointerException if required parameters are null
+     *
+     * @see HDBManager
+     * @see Project
+     * @see Applicant
+     */
+	// ORIGINAL FUNCTION SIGNATURE:
+	// public void switchFunction(String userName, ArrayList<Project> projects, ArrayList<HDBManager> hdbManagers, ArrayList<HDBOfficer> hdbOfficers, ArrayList<Applicant> applicants)
+	// {
+	public void switchFunction(String userName, ArrayList<HDBManager> hdbManagers, ArrayList<HDBOfficer> hdbOfficers, ArrayList<Applicant> applicants)
 	{
-		
+		ArrayList<Project> projects;
 		do {
-			
 			System.out.println("\nHere are the actions you can perform:");
 			System.out.println("==================================== \n");
 			
@@ -36,9 +83,10 @@ public class ManagerInput {
             System.out.println("Enter your choice:");
             choice = scanner.nextInt();
             scanner.nextLine();
-            
-            HDBManager manager = new HDBManager();   
-            projects = init.LoadProjectInfo(hdbManagers, hdbOfficers); // restore changed data
+             
+            projects = Init.LoadProjectInfo(hdbManagers, hdbOfficers); // Restore modified data, if any
+            manager.PastDateChecker(projects);  // Verify past projects and ensure visibility OFF
+            manager.updateMaritalStatus(projects); // Update marital status to check during runtime
             
             switch(choice) {
             
@@ -51,51 +99,79 @@ public class ManagerInput {
             case 1:
             	
             	// check if any active projects
-            	Project currentActiveProj = manager.currentActiveProject(projects, userName, false);
-            	
-            	// no active project
-            	if (currentActiveProj == null)
+            	if (manager.currentActiveProject(projects, userName, false) == null)
             	{
-            		// Need error checking
-            		System.out.println("Enter Project Name: ");
-            		String projectName = scanner.nextLine();   
+            		// Error checking for project Name (Ensure no duplicated project name)
+            		String projectName = manager.uniqueProjectName(projects, scanner, "Enter a unique project name: \n");
+
+            		// Error checking for string
+            		String neighborhood = manager.validateString(scanner, "Enter Select Neighborhood (e.g., Yishun, Boon Lay): \n"); 
             		
-            		System.out.println("Enter Select Neighborhood (e.g., Yishun, Boon Lay): ");
-            		String neighborhood = scanner.nextLine(); 
+            		// Error checking for valid integer
+            		String unitType1 = manager.validateInteger(scanner, "Enter the Number of units for 2-Room: \n");            		            		
+            		String sellPriceType1 = manager.validateInteger(scanner, "Enter the Selling price for 2-Room: \n");     		            		
+            		String unitType2 = manager.validateInteger(scanner, "Enter the Number of units for 3-Room: \n");
+            		String sellPriceType2 = manager.validateInteger(scanner, "Enter the Selling price for 3-Room: \n");
+            		            		
+            		// check valid dates
+            		boolean verifiedDates = false;
+            		String verifiedOpeningDate;
+            		String verifiedClosingDate;
+            		do
+            		{
+            			// Error checking for correct Date format
+            			verifiedOpeningDate = manager.verifyDate(scanner, "Set application opening date (dd/mm/yy): \n");
+            			// Error checking for correct Date format
+            			verifiedClosingDate = manager.verifyDate(scanner, "Set application closing date (dd/mm/yy): \n");            		
+            			
+            			boolean valid = manager.ValidDateChecker(verifiedOpeningDate, verifiedClosingDate);
+            			
+            			if (valid)
+            			{
+            				verifiedDates = true;
+            			}
+            			else
+            			{
+            				System.out.println("Invalid dates. Please try again!\n");
+            			}
+            			
+            		}while(verifiedDates == false);
             		
-            		System.out.println("Enter the Number of units for Type 1 (2-Room): ");
-            		String unitType1 = scanner.nextLine();
+            		// Error checking for MAX slot
+            		String verifiedMaxSlot = manager.verifyOfficerSlots(scanner, "Set Available HDB Officer Slots (Max 10): \n");
+
+            		// Error checking for visibility (specific type case)
+            		String verifiedVisibility = null;            		
+            		do {
+            			System.out.println("Set visibility of project (on/off): ");
+            			String inputV = scanner.nextLine();                		
+            			
+            			switch(inputV)
+            			{
+            			case "on":
+            				verifiedVisibility = "true";
+            				break;
+            				
+            			case "off":
+            				verifiedVisibility = "false";
+            				break;
+            				
+            			default:
+            				System.out.println("Invalid input. Please try again! \n");
+            				break;
+            			}
+            			
+            		}while(verifiedVisibility == null);
             		
-            		System.out.println("Enter the Selling price for Type 1 (2-Room): ");
-            		String sellPriceType1 = scanner.nextLine();
-            		
-            		System.out.println("Enter the Number of units for Type 2 (3-Room): ");
-            		String unitType2 = scanner.nextLine();
-            		
-            		System.out.println("Enter the Selling price for Type 2 (3-Room): ");
-            		String sellPriceType2 = scanner.nextLine();
-            		
-            		System.out.println("Set application opening date (dd/mm/yy): ");
-            		String openingDate = scanner.nextLine();
-            		
-            		System.out.println("Set application closing date (dd/mm/yy): ");
-            		String endingDate = scanner.nextLine();
-            		
-            		System.out.println("Set Available HDB Officer Slots (Max 10): ");
-            		String slots = scanner.nextLine();       
-            		
-            		System.out.println("Set visibility of project ('true' = ON, 'false' = OFF): ");
-            		String visibility = scanner.nextLine();            	
             		
             		System.out.println("\nNOTE: You will be assigned to this created project.\n");
             		
             		// Convert inputs to a string to update the txt
-            		String createProjectString = String.join(",", projectName, neighborhood, "2-Room", unitType1, sellPriceType1, "3-Room", unitType2, sellPriceType2, openingDate, endingDate, userName, slots," ", visibility);
-            		System.out.printf("%s", createProjectString);
-            		
-            		// manager.createProject(createProjectString, projects, hdbManagers, hdbOfficers); // WRITE to createProject function
+            		String createProjectString = String.join(",", projectName, neighborhood, "2-Room", unitType1, sellPriceType1, "3-Room", unitType2, sellPriceType2, verifiedOpeningDate, verifiedClosingDate, userName, verifiedMaxSlot," ", verifiedVisibility);
+            		System.out.printf("Successfully Created! \n %s\n", createProjectString);
+
 					//Load the created project to the list      
-					projects = manager.createProject(createProjectString, projects, hdbManagers, hdbOfficers); // WRITE to createProject function
+					projects = manager.createProject(createProjectString, hdbManagers, hdbOfficers); // WRITE to createProject function
             	}
             	else
             	{
@@ -124,7 +200,7 @@ public class ManagerInput {
             		// Check which project to edit
             		for (int i=0; i<projects.size(); i++)
             		{
-            			if (projects.get(i).getProjectName().equals(selectedProject)) // found the projectID to update 
+            			if (projects.get(i).getHDBManager().getNRIC().equals(userName) && projects.get(i).getProjectName().equals(selectedProject)) // found the projectID to update
             			{            				
             				found = true;    
             				int choice2;
@@ -139,7 +215,8 @@ public class ManagerInput {
                         		System.out.println("4. Change Application Opening Date");
                         		System.out.println("5. Change Application Closing Date");
                         		System.out.println("6. Toggle Visibility (On/Off)");
-                        		System.out.println("7. Quit\n");
+                        		System.out.println("7. Update Number of Officer Slots");
+                        		System.out.println("8. Quit\n");
                         		
                         		System.out.println("Select the Choice: ");
                         		choice2 = scanner.nextInt();
@@ -150,18 +227,17 @@ public class ManagerInput {
                         		{
                         		// Update Project Name
                         		case 0:
-                        			System.out.println("Enter Updated Project Name: ");
-                                	String newProjectName = scanner.nextLine();  
-                                	
-                                	manager.editProject(selectedProject, newProjectName, "0", projects, i, hdbManagers, hdbOfficers);
+                        			String newProjectName = manager.uniqueProjectName(projects, scanner, "Enter a unique project name to update: \n");
+                        			                           	
+                                	manager.editProject(newProjectName, "0", projects, i);                                	
+                                	selectedProject = newProjectName;
                                 	break;
                                 	
                                 // Update Neighborhood
-                        		case 1:                                        	
-                                	System.out.println("Enter Updated Neighbourhood: ");                                     	
-                                	String newNeighbourhood = scanner.nextLine();      
+                        		case 1:                                  	
+                                	String newNeighbourhood = manager.validateString(scanner, "Enter updated Neighbourhood: \n");      
                                 	
-                                	manager.editProject(selectedProject, newNeighbourhood, "1", projects, i, hdbManagers, hdbOfficers);
+                                	manager.editProject(newNeighbourhood, "1", projects, i);
                                 	break;
                                 	
                                 // Update price
@@ -180,27 +256,24 @@ public class ManagerInput {
                         				{
                         				// 2 Room 
                         				case 1:
-                        					System.out.println("Enter Updated Pricing for 2-Room: ");  
-                            				String newPricing1 = scanner.nextLine(); 
+                        					// validate integer
+                        					String sellPriceType1 = manager.validateInteger(scanner, "Enter the updated selling price for 2-Room: \n");
+                        					                            				
+                            				String currentRoom1 = "2-Room,";                            				
+                            				currentRoom1 += sellPriceType1; // identifier
                             				
-                            				String currentRoom1 = "2-Room,";
-                            				
-                            				currentRoom1 += newPricing1; // identifier
-                            				
-                            				manager.editProject(selectedProject, currentRoom1, "2", projects, i, hdbManagers, hdbOfficers);
+                            				manager.editProject(currentRoom1, "2", projects, i);
                             				flatType = -1;
                         					break;
                         					
                         				// 3 Room
                         				case 2:
-                        					System.out.println("Enter Updated Pricing for 3-Room: ");
-                            				String newPricing2 = scanner.nextLine(); 
+                        					String sellPriceType2 = manager.validateInteger(scanner, "Enter the updated selling price for 3-Room: \n");
+                        					                            				
+                            				String currentRoom2 = "3-Room,";                            				
+                            				currentRoom2 += sellPriceType2; // identifier
                             				
-                            				String currentRoom2 = "3-Room,";
-                            				
-                            				currentRoom2 += newPricing2; // identifier
-                            				
-                            				manager.editProject(selectedProject, currentRoom2, "2", projects, i, hdbManagers, hdbOfficers);
+                            				manager.editProject(currentRoom2, "2", projects, i);
                             				flatType = -1;
                         					break;
                         					
@@ -228,27 +301,23 @@ public class ManagerInput {
                         				{
                         				// 2 Room 
                         				case 1:
-                        					System.out.println("Enter Updated Number of Units for 2-Room: ");  
-                            				String newNoUnits1 = scanner.nextLine(); 
+                        					String unitType1 = manager.validateInteger(scanner, "Enter updated number of units for 2-Room: \n");
+                        					                            				
+                            				String setRoom1 = "2-Room,";                            				
+                            				setRoom1 += unitType1; // identifier
                             				
-                            				String setRoom1 = "2-Room,";
-                            				
-                            				setRoom1 += newNoUnits1; // identifier
-                            				
-                            				manager.editProject(selectedProject, setRoom1, "3", projects, i, hdbManagers, hdbOfficers);
+                            				manager.editProject(setRoom1, "3", projects, i);
                             				unitType = -1;
                         					break;
                         					
                         				// 3 Room
                         				case 2:
-                        					System.out.println("Enter Updated Number of Units for 3-Room: ");
-                            				String newNoUnits2 = scanner.nextLine(); 
+                        					String unitType2 = manager.validateInteger(scanner, "Enter updated number of units for 3-Room: \n");
+                        					                            				
+                            				String setRoom2 = "3-Room,";                            				
+                            				setRoom2 += unitType2; // identifier
                             				
-                            				String setRoom2 = "3-Room,";
-                            				
-                            				setRoom2 += newNoUnits2; // identifier
-                            				
-                            				manager.editProject(selectedProject, setRoom2, "3", projects, i, hdbManagers, hdbOfficers);
+                            				manager.editProject(setRoom2, "3", projects, i);
                             				unitType = -1;
                         					break;
                         					
@@ -261,39 +330,116 @@ public class ManagerInput {
                         			break;
                         			
                         		// Change Application Opening Date
-                        		case 4:
-                        			System.out.println("Enter Updated Application Opening Date (dd/mm/yy): "); // ** NEED VALIDATE CORRECT/WRONG DATE FORMAT 
-                                	String updatedOpeningDate = scanner.nextLine();
-                        			
-                                	manager.editProject(selectedProject, updatedOpeningDate, "4", projects, i, hdbManagers, hdbOfficers);
+                        		case 4:  
+                        			// check for past projects (if yes, no updating application date)
+                        			if(manager.PastDateCheckerProject(projects, selectedProject))
+                        			{
+                        				System.out.println("Not allowed to change application period for past projects.");
+                        			}
+                        			else
+                        			{ 
+                        				// check valid dates
+                        				boolean verifiedOpeningDates = false;                            		
+                        				String updatedOpeningDate;                        			
+                        				do
+                        				{                            			         		
+                        					updatedOpeningDate = manager.verifyDate(scanner, "Update application opening date (dd/mm/yy): \n");
+                        					
+                        					boolean valid = manager.ValidDateCheckerforEditing(updatedOpeningDate, projects.get(i).getApplicationClosingDate().toString(), true);
+                        					
+                        					if (valid)
+                        					{
+                        						verifiedOpeningDates = true;
+                        						manager.editProject(updatedOpeningDate, "4", projects, i);
+                        					}
+                        					else
+                        					{
+                        						System.out.println("Invalid date. Please try again!\n");
+                        					}
+                        					
+                        				}while(verifiedOpeningDates == false);                          		
+                        			}                        			
                         			break;
                         			
                         		// Change Application Closing Date
                         		case 5:
-                        			System.out.println("Enter Updated Application Closing Date (dd/mm/yy): "); // ** NEED VALIDATE CORRECT/WRONG DATE FORMAT 
-                                	String updatedClosingDate = scanner.nextLine();
-                        			
-                                	manager.editProject(selectedProject, updatedClosingDate, "5", projects, i, hdbManagers, hdbOfficers);
+                        			// check for past projects (if yes, no updating application date)
+                        			if(manager.PastDateCheckerProject(projects, selectedProject))
+                        			{
+                        				System.out.println("Not allowed to change application period for past projects.");
+                        			}
+                        			else
+                        			{
+                        				// check valid dates
+                        				boolean verifiedClosingDates = false;                            		
+                        				String updatedClosingDate;                        			
+                        				do
+                        				{                            			         		
+                        					updatedClosingDate = manager.verifyDate(scanner, "Update application closing date (dd/mm/yy): \n");
+                        					
+                        					boolean valid = manager.ValidDateCheckerforEditing(projects.get(i).getApplicationOpeningDate().toString(), updatedClosingDate, false);
+                        					
+                        					if (valid)
+                        					{
+                        						verifiedClosingDates = true;
+                        					}
+                        					else
+                        					{
+                        						System.out.println("Invalid date. Please try again!\n");
+                        					}
+                        					
+                        				}while(verifiedClosingDates == false); 
+                        				
+                        				manager.editProject(updatedClosingDate, "5", projects, i);
+                        			}
                         			break;
                         			
                         		// Toggle Visibility (On/Off)
                         		case 6:
-                        			// auto toggling to On/Off
-                        			if(projects.get(i).getVisibility())
+                        			// check for past projects (if yes, no updating visibility)
+                        			if(manager.PastDateCheckerProject(projects, selectedProject))
                         			{
-                        				// true = ON
-                        				System.out.printf("Current Project Visibility: '%s' -- ON\n", selectedProject);
+                        				System.out.println("Visibility for past projects are always OFF. Not allowed to change.");
                         			}
                         			else
                         			{
-                        				// false = OFF
-                        				System.out.printf("Current Project Visibility '%s' -- OFF\n", selectedProject);
-                        			}
-                        			
-                        			manager.toggleVisibility(projects, projects.get(i).getProjectName());                        			
+                        				// check if any active projects
+                        				if (manager.currentActiveProject(projects, userName, false) == null) // no active project
+                        				{
+                        					// auto toggling to On/Off
+                        					if(projects.get(i).getVisibility())
+                        					{
+                        						// true = ON
+                        						System.out.printf("Current Project Visibility: '%s' -- ON\n", selectedProject);
+                        					}
+                        					else
+                        					{
+                        						// false = OFF
+                        						System.out.printf("Current Project Visibility '%s' -- OFF\n", selectedProject);
+                        					}                       			
+                        					manager.toggleVisibility(projects, projects.get(i).getProjectName(), userName);
+                        				}
+                        				else
+                        				{
+                        					System.out.println("Only 1 active project allowed.\n");
+                        				}
+                        			}                        			
                         			break;
                         			
+                        		// update officer slots
                         		case 7:
+                        			if(manager.PastDateCheckerProject(projects, selectedProject))
+                        			{
+                        				System.out.println("Not allowed to update officer slots for past projects.");
+                        			}
+                        			else
+                        			{
+                        				String verifiedMaxSlot = manager.verifyOfficerSlots(scanner, "Set Available HDB Officer Slots (Max 10): \n");                        				
+                        				manager.editProject(verifiedMaxSlot, "7", projects, i);                       			
+                        			}
+                        			break;
+                        			
+                        		case 8:
                         			break;
                         			
                         		default:
@@ -301,7 +447,7 @@ public class ManagerInput {
                         			break;                        		
                         		}            					
             					
-            				}while(choice2 != 7);
+            				}while(choice2 != 8);
             				checkE = 1; // exit to manager main page
             				break; // break out of for loop
             			}            		
@@ -326,6 +472,7 @@ public class ManagerInput {
             	System.out.println("Enter Project Name to Delete: ");
             	String deletedProject = scanner.nextLine();
             	
+            	// check for valid Project
             	Project currentProj = manager.returnProject(projects, deletedProject);
             	
             	if (currentProj != null)
@@ -333,6 +480,7 @@ public class ManagerInput {
             		int checkD = 0;
             		do
             		{
+            			// Confirmation of deletion check
             			System.out.printf("Confirm Deletion of Project: '%s'? (Y/N): ", deletedProject);
             			String confirm = scanner.nextLine();
             			
@@ -366,51 +514,30 @@ public class ManagerInput {
             case 4: 
             	
             	// call all the project only the manager is handling
-            	manager.listSpecificProjects(projects, userName);
-            	
+            	manager.listSpecificProjects(projects, userName);            	
             	
             	System.out.println("Enter Project Name to Toggle: ");
-            	String toggleProject = scanner.nextLine();  
+            	String toggleProject = scanner.nextLine();              	
             	
-            	
+            	// check for valid Project
             	Project checkTogglePrj = manager.returnProject(projects, toggleProject);
             	
             	if(checkTogglePrj != null)
             	{
-            		manager.toggleVisibility(projects, toggleProject);          	
+            		// check for past projects (if yes, no updating visibility)
+        			if(manager.PastDateCheckerProject(projects, toggleProject))
+        			{
+        				System.out.println("Visibility for past projects are always OFF. Not allowed to change.");
+        			}       
+        			else
+        			{
+        				manager.toggleVisibility(projects, toggleProject, userName);         		
+        			}
             	}
             	else
             	{
             		System.out.println("Invalid project. Please try again!\n");
-            	}
-
-            	/*int checkB = 0;
-    			
-    			do
-    			{
-    				System.out.println("Update Toggle Visibility (On/Off): ");            			
-    				String toggle = scanner.nextLine();
-    				
-    				switch(toggle)
-    				{
-    				case "On":
-    					//manager.toggleVisibility(toggleProject, true); 
-    					checkB = 1;
-    					break;
-    					
-    				case "Off":
-    					//manager.toggleVisibility(toggleProject, false);
-    					checkB = 1;
-    					break;
-    					
-    				default:
-    					System.out.println("Invalid input. Please try again!");
-    					break;
-    				}            				
-    				
-    			}while (checkB != 1); 			            	
-            	*/
-            	
+            	}            	
             	break;
             	
             // View All Created Projects by all managers
@@ -437,7 +564,8 @@ public class ManagerInput {
             	break;
             	
             // Approve or Reject Applicant’s BTO Application
-            case 9:            	
+            case 9:
+            	manager.approveOrRejectApplication(projects, applicants, userName);
             	break;
             	
             // Approve or Reject Applicant’s Withdrawal Request
@@ -447,7 +575,6 @@ public class ManagerInput {
             	
             // Generate Reports of Applicants
             case 11:  
-            	FlatType selectedFlatType = null;
             	String maritalStatusFilter = null;
             	Integer minAge = null, maxAge = null;
             	int choice3;
@@ -523,11 +650,13 @@ public class ManagerInput {
             	break;
             
             // View Enquiries for ALL Projects
-            case 12:            	
+            case 12:
+            	manager.viewEnquiries(projects);
             	break;
             
             //  View and Reply to Enquiries for Your Projects
-            case 13:            	
+            case 13:        
+            	manager.replyToEnquiry(projects, userName, scanner);
             	break;
             	
             case 14:
@@ -540,7 +669,7 @@ public class ManagerInput {
             
 		}while(choice != 14);
 		
-		System.out.println("Quit Successful!");
+		System.out.println("Quit Successful!\n");
 		
 		return;
 	}

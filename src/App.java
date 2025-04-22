@@ -56,7 +56,8 @@ public class App{
 
         //Initialize Application info
         ArrayList<Application> applications = init.loadApplicationInfo(applicant, projects);
-
+        
+        
         
         // General general = new General();
         // General.editProjectFile(projects.get(1),"New Name");
@@ -89,8 +90,6 @@ public class App{
                         System.out.println("Already login as: " + currentUserId);
                         break;
                     }
-
-
                     System.out.println("===User type===");
                     System.out.println("1. HDB Manager");
                     System.out.println("2. HDB Officer");
@@ -98,6 +97,11 @@ public class App{
                     System.out.println("===============");
                     userType = "NULL";
                     ArrayList<String> userList = new ArrayList<>(Arrays.asList("1", "2", "3"));
+                    
+                    // to update status for all projects
+                    HDBManager mainManager = ManagerFactory.defaultManager(); 
+                    mainManager.updateMaritalStatus(projects);
+                    
                     while(true){
                         if(userList.contains(userType)){
                             break;

@@ -136,5 +136,14 @@ public class Applicant extends User{
         this.currentApplication = currentApplication;
     }
 
+    /**
+     * Appends a past application to the applicant's past applications list.
+     * 
+     * @param pastApplication the Application object to append as a past application
+     */
+    public void appendPastApplications(Application pastApplication) {
+        this.pastApplications.add(pastApplication);
+    }
+
 }
 

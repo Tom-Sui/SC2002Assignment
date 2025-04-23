@@ -108,6 +108,8 @@ public class ManagerApplicantRegistration implements I_ManagerApplicantRegistrat
     			
     			//Clear from applicant
     			applicant.setCurrentApplication(null);
+				applicant.appendPastApplications(application);
+
     	
     			ArrayList<FlatType> flatTypes = project.getFlatTypes(); // changes to .getFlatTypes from .getFlatTypesList
     			

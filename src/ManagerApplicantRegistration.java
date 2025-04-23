@@ -2,6 +2,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 
 public class ManagerApplicantRegistration implements I_ManagerApplicantRegistration{
     /**
@@ -17,13 +18,11 @@ public class ManagerApplicantRegistration implements I_ManagerApplicantRegistrat
     public void approveOrRejectApplication(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, String username){
     	
     	
-    	
     	Date currentTime = new Date();
     			
     	for (Project project : currentProjects) {
             // Check if the manager is managing the project
     		 if (project.getHDBManager().getNRIC().equals(username)) {
-
     		        // Check if today's date is within the application opening and closing dates
     		        if (project.getApplicationOpeningDate().compareTo(currentTime) > 0 || project.getApplicationClosingDate().compareTo(currentTime) < 0) {
     		            continue; // Skip this project if it's not within the application period
@@ -35,21 +34,23 @@ public class ManagerApplicantRegistration implements I_ManagerApplicantRegistrat
                 int availableUnits = flatType.getUnits();
                 int unitCount = availableUnits;
                 
-
                 // Iterate through the applications for the project
                 for (Application application : project.getApplications()) {
+                	
                     // Check if the application's flat type matches the current flat type
+                	System.out.printf("%s", application.getApplicant().getName());
                     if (application.getFlatType() == flatType) {
                         // Only process applications with PENDING status
                         if (application.getApplicationStatus() == ApplicationStatus.PENDING) {
                             if (availableUnits == 0) {
                                 //No units available
                                 application.setApplicationStatus(ApplicationStatus.UNSUCCESSFUL);
-                                General.editOtherFile(filePath, "/ApplicationList.txt", "PENDING" ,"UNSUCCESSFUL", application.getApplicant().getNRIC());
+                                General.editOtherFile(filePath, "/ApplicationList.txt", "UNSUCCESSFUL" ,"PENDING", application.getApplicant().getNRIC());
                                 System.out.printf("ApplicationID %d for project %s was UNSUCCESSFUL", application.getApplicationId(),application.getProject().getProjectName());
                             } else if (unitCount > 0){
                                 // Approves x number of applications with x being the number of available units
                                 application.setApplicationStatus(ApplicationStatus.SUCCESSFUL);
+                                General.editOtherFile(filePath, "/ApplicationList.txt", "SUCCESSFUL" ,"PENDING", application.getApplicant().getNRIC());
                                 System.out.printf("ApplicationID %d for project %s was SUCCESSFUL", application.getApplicationId(),application.getProject().getProjectName());
                                 unitCount -=1;
                             }
@@ -60,6 +61,8 @@ public class ManagerApplicantRegistration implements I_ManagerApplicantRegistrat
     		 }
     	}
     }
+   
+    
         
     
 	/**
@@ -126,6 +129,7 @@ public class ManagerApplicantRegistration implements I_ManagerApplicantRegistrat
     			//Check if a flat was booked
     			if(application.getIsBooked()) {
     				FlatTypeLogic.updateIncreaseFilteredFlatTypeUnits(flatTypes, flatType);
+    				General.editProjectFile(project, project.getProjectName());
     			}
     			
     			System.out.printf("Withdrawn application for applicant %s (NRIC: %s)\\n", 

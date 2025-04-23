@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class ManagerOfficerRegistration extends BaseManagerOfficerRegistration{
 	
-	private String DataFilePath = "./Data";   // TO ADD ./src FOR ECLIPSE	
+	private String DataFilePath = "./src/Data";   // TO ADD ./src FOR ECLIPSE	
 	String filePath = DataFilePath + "/OfficerRegistrationList.txt"; // change this if your path is different	
 	/**
 	 * Displays the officer registration list.

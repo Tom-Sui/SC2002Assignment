@@ -9,7 +9,7 @@
  * @see Project
  */
 public class Enquiry {
-    private static int enquiryID = 0;
+    private static int enquiryID = 1;
     private String userNric; 
     private String projectName;
     private String message;
@@ -29,12 +29,30 @@ public class Enquiry {
      * 
      * @param userNric the Applicant making the enquiry
      * @param projectName the Project being enquired about
-     * @param message the enquiry message content String     */
+     * @param message the enquiry message content
+     */
     public Enquiry(String userNric, String projectName, String message) {
         enquiryID = enquiryID++;
         this.userNric = userNric;
         this.projectName = projectName;
         this.message = message;
+        this.replyID = 0;
+    }
+
+    /**
+     * Constructs an Enquiry object with the specified applicant, project, message, and reply ID.
+     * 
+     * @param userNric the Applicant making the enquiry
+     * @param projectName the Project being enquired about
+     * @param message the enquiry message content
+     * @param replyID the ID of the reply to this enquiry
+     */
+    public Enquiry(String userNric, String projectName, String message, int replyID) {
+        enquiryID = enquiryID++;
+        this.userNric = userNric;
+        this.projectName = projectName;
+        this.message = message;
+        this.replyID = replyID;
     }
 
     /**
@@ -95,6 +113,10 @@ public class Enquiry {
      */
     public int getReplyID(){
         return this.replyID;
+    }
+
+    public int getApplicant() {
+        return Integer.parseInt(this.userNric.substring(1));
     }
 
     public String toString() {

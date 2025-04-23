@@ -14,6 +14,7 @@ public class HDBManager extends User{
 	private final I_ManagerOfficerRegistration managerOfficerRegistration;
 	private final I_ManagerApplicantRegistration managerApplicantRegistration;
 	private final I_Enquiry enquiry;
+	private ArrayList<Project> managedProjects;
 
     public HDBManager(I_ProjectManager projectManager, I_ListOutProjects listOutProjects, 
     				  I_InputValidator inputValidator, I_ManagerOfficerRegistration managerOfficerRegistration,
@@ -25,9 +26,12 @@ public class HDBManager extends User{
     	this.managerOfficerRegistration = managerOfficerRegistration;
     	this.managerApplicantRegistration = managerApplicantRegistration;
     	this.enquiry = enquiry;
+        this.managedProjects = new ArrayList<>();
     }
     
-    
+    public ArrayList<Project> getProject() {
+        return managedProjects;
+    }
     
     // Abstract methods that must be implemented by subclasses
 
@@ -71,7 +75,7 @@ public class HDBManager extends User{
     // Project management
     public void setManagedProjects(Project project)
     {
-    	projectManager.setManagedProjects(project);
+    	this.managedProjects.add(project);
     }
     
     public void PastDateChecker(ArrayList<Project> currentProjects)

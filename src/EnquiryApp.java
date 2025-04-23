@@ -212,6 +212,7 @@ public class EnquiryApp {
             Enquiry enquiryToUpdate = enquiryService.getEnquiryById(enquiryId);
             if (enquiryToUpdate != null) {
                 enquiryToUpdate.setMessage(newMessage);
+                enquiryService.updateEnquiry(enquiryToUpdate);
                 enquiryService.writeEnquiriesToFile();
                 System.out.println("Enquiry updated successfully!");
             }

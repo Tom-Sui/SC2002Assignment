@@ -56,27 +56,27 @@ public abstract class BaseManagerOfficerRegistration implements I_ManagerOfficer
     
     
     // View enquries for all projects
-    public void viewEnquiries(ArrayList<Project> currentProjects) {
+    // public void viewEnquiries(ArrayList<Project> currentProjects) {
     	
-    	for(Project project: currentProjects) {
+    // 	for(Project project: currentProjects) {
     		
-    		System.out.printf("Enquiries for Project %s\n", project.getProjectName());
+    // 		System.out.printf("Enquiries for Project %s\n", project.getProjectName());
     		
-    		ArrayList<Enquiry> enquiries = project.getEnquiries();
+    // 		ArrayList<Enquiry> enquiries = project.getEnquiries();
     		
-    		for(Enquiry enquiry: enquiries) {
+    // 		for(Enquiry enquiry: enquiries) {
     			
-    			System.out.printf("Applicant ID: %d\n", enquiry.getApplicant());
-    			System.out.printf("Message: %s\n", enquiry.getMessage());
+    // 			System.out.printf("Applicant ID: %d\n", enquiry.getApplicant());
+    // 			System.out.printf("Message: %s\n", enquiry.getMessage());
     			
-    			if(enquiry.getReplies().equals("")) {
-    				System.out.printf("There is no reply yet");
-    			} else {
-    				System.out.printf("Reply: %s\n", enquiry.getReplies());
-    			}
-    		}
-    	}
-    }
+    // 			if(enquiry.getReplies().equals("")) {
+    // 				System.out.printf("There is no reply yet");
+    // 			} else {
+    // 				System.out.printf("Reply: %s\n", enquiry.getReplies());
+    // 			}
+    // 		}
+    // 	}
+    // }
 
 }
 

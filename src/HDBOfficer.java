@@ -14,11 +14,10 @@ import java.time.ZoneId;
  * 
  */
 
-public class HDBOfficer extends Applicant{
+public class HDBOfficer extends Applicant {
     private Project managedProject;
     private ArrayList<Project> upcomingProjects = new ArrayList<Project>();
     private Map<Project, OfficerRegistrationStatus> registrationStatusMap = new HashMap<>();
-    //private OfficerRegistrationStatus officerRegistrationStatus = OfficerRegistrationStatus.PENDING;
     private ArrayList<Application> managedApplications = new ArrayList<Application>();
     private boolean isManagingOfficer = false;
     
@@ -124,43 +123,6 @@ public class HDBOfficer extends Applicant{
     }
 
     /**
-     * Creates a new enquiry for a project.
-     *
-     * @param project the project to enquire about
-     * @param message the enquiry message
-     * @return the created enquiry
-     */
-    public Enquiry createEnquiry(Project project, String message) {
-        Enquiry[] enquiry = new Enquiry[10];
-        return enquiry[0];
-    }
-
-    /**
-     * Retrieves all enquiries.
-     *
-     * @return an array of enquiries
-     */
-    public Enquiry[] viewEnquiries() {
-        Enquiry[] enquiry = new Enquiry[10];
-        return enquiry;
-    }
-
-    /**
-     * Edits an existing enquiry.
-     *
-     * @param enquiry the enquiry to edit
-     * @param newMessage the new message content
-     */
-    public void editEnquiry(Enquiry enquiry, String newMessage) {}
-
-    /**
-     * Deletes an existing enquiry.
-     *
-     * @param enquiry the enquiry to delete
-     */
-    public void deletEnquiry(Enquiry enquiry) {}
-
-    /**
      * Checks if the officer can apply for a project.
      *
      * @param project the project to check
@@ -212,14 +174,6 @@ public class HDBOfficer extends Applicant{
             }
         }
     }
-
-    /**
-     * Replies to an enquiry.
-     *
-     * @param enquiry the enquiry to reply to
-     * @param reply the reply message
-     */
-    public void replyToEnquiry(Enquiry enquiry, String reply) {}
 
     /**
      * Gets all managed applications.

@@ -152,14 +152,6 @@ public abstract class User {
     }
 
     /**
-     * Placeholder method for enquiry creation (to be implemented by subclasses).
-     * @return Always returns false in base implementation
-     */
-    public boolean createEnquiry() {
-        return false;
-    }
-
-    /**
      * Modifies user information in the specified file.
      * 
      * @param newContent The new value to set
@@ -262,35 +254,5 @@ public abstract class User {
             return false;
         }
     }
-
-    // Abstract methods that must be implemented by subclasses
-
-    /**
-     * Creates a new enquiry for a specific project.
-     * 
-     * @param project The project the enquiry relates to
-     * @param message The enquiry message content
-     * @return The created Enquiry object
-     */
-    public abstract Enquiry createEnquiry(Project project, String message);
-
-    /**
-     * Retrieves all enquiries associated with this user.
-     * @return An array of Enquiry objects
-     */
-    public abstract Enquiry[] viewEnquiries();
-
-    /**
-     * Modifies an existing enquiry.
-     * 
-     * @param enquiry The enquiry to modify
-     * @param newMessage The new message content
-     */
-    public abstract void editEnquiry(Enquiry enquiry, String newMessage);
-
-    /**
-     * Deletes an existing enquiry.
-     * @param enquiry The enquiry to delete
-     */
-    public abstract void deletEnquiry(Enquiry enquiry);
 }
+

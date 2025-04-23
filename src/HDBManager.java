@@ -194,11 +194,22 @@ public class HDBManager extends User{
     	managerApplicantRegistration.generateApplicantReport(applicants, maritalStatusFilter, minAge, maxAge);
     }
     
-    
-    // Enquiries
-    public void viewEnquiries(ArrayList<Project> currentProjects)
-    {
-    	managerOfficerRegistration.viewEnquiries(currentProjects);    	
+    public void viewEnquiries(ArrayList<Project> currentProjects) {
+    	
+    	for(Project project: currentProjects) {
+    		System.out.printf("Enquiries for Project %s\n", project.getProjectName());
+    		ArrayList<Enquiry> enquiries = project.getEnquiries();
+    		for(Enquiry enquiry: enquiries) {
+
+    			System.out.printf("Applicant ID: %s\n", enquiry.getUserNric());
+    			System.out.printf("Message: %s\n", enquiry.getMessage());
+    			if(enquiry.getReplyID() == 0) {
+    			System.out.printf("There is no reply yet");
+    			} else {
+    				System.out.printf("Reply: %s\n", enquiry.getReplyID());
+    			}
+    		}
+    	}
     }
     
     public void replyToEnquiry(ArrayList<Project> currentProjects, String NRIC, Scanner scanner)

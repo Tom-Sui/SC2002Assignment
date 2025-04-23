@@ -9,24 +9,33 @@
  * @see Project
  */
 public class Enquiry {
-    private static int enquiryID = 0;
+    private static int enquiryID = 1;
     private String userNric; 
     private String projectName;
     private String message;
     private int replyID;
 
     // ========== CONSTRUCTOR ==========
+    public Enquiry() {
+        enquiryID = enquiryID++;
+        this.userNric = "";
+        this.projectName = "";
+        this.message = "";
+        this.replyID = 0;
+    }
+
     /**
      * Constructs an Enquiry object with the specified applicant, project, and message.
      * 
      * @param userNric the Applicant making the enquiry
      * @param projectName the Project being enquired about
      * @param message the enquiry message content String     */
-    public Enquiry(String userNric, String projectName, String message) {
+    public Enquiry(String userNric, String projectName, String message, int replyID) {
         enquiryID = enquiryID++;
         this.userNric = userNric;
         this.projectName = projectName;
         this.message = message;
+        this.replyID = replyID;
     }
 
     /**

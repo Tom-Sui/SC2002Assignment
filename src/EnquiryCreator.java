@@ -1,7 +1,7 @@
 public interface EnquiryCreator {
 
     public default Enquiry createEnquiry(String userNric, String projectName, String message) {
-        return new Enquiry(userNric, projectName, message);
+        return new Enquiry(userNric, projectName, message, 0);
     }
 
     public default Enquiry editEnquiry(Enquiry enquiry, String message) {

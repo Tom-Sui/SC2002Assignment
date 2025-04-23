@@ -7,37 +7,48 @@ public class EnquiryService {
     private ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>();
     private HashMap<String, ArrayList<Enquiry>> enquiriesByProject = new HashMap<String, ArrayList<Enquiry>>();
     private HashMap<String, ArrayList<Enquiry>> enquiriesByApplicant = new HashMap<String, ArrayList<Enquiry>>();
+    private static final String ENQUIRIES_FILE = "Data/enquiries.txt";
+
+    public EnquiryService() {
+        try {
+            readEnquiriesFromFile();
+        } catch (IOException e) {
+            System.err.println("Error reading enquiries from file: " + e.getMessage());
+        }
+    }
 
     public void refreshEnquiriesByApplicant(String userNric) {
         enquiriesByApplicant.clear();
-        for (Enquiry enquiry : viewEnquiriesByApplicant(userNric) ) {
-            enquiriesByApplicant.put(enquiry.getUserNric(), enquiry);
+        ArrayList<Enquiry> userEnquiries = viewEnquiriesByApplicant(userNric);
+        if (!userEnquiries.isEmpty()) {
+            enquiriesByApplicant.put(userNric, userEnquiries);
         }
     }
 
     public void refreshEnquiriesByProject(String projectName) {
         enquiriesByProject.clear();
-        for (Enquiry enquiry : viewEnquiriesByProject(projectName) ) {
-            enquiriesByProject.put(enquiry.getProjectName(), enquiry);
+        ArrayList<Enquiry> projectEnquiries = viewEnquiriesByProject(projectName);
+        if (!projectEnquiries.isEmpty()) {
+            enquiriesByProject.put(projectName, projectEnquiries);
         }
     }
     
     public ArrayList<Enquiry> viewEnquiriesByProject(String projectName) {
-        return enquiries.stream()
+        return new ArrayList<>(enquiries.stream()
             .filter(enquiry -> enquiry.getProjectName().equals(projectName))
-            .collect(Collectors.toList());
+            .collect(Collectors.toList()));
     }
 
     public ArrayList<Enquiry> viewEnquiriesByProjects(ArrayList<String> projectNames) {
-        return enquiries.stream()
+        return new ArrayList<>(enquiries.stream()
             .filter(enquiry -> projectNames.contains(enquiry.getProjectName()))
-            .collect(Collectors.toList());
+            .collect(Collectors.toList()));
     }
 
     public ArrayList<Enquiry> viewEnquiriesByApplicant(String userNric) {
-        return enquiries.stream()
+        return new ArrayList<>(enquiries.stream()
             .filter(enquiry -> enquiry.getUserNric().equals(userNric))
-            .collect(Collectors.toList());
+            .collect(Collectors.toList()));
     }
 
     public ArrayList<Enquiry> viewAllEnquiries() {
@@ -46,12 +57,16 @@ public class EnquiryService {
 
     public ArrayList<Enquiry> getEnquiriesByProject(String projectName) {
         refreshEnquiriesByProject(projectName);
-        return enquiriesByProject.get(projectName);
+        return enquiriesByProject.getOrDefault(projectName, new ArrayList<>());
     }
 
     public ArrayList<Enquiry> getEnquiriesByApplicant(String userNric) {
         refreshEnquiriesByApplicant(userNric);
-        return enquiriesByApplicant.get(userNric);
+        return enquiriesByApplicant.getOrDefault(userNric, new ArrayList<>());
+    }
+    
+    public ArrayList<Enquiry> getEnquiriesByProjects(ArrayList<String> projectNames) {
+        return viewEnquiriesByProjects(projectNames);
     }
 
     public boolean addEnquiry(Enquiry enquiry) {
@@ -95,6 +110,22 @@ public class EnquiryService {
         return false;
     }
 
+    public void readEnquiriesFromFile() throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(ENQUIRIES_FILE))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                String[] data = line.split(",");
+                int enquiryID = Integer.parseInt(data[0]);
+                String projectName = data[1];
+                String userNric = data[2];
+                String message = data[3];
+                int replyID = Integer.parseInt(data[4]);
+                Enquiry enquiry = new Enquiry(userNric, projectName, message, replyID);
+                enquiries.add(enquiry);
+            }
+        }
+    }
+
     /**
      * Writes all enquiries to a text file named "enquiries.txt".
      * <p>
@@ -104,7 +135,7 @@ public class EnquiryService {
      * </p>
      */
     public void writeEnquiriesToFile() {
-        try (PrintWriter writer = new PrintWriter(new FileWriter("enquiries.txt"))) {
+        try (PrintWriter writer = new PrintWriter(new FileWriter("Data/enquiries.txt"))) {
             for (Enquiry enquiry : enquiries) {
                 int replyId = (enquiry.getReplyID() == 0) ? 0 : enquiry.getReplyID();
                 writer.printf("%d,%s,%s,%s,%d%n",

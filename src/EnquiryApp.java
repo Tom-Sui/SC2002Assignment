@@ -34,7 +34,7 @@ import java.io.PrintWriter;
 public class EnquiryApp {
     private static final Scanner sc = new Scanner(System.in);
     private static final EnquiryService enquiryService = new EnquiryService();
-    private static final String ENQUIRIES_FILE = "enquiries.txt";
+    private static final String ENQUIRIES_FILE = "Data/enquiries.txt";
 
     /**
      * Starts the enquiry application for a given user.
@@ -143,8 +143,8 @@ public class EnquiryApp {
             displayEnquiries(enquiries);
         } else if (user instanceof HDBManager manager) {
             ArrayList<String> projectNames = new ArrayList<>();
-            for (Project project : manager.getProjects()) {
-                projectNames.add(project.getName());
+            for (Project project : manager.getProject()) {
+                projectNames.add(project.getProjectName());
             }
             ArrayList<Enquiry> enquiries = enquiryService.getEnquiriesByProjects(projectNames);
             displayEnquiries(enquiries);
@@ -163,6 +163,9 @@ public class EnquiryApp {
     private static void createEnquiry(User user) {
         System.out.println("\nCreate New Enquiry:");
         System.out.println("============================");
+
+        System.out.println("Available Projects:");
+        viewEnquiries(user);
         
         System.out.print("Enter project name: ");
         String projectName = sc.nextLine();
@@ -171,10 +174,11 @@ public class EnquiryApp {
         String message = sc.nextLine();
 
         if (user instanceof Applicant applicant) {
-            Project project = findProject(projectName);
-            if (project != null) {
-                Enquiry enquiry = new Enquiry(applicant.getNRIC(), projectName, message);
+            // Project project = findProject(projectName);
+            if (projectName != null) {
+                Enquiry enquiry = new Enquiry(applicant.getNRIC(), projectName, message, 0);
                 enquiryService.addEnquiry(enquiry);
+                enquiryService.writeEnquiriesToFile();
                 System.out.println("Enquiry created successfully!");
                 return; // Exit the method after successful creation
             }
@@ -208,6 +212,7 @@ public class EnquiryApp {
             Enquiry enquiryToUpdate = enquiryService.getEnquiryById(enquiryId);
             if (enquiryToUpdate != null) {
                 enquiryToUpdate.setMessage(newMessage);
+                enquiryService.writeEnquiriesToFile();
                 System.out.println("Enquiry updated successfully!");
             }
         }
@@ -236,6 +241,7 @@ public class EnquiryApp {
             Enquiry enquiryToDelete = enquiryService.getEnquiryById(enquiryId);
             if (enquiryToDelete != null) {
                 enquiryService.deleteEnquiry(enquiryToDelete);
+                enquiryService.writeEnquiriesToFile();
                 System.out.println("Enquiry deleted successfully!");
             }
         }
@@ -263,11 +269,12 @@ public class EnquiryApp {
             System.out.print("Enter your reply: ");
             String reply = sc.nextLine();
 
-            Enquiry enquiryToReply = findEnquiryById(enquiries, enquiryId);
+            Enquiry enquiryToReply = enquiryService.getEnquiryById(enquiryId);
             if (enquiryToReply != null) {
-                Enquiry replyEnquiry = new Enquiry(enquiryToReply.getUserNric(), enquiryToReply.getProjectName(), reply);
+                Enquiry replyEnquiry = new Enquiry(enquiryToReply.getUserNric(), enquiryToReply.getProjectName(), reply, 0);
                 enquiryService.addEnquiry(replyEnquiry);
                 enquiryToReply.setReplyID(replyEnquiry.getEnquiryID());
+                enquiryService.writeEnquiriesToFile();
                 System.out.println("Reply sent successfully!");
             }
         }
@@ -296,19 +303,5 @@ public class EnquiryApp {
             }
             System.out.println("------------------------");
         }
-    }
-
-    /**
-     * Finds an enquiry by its ID in a list of enquiries.
-     *
-     * @param enquiries The list of enquiries to search
-     * @param enquiryId The ID of the enquiry to find
-     * @return The found enquiry or null if not found
-     */
-    private static Enquiry findEnquiryById(List<Enquiry> enquiries, int enquiryId) {
-        return enquiries.stream()
-            .filter(e -> e.getEnquiryID() == enquiryId)
-            .findFirst()
-            .orElse(null);
     }
 }

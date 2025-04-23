@@ -1514,13 +1514,13 @@ public class HDBManager extends User{
     		System.out.printf("Enquiries for Project %s\n", project.getProjectName());
     		ArrayList<Enquiry> enquiries = project.getEnquiries();
     		for(Enquiry enquiry: enquiries) {
-    			
-    			System.out.printf("Applicant ID: %d\n", enquiry.getApplicant());
+
+    			System.out.printf("Applicant ID: %s\n", enquiry.getUserNric());
     			System.out.printf("Message: %s\n", enquiry.getMessage());
-    			if(enquiry.getReplies().equals("")) {
+    			if(enquiry.getReplyID() == 0) {
     			System.out.printf("There is no reply yet");
     			} else {
-    				System.out.printf("Reply: %s\n", enquiry.getReplies());
+    				System.out.printf("Reply: %s\n", enquiry.getReplyID());
     			}
     		}
     	}

@@ -151,10 +151,15 @@ public class Application {
         this.flatType = flatType;
     }
     
-
+    /**
+     * Sets the applicant associated with this application.
+     * 
+     * @param applicant the new Applicant object
+     */
     public void setApplicant(Applicant applicant) {
     	this.applicant = applicant;
     }
+
     /**
      * Gets the application ID.
      * 

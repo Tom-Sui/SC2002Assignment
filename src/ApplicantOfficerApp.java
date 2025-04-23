@@ -100,7 +100,7 @@ public class ApplicantOfficerApp {
 					System.out.printf("Enter the project number to apply for: ");	
 					try {
 						int projectNumber = sc.nextInt();
-						Project project = projectList.get(projectNumber);
+						Project project = projectList.get(projectNumber-1);
 						ArrayList<FlatType> filteredFlatTypes = FlatTypeLogic.filterFlatTypesByMaritalStatus(project.getFlatTypes(), applicant.getMaritalStatus());
 						if (filteredFlatTypes.isEmpty()){
 							System.out.println("Cannot apply for project, applicant is single: " + project.getProjectName());
@@ -109,8 +109,9 @@ public class ApplicantOfficerApp {
 						System.out.println(FlatTypeLogic.displayFlatTypesView(filteredFlatTypes)); 
 						System.out.printf("Enter the flat type number to apply for: ");
 						int flatTypeNumber = sc.nextInt();
-						FlatType flatType = filteredFlatTypes.get(flatTypeNumber);
+						FlatType flatType = filteredFlatTypes.get(flatTypeNumber-1);
 						applicant.applyForProject(project, flatType);
+						System.out.println(flatType);
 						System.out.println("Project application has been sent.");
 					} catch (IndexOutOfBoundsException e) {
 						System.out.println("Invalid project ID. Please enter a valid project ID.");

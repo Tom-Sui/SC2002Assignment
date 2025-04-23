@@ -85,7 +85,7 @@ public class ProjectLogic {
         
         for (Project newProject : projects) {
         	 System.out.println("Project ID: " + (idx+1));
-             System.out.println(projects.get(idx).toString());
+             System.out.println(newProject.toString());
              idx++;
         }
         

@@ -51,8 +51,8 @@ public class Application {
         this.applicant = applicant;
         this.project = project;
         this.isBooked = false;
-        this.bookingRequested = false;
-        this.applicationStatus = ApplicationStatus.SUCCESSFUL; //SHOULD BE PENDING. CHANGED TO SUCCESSFUL TO TEST OTHER FEATURES
+        this.bookingRequested = true;
+        this.applicationStatus = ApplicationStatus.PENDING; 
         this.flatType = flatType;
     }
 

@@ -1,10 +1,29 @@
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.io.File;
 import java.io.PrintWriter;
 import java.io.IOException;
 
 public class ApplicationService {
+	
+	public static void updateApplications(Applicant applicant) {
+	    ArrayList<Application> applications = applicant.getPastApplications();
+	    Iterator<Application> iterator = applications.iterator();
+
+	    while (iterator.hasNext()) {
+	        Application app = iterator.next();
+	        ApplicationStatus appStatus = app.getApplicationStatus();
+
+	        // Use AND instead of OR here
+	        if (appStatus != ApplicationStatus.WITHDRAWN || appStatus != ApplicationStatus.UNSUCCESSFUL) {
+	            applicant.setCurrentApplication(app);
+	            iterator.remove(); 
+	            break; 
+	        }
+	    }
+	}
+	
 	public static boolean processBooking(Application application, Project project) {
 		FlatType chosenFlatType = application.getFlatType();
         ArrayList<FlatType> flatTypes = project.getFlatTypes();

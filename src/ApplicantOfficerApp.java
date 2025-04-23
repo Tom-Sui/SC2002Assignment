@@ -7,6 +7,7 @@ public class ApplicantOfficerApp {
 	public static void start(User user, ArrayList<Project> projectList){
 		Applicant applicant = (Applicant)user;
 	    HDBOfficer officer = null;
+	    ApplicationService.updateApplications(applicant);
 		projectList = ProjectLogic.filterProjectsByMaritalStatus(projectList, user.getMaritalStatus());
 		if (user instanceof HDBOfficer) { //only need to check if they are HDBOfficer because a HDBOfficer is an applicant
 			officer = (HDBOfficer)user;	
@@ -113,6 +114,14 @@ public class ApplicantOfficerApp {
 						applicant.applyForProject(project, flatType);
 						System.out.println(flatType);
 						System.out.println("Project application has been sent.");
+						System.out.println("Registered for project: " + project.getProjectName());
+						
+						//Updating application datafile
+						Application application = applicant.getCurrentApplication();
+						String projectApplication = String.format("%d,%s,%s,%s,%s,%s,%s",application.getApplicationId(), applicant.getNRIC(), application.getProject().getProjectName(), application.getApplicationStatus(), application.getBookingRequested(),application.getIsBooked(), application.getFlatType().getFlatTypeName());
+						General.editFile("./Data/ApplicationList.txt", projectApplication);
+
+						
 					} catch (IndexOutOfBoundsException e) {
 						System.out.println("Invalid project ID. Please enter a valid project ID.");
 						continue;

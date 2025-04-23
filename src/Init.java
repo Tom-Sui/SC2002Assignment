@@ -159,12 +159,11 @@ public class Init {
     public ArrayList<Application> loadApplicationInfo(ArrayList<Applicant> applicants, ArrayList<Project> projects){
         File applicationFile = new File(DataFilePath + "/ApplicationList.txt");
         ArrayList<Application> applications = new ArrayList<Application>();
-        Application application;
         try {
             Scanner scanner = new Scanner(applicationFile);
 
             while (scanner.hasNextLine()) {
-            	application = new Application();
+                Application application = new Application();
                 String[] data = scanner.nextLine().split(",");
                 application.setApplicant(ApplicationLogic.getApplicant(applicants, data[1]));
                 application.setProject(ApplicationLogic.getProject(projects, data[2]));
@@ -173,6 +172,13 @@ public class Init {
                 application.setBookingRequested(Boolean.parseBoolean(data[5]));
                 application.setFlatType(ApplicationLogic.getFlatType(application.getProject(), data[6]));
                 applications.add(application);
+                
+                /**
+                 * Insert all applications to the applicant's past application list temporarily for simplicity.
+                 * We will check and update accordingly with another method.
+                 */
+                Applicant applicant = application.getApplicant();
+                applicant.appendPastApplications(application);
             }
             scanner.close();
         } catch (FileNotFoundException e) {

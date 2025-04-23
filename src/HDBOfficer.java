@@ -211,12 +211,18 @@ public class HDBOfficer extends Applicant {
     }
 
     /**
-     * Generates a receipt for a flat application.
+     * Generates a receipt for a flat booking.
+     * <p>
+     * Delegates to ApplicationService to generate a comprehensive receipt.
+     * </p>
      *
      * @param application the application to generate receipt for
      */
-    public void generateFlatReceipt(Application application) {
-        System.out.println(application.toString());
+    public void generateFlatSelectionReceipt(Application application) {
+        String receipt = ApplicationService.generateFlatSelectionReceipt(application);
+        if (receipt != null) {
+            System.out.println(receipt);
+        }
     }
 
     /**

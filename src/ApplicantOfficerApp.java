@@ -144,7 +144,7 @@ public class ApplicantOfficerApp {
 						System.out.println("No application found.");
 						continue;
 					} 
-					applicant.requestWithdrawal();
+					ApplicationService.withdrawApplication(currentApplication);
 					System.out.println("Withdrawal request is sent.");
 				}
 				if (officer != null) {
@@ -203,6 +203,15 @@ public class ApplicantOfficerApp {
 					    	System.out.println("\nGenerate flat selection receipt:");
 							System.out.println("============================");
 							ApplicationLogic.displayApplications(filteredApplications);
+							System.out.print("Enter the application number to generate a flat selection receipt: ");
+							try{
+								int chosenApplication = sc.nextInt();
+								ApplicationService.generateFlatSelectionReceipt(filteredApplications.get(chosenApplication-1));
+								ApplicationService.writeReceiptToFile(filteredApplications.get(chosenApplication-1));
+							} catch (IndexOutOfBoundsException e) {
+								System.out.println("Invalid application ID. Please enter a valid application ID.");
+								continue;
+							}
 						}
 						else if (choice == 11){ 
 							// View project details

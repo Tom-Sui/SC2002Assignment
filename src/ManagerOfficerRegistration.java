@@ -2,7 +2,16 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
+/**
+ * ManagerOfficerRegistration class handles the officer registration process for HDB projects.
+ * <p>
+ * This class provides methods to view the officer registration list and approve or reject officer registrations.
+ * </p>
+ * 
+ * @see BaseManagerOfficerRegistration
+ * @see Project
+ * @see HDBOfficer
+ */
 public class ManagerOfficerRegistration extends BaseManagerOfficerRegistration{
 	
 	private String DataFilePath = "./Data";   // TO ADD ./src FOR ECLIPSE	
@@ -248,6 +257,15 @@ public class ManagerOfficerRegistration extends BaseManagerOfficerRegistration{
              System.err.println("Error reading the file: " + e.getMessage());
          }
     }
+
+	/**
+	 * Displays all enquiries related to the current projects.
+	 * <p>
+	 * This method retrieves and displays all enquiries for each project in the currentProjects list.
+	 * </p>
+	 * 
+	 * @param currentProjects List of current projects (must not be null)
+	 */
 
     public void viewEnquiries(ArrayList<Project> currentProjects) {
         EnquiryService enquiryService = new EnquiryService();

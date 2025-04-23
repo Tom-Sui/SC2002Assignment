@@ -156,6 +156,14 @@ public class Init {
         return projects;
     }
     
+    /**
+     * Loads application information from the ApplicationList.txt file and associates
+     * applicants and projects with each application.
+     * 
+     * @param applicants List of applicants to associate with applications
+     * @param projects List of projects to associate with applications
+     * @return ArrayList of Application objects populated with data from the file
+     */
     public ArrayList<Application> loadApplicationInfo(ArrayList<Applicant> applicants, ArrayList<Project> projects){
         File applicationFile = new File(DataFilePath + "/ApplicationList.txt");
         ArrayList<Application> applications = new ArrayList<Application>();
@@ -280,6 +288,13 @@ public class Init {
         return hdbManagers;
     }
      
+    /**
+     * Loads enquiry information from the EnquiryList.txt file.
+     * 
+     * @param applicants List of applicants to associate with enquiries
+     * @param projects List of projects to associate with enquiries
+     * @return ArrayList of Enquiry objects populated with data from the file
+     */
     public ArrayList<Enquiry> loadEnquiryInfo(ArrayList<Applicant> applicants, ArrayList<Project> projects){
         File enquiryFile = new File("./Data/EnquiryList.txt");
         ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>();

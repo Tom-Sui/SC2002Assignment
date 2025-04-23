@@ -63,11 +63,11 @@ public class ApplicationLogic {
     }
 
 
-    /*
-     * Filters applications that have been applied to past projects.
+    /**
+     * Filters applications that have been applied for in the past.
      * 
      * @param applicationList the list of applications to filter
-     * @return ArrayList containing only Projects that have been applied to 
+     * @return ArrayList containing only past applied projects
      */
     public static ArrayList<Project> filterByPastAppliedProjects(ArrayList<Application> applicationList) {
         ArrayList<Project> pastAppliedProjects = new ArrayList<>();
@@ -76,7 +76,13 @@ public class ApplicationLogic {
         }
         return pastAppliedProjects;
     }
-    
+    /**
+     * Retrieves the Applicant object that matches the given input NRIC.
+     * 
+     * @param applicantList the list of applicants to search
+     * @param NRIC the NRIC of the applicant to search for
+     * @return the matching Applicant object, or null if not found
+     */
     public static Applicant getApplicant(ArrayList<Applicant> applicantList, String NRIC) {
     	for (Applicant applicant : applicantList) {
     		if (applicant.getNRIC().equals(NRIC)) {
@@ -85,7 +91,13 @@ public class ApplicationLogic {
     	}
 		return null;
     }
-    
+    /**
+     * Retrieves the Project object that matches the given input project name.
+     * 
+     * @param projectList the list of projects to search
+     * @param projectName the name of the project to search for
+     * @return the matching Project object, or null if not found
+     */
     public static Project getProject(ArrayList<Project> projectList, String projectName) {
     	for (Project project : projectList) {
     		if (project.getProjectName().equals(projectName)) {
@@ -94,7 +106,13 @@ public class ApplicationLogic {
     	}
 		return null;
     }
-    
+    /**
+     * Retrieves the FlatType object that matches the given input flat type name.
+     * 
+     * @param project the project containing the flat types
+     * @param inputFlatType the name of the flat type to search for
+     * @return the matching FlatType object, or null if not found
+     */
     public static FlatType getFlatType(Project project, String inputFlatType) {
         for (FlatType flatType : project.getFlatTypes()) {
             if (flatType.matchesTypeName(inputFlatType)) {

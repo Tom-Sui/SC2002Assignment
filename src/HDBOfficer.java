@@ -20,7 +20,32 @@ public class HDBOfficer extends Applicant {
     private Map<Project, OfficerRegistrationStatus> registrationStatusMap = new HashMap<>();
     private ArrayList<Application> managedApplications = new ArrayList<Application>();
     private boolean isManagingOfficer = false;
-    
+    /**
+     * Default constructor for HDBOfficer.
+     */
+    public HDBOfficer() {}
+    /**
+     * Constructs an HDBOfficer with specified details and managed project.
+     *
+     * @param name the officer's name
+     * @param NRIC the officer's NRIC
+     * @param userID the officer's user ID
+     * @param password the officer's password
+     * @param age the officer's age
+     * @param maritalStatus the officer's marital status
+     * @param managedProject the project assigned under this officer
+     */
+    public HDBOfficer(String name, String NRIC, int userID, String password, int age, 
+                     MaritalStatus maritalStatus, Project managedProject) {
+        super(name, NRIC, userID, password, age, maritalStatus);
+        this.managedProject = managedProject;
+    }
+    /**
+     * Checks if the officer is managing a project and if the current date is past the application closing date.
+     * <p>
+     * If the current date is past the application closing date, the officer is no longer managing the project.
+     * </p>
+     */
     public void checkCurrentProject() {
     	// Return if the officer is not managing any project.
     	if (managedProject == null) {
@@ -35,7 +60,13 @@ public class HDBOfficer extends Applicant {
     		managedApplications.clear();
     	}
     }
-    
+    /**
+     * Checks if there are any new projects that the officer can manage.
+     * <p>
+     * If the current date matches the application opening date of any upcoming project,
+     * the officer is assigned to manage that project.
+     * </p>
+     */
     public void checkNewProject() {
     	LocalDate currentDate = LocalDate.now();
     	for (Project project : upcomingProjects) {
@@ -49,6 +80,12 @@ public class HDBOfficer extends Applicant {
     }
  
     // TODO: method to check if there are any approved projects in registrationStatusMap. if there are, transfer them to upcomingProjects
+    /**
+     * Checks if there are any approved projects in the registration status map.
+     * <p>
+     * If there are approved projects, they are added to the list of upcoming projects.
+     * </p>
+     */
     public void checkApprovedProjects() {
     	if (registrationStatusMap.size() == 0) {
     		return;
@@ -99,28 +136,6 @@ public class HDBOfficer extends Applicant {
         registrationStatusMap.put(project, OfficerRegistrationStatus.PENDING);
         return true;
     }
-    
-    /**
-     * Default constructor for HDBOfficer.
-     */
-    public HDBOfficer() {}
-
-    /**
-     * Constructs an HDBOfficer with specified details and managed project.
-     *
-     * @param name the officer's name
-     * @param NRIC the officer's NRIC
-     * @param userID the officer's user ID
-     * @param password the officer's password
-     * @param age the officer's age
-     * @param maritalStatus the officer's marital status
-     * @param managedProject the project assigned under this officer
-     */
-    public HDBOfficer(String name, String NRIC, int userID, String password, int age, 
-                     MaritalStatus maritalStatus, Project managedProject) {
-        super(name, NRIC, userID, password, age, maritalStatus);
-        this.managedProject = managedProject;
-    }
 
     /**
      * Checks if the officer can apply for a project.
@@ -153,7 +168,6 @@ public class HDBOfficer extends Applicant {
     /**
      * Gets the officer's registration status.
      *
-     * @return the current registration status
      */
     
     public void viewOfficerRegistrationStatus() {
@@ -162,11 +176,12 @@ public class HDBOfficer extends Applicant {
     	});
     }
     
-    /*
-    * @param allow HDBOfficer to view all booking requests from applicants.
-    * @return void  
-    * @description - The HDBOfficer can only receive and view requests of applicants that applied to the project he/she is part of */
-    
+    /**
+     * Displays the list of book requests for the managed applications.
+     * <p>
+     * If there are no managed applications, a message is displayed indicating that there are no requests.
+     * </p>
+     */
     public void viewBookRequests() {
         if (managedApplications.size() > 0) {
             for (Application app : managedApplications) {
@@ -236,7 +251,15 @@ public class HDBOfficer extends Applicant {
     public void setManagingOfficer(boolean isManagingOfficer) {
         this.isManagingOfficer = isManagingOfficer;
     }
-    
+    /**
+     * set officer registration status for a project.
+     * <p>
+     * This method updates the registration status of a project in the officer's registration status map.
+     * </p>
+     * 
+     * @param project the project whose registration status is to be set
+     * @param status the new registration status to be set for the project
+     */
     public void setOfficerRegistrationStatus(Project project, OfficerRegistrationStatus status) {
     	if(registrationStatusMap.containsKey(project)) {
     		registrationStatusMap.put(project, status);

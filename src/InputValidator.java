@@ -5,13 +5,33 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-
+/**
+ * InputValidator class implements I_InputValidator interface to handle input validation for various user inputs.
+ * <p>
+ * This class provides methods to validate project names, strings, integers, dates, and officer slots.
+ * </p>
+ * 
+ * @see I_InputValidator
+ * @see Project
+ */
 // Handles Input Validation functions
 public class InputValidator implements I_InputValidator{
 	
 	DateFormat formatter = new SimpleDateFormat("d/M/yyyy");
     Date currentDate = new Date();
-        
+    
+	/**
+	 * Ensures a project name is unique by checking against existing projects
+	 * <p>
+	 * This method prompts the user for a project name and checks if it is unique among the current projects.
+	 * If the name is not unique, it will prompt the user to enter a different name.
+	 * </p>
+	 * @param currentProjects The list of current projects in the system
+	 * @param scanner The scanner object for user input
+	 * @param prompt The prompt message for user input
+	 * @return The verified unique project name
+	 * 
+	 */
     // verify unique Project Name
     public String uniqueProjectName(ArrayList<Project> currentProjects, Scanner scanner, String prompt)
     {
@@ -54,7 +74,16 @@ public class InputValidator implements I_InputValidator{
     }
     
     
-    
+    /**
+	 * Validates and returns a string input from the user.
+	 * <p>
+	 * This method prompts the user for a string input and checks if it is valid (not empty, no digits).
+	 * If the input is invalid, it will prompt the user to enter a different string.
+	 * </p>
+	 * @param scanner The scanner object for user input
+	 * @param prompt The prompt message for user input
+	 * @return The verified valid string input
+	 */
     // verify valid string (no integer, no spaces)
     public String validateString(Scanner scanner, String prompt)
     {
@@ -80,7 +109,17 @@ public class InputValidator implements I_InputValidator{
     	return verifiedString;    	
     }
     
-    
+    /**
+	 * Validates and returns an integer input (as a string) from the user.
+	 * <p>
+	 * This method prompts the user for an integer input and checks if it is valid (not empty, non-negative).
+	 * If the input is invalid, it will prompt the user to enter a different integer.
+	 * </p>
+	 * @param scanner The scanner object for user input
+	 * @param prompt The prompt message for user input
+	 * @return The verified valid integer input (as a string)
+	 * 
+	 */
     // verify only integer numbers
     public String validateInteger(Scanner scanner, String prompt)
     {
@@ -113,7 +152,17 @@ public class InputValidator implements I_InputValidator{
     }
     
     
-    
+    /**
+	 * Verifies and returns a valid date input from the user.
+	 * <p>
+	 * This method prompts the user for a date input and checks if it is valid (in the format dd/mm/yy).
+	 * If the input is invalid, it will prompt the user to enter a different date.
+	 * * </p>
+	 * @param scanner The scanner object for user input
+	 * @param prompt The prompt message for user input
+	 * @return The verified valid date input (in the format dd/mm/yy)
+	 * 
+	 */
     // verify correct date input
     public String verifyDate(Scanner scanner, String prompt)
     {
@@ -138,7 +187,17 @@ public class InputValidator implements I_InputValidator{
     	return verifiedDate;
     }
     
-    
+    /**
+	 * Verifies valid opening and closing dates for creating new project.
+	 * <p>
+	 * This method checks if the opening and closing dates are logically valid (not in the past, not overlapping).
+	 * If the dates are invalid, it will return false.
+	 * </p>
+	 * @param openingDate The opening date of the project
+	 * @param closingDate The closing date of the project
+	 * @return true if the dates are valid, false otherwise
+	 * 
+	 */
     // Verify valid opening and closing dates for creating new project
     public boolean ValidDateChecker(String openingDate, String closingDate)
     {
@@ -165,6 +224,17 @@ public class InputValidator implements I_InputValidator{
     	return false;    	
     }
     
+	/**
+	 * Verifies valid opening and closing dates for editing existing project.
+	 * <p>
+	 * This method checks if the opening and closing dates are logically valid (not in the past, not overlapping).
+	 * If the dates are invalid, it will return false.
+	 * </p>
+	 * @param openingDate The opening date of the project
+	 * @param closingDate The closing date of the project
+	 * @return true if the dates are valid, false otherwise
+	 * 
+	 */
     
     // Verify valid opening and closing dates for editing existing project
     public boolean ValidDateCheckerforEditing(String openingDate, String closingDate, boolean forOpening)
@@ -208,7 +278,17 @@ public class InputValidator implements I_InputValidator{
     	return false;    	
     }
     
-    
+    /**
+	 * Verifies valid number of slots for officers.
+	 * <p>
+	 * This method checks if the number of slots is within the valid range (1 to 10).
+	 * If the input is invalid, it will prompt the user to enter a different number of slots.
+	 * </p>
+	 * @param scanner The scanner object for user input
+	 * @param prompt The prompt message for user input
+	 * @return The verified valid number of slots (as a string)
+	 *
+	 */
     // Verify valid number of slots
     public String verifyOfficerSlots(Scanner scanner, String prompt)
     {

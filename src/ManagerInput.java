@@ -25,7 +25,8 @@ public class ManagerInput {
      * including project creation, editing, deletion, and various approval workflows.
      * </p>
      *
-     * @param userName The username of the currently logged-in manager
+	 * @param name The name of the manager
+	 * @param managerID The ID of the manager
      * @param projects List of all projects in the system
      * @param hdbManagers List of all HDB managers
      * @param hdbOfficers List of all HDB officers
@@ -53,9 +54,9 @@ public class ManagerInput {
      * @throws IllegalArgumentException if invalid inputs are provided
      * @throws NullPointerException if required parameters are null
      *
-     * @see HDBManager
-     * @see Project
-     * @see Applicant
+     * @see HDBManager list of all HDB managers
+     * @see Project list of all projects
+     * @see Applicant list of all applicants
      */
 	public void switchFunction(User name, String managerID, ArrayList<Project> projects, ArrayList<HDBManager> hdbManagers, ArrayList<HDBOfficer> hdbOfficers, ArrayList<Applicant> applicants)
 	{

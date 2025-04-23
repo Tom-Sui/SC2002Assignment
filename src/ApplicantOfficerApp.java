@@ -2,8 +2,24 @@ import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-
+/**
+ * The main application class for the applicant and HDB officer.
+ * This class handles the user interface and interactions for both applicants and HDB officers.
+ * It provides options to view available projects, apply for projects, book flats, and manage applications.
+ * 
+ * @see User
+ * @see Project
+ * @see FlatType
+ * @see Application
+ */
 public class ApplicantOfficerApp {
+	/**
+	 * Starts the application for the applicant or HDB officer.
+	 * Displays the list of features available to the user and handles user input.
+	 * 
+	 * @param user the user (applicant or HDB officer) using the application
+	 * @param projectList the list of projects available for the user to apply for
+	 */
 	public static void start(User user, ArrayList<Project> projectList){
 		Applicant applicant = (Applicant)user;
 	    HDBOfficer officer = null;
@@ -220,6 +236,13 @@ public class ApplicantOfficerApp {
 		} while (choice != -1);
 		
 	}
+	/**
+	 * Displays the features available to the user.
+	 * 
+	 * @param features the list of features to display
+	 * @param index the starting index for numbering the features
+	 * @return the updated index after displaying the features
+	 */
 	public static int displayFeatures(ArrayList<String> features, int index) {
 		int i;
 		for (i=0; i<features.size(); i++) {

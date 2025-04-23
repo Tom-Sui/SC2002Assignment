@@ -2,6 +2,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * BaseManagerOfficerRegistration.java
+ * 
+ * This abstract class provides methods for managing officer registrations in a housing project.
+ * It includes methods for rejecting and approving officer registrations, as well as viewing enquiries.
+ * 
+ * @see I_ManagerOfficerRegistration
+ * @see HDBOfficer
+ * @see Project
+ */
 public abstract class BaseManagerOfficerRegistration implements I_ManagerOfficerRegistration{
 	
 	Date currentTime = new Date();	
@@ -16,10 +26,6 @@ public abstract class BaseManagerOfficerRegistration implements I_ManagerOfficer
 	 *
 	 * @param filePath The path to the directory containing the registration file (must not be null)
 	 * @param officerNRIC The NRIC of the officer to reject (must not be null or empty, used as unique identifier)
-	 *
-	 * @throws NullPointerException if either parameter is null
-	 * @throws IllegalArgumentException if officerNRIC is empty
-	 * @throws IOException if there is an error updating the registration file
 	 *
 	 * @see General#editOtherFile(String, String, String, String, String)
 	 *
@@ -41,9 +47,6 @@ public abstract class BaseManagerOfficerRegistration implements I_ManagerOfficer
 	 * @param filePath The path to the directory containing the registration file (must not be null)
 	 * @param officerNRIC The NRIC of the officer to reject (must not be null or empty, used as unique identifier)
 	 *
-	 * @throws NullPointerException if either parameter is null
-	 * @throws IllegalArgumentException if officerNRIC is empty
-	 * @throws IOException if there is an error updating the registration file
 	 *
 	 * @see General#editOtherFile(String, String, String, String, String)
 	 *

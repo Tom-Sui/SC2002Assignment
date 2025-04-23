@@ -37,6 +37,11 @@ public class TwoRoom extends FlatType {
         super(units, price, allowedGroups);
     }
     
+    /**
+     * Returns the name of this flat type.
+     * 
+     * @return a string representing the flat type name ("2-Room")
+     */
 	public String getFlatTypeName() {
 		return "2-Room";
 	}

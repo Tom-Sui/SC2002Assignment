@@ -49,7 +49,20 @@ public class ProjectLogic {
         }
         return filteredProjects;
     }
-    
+    /**
+     * Filters projects for a specific HDB officer.
+     * <p>
+     * This method filters out projects that the officer is already in charge of,
+     * allowing them to view only the projects they can apply to.
+     * </p>
+     *
+     * @param projects List of all projects
+     * @param officer The HDB officer to filter projects for
+     * @return Filtered list of projects available for the officer to apply to
+     *
+     * @see Project
+     * @see HDBOfficer
+     */
     public static ArrayList<Project> filterProjectsForOfficer(ArrayList<Project> projects, HDBOfficer officer) {
         ArrayList<Project> filteredProjects = new ArrayList<>();
         
@@ -68,6 +81,8 @@ public class ProjectLogic {
      * Displays all available projects that are visible to applicants.
      * 
      * @param projects list of all projects to display
+     * @param applicant the applicant whose past applications are to be considered
+     * @return the number of available projects displayed
      */
     public static int viewAvailableProjects(ArrayList<Project> projects, Applicant applicant) {
         List<Application> pastApplications = applicant.getPastApplications();
@@ -105,8 +120,6 @@ public class ProjectLogic {
      * </p>
      *
      * @param officers List of HDB officers to display
-     * 
-
      *
      * @see HDBOfficer#toString()
      */

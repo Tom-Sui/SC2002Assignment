@@ -8,16 +8,32 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
-
+/**
+ * ProjectManager class that extends BaseProjectManager.
+ * <p>
+ * This class is responsible for managing housing projects, including creating, editing,
+ * and deleting projects. It also handles the storage and retrieval of project data from
+ * a text file.
+ * </p>
+ * 
+ * @see BaseProjectManager
+ * @see Project
+ * @see FlatType
+ */
 // Handles Project-related functions to txt
 public class ProjectManager extends BaseProjectManager{
 	
 	private String DataFilePath = "./Data";   // TO ADD /src/ FOR ECLIPSE
 	
 	// Constructor
-	public ProjectManager(General general, ArrayList<Project> managedProjects)
+	/**
+	 * Constructor for ProjectManager class.
+	 * 
+	 * @param managedProjects ArrayList of projects managed by this manager
+	 */
+	public ProjectManager(ArrayList<Project> managedProjects)
 	{
-		super(general, managedProjects);
+		super(managedProjects);
 	}
     
     /**

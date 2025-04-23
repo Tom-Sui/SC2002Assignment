@@ -1,13 +1,13 @@
 import java.util.ArrayList;
 
 /**
- * Provides utility methods for managing and displaying flat type information.
- * <p>
- * This class contains static methods for displaying flat type details and managing
- * flat unit inventory. It serves as a helper class for flat type-related operations.
- * </p>
+ * FlatTypeLogic.java
+ * 
+ * This class provides utility methods for managing flat types in a housing project.
+ * It includes methods for displaying flat types, filtering by marital status, and updating available units.
  * 
  * @see FlatType
+ * @see MaritalStatus
  */
 public class FlatTypeLogic {
 

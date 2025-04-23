@@ -2,6 +2,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+
+/**
+ * Main class for the HDB application
+ * 
+ * This class handles user login, profile editing, and application management.
+ * It initializes user data and provides a command-line interface for interaction.
+ */
 public class App{
     //To keep track who is loged in
     private static String filePath = "./Data";  // TO ADD /src/ FOR ECLIPSE
@@ -14,6 +21,11 @@ public class App{
     private static String currentUserId = "NULL";
     private static int userPos = -1;
 
+    /**
+     * Main method to run the application
+     * 
+     * @param args command line arguments
+     */
     public static void main(String[] args) {
         String userInput;
         Scanner scanner = new Scanner(System.in);
@@ -221,7 +233,9 @@ public class App{
         }
         scanner.close();
     }
-
+    /**
+     * Displays help information for the user
+     */
     public static void helpInfo(){
         //little instructions guids for user
         //the instruction we can change later on or remove it
@@ -234,13 +248,19 @@ public class App{
         System.out.println("9. quit");
         System.out.println("========================");
     }
-
+    /**
+     * Displays a message indicating that login was successful
+     * 
+     * @param user the logged-in user
+     */
     public static void loginSuccess(User user){
         System.out.println("===Login success===");
         System.out.println("Welcome " + user.getName());
         System.out.println("===================\n");
     }
-
+    /**
+     * Displays a message indicating that login has failed
+     */
     public static void loginFailed(){
         System.out.println("============Login failed============");
         System.out.println("Incorrect password or incorrect ID");
@@ -348,7 +368,14 @@ public class App{
         }
         return false;
     }
-
+    /**
+     * Handles login for HDB Officer
+     * 
+     * @param userName the username or NRIC
+     * @param userPassword the password
+     * @param officers list of HDB officers
+     * @return true if login successful, false otherwise
+     */
     private static boolean handleOfficerLogin(String userName, String userPassword, ArrayList<HDBOfficer> officers) {
         for (int i = 0; i < officers.size(); i++) {
             if (officers.get(i).getNRIC().equals(userName) && officers.get(i).login(userPassword)) {

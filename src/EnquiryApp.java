@@ -13,7 +13,6 @@ import java.io.PrintWriter;
  * HDB Officers, and HDB Managers) with role-specific functionality.
  * </p>
  * 
- * <p>
  * The application provides these main functions:
  * <ul>
  *   <li>View all enquiries - Lists enquiries based on user role</li>
@@ -22,7 +21,6 @@ import java.io.PrintWriter;
  *   <li>Delete an enquiry - Lets applicants remove their enquiries</li>
  *   <li>Reply to an enquiry - Permits HDB staff to respond to enquiries</li>
  * </ul>
- * </p>
  *
  * @see User
  * @see Applicant

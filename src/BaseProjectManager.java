@@ -2,19 +2,33 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-
+/**
+ * BaseProjectManager is an abstract class that implements the I_ProjectManager and I_ListOutProjects interfaces.
+ * It provides a foundation for managing housing projects, including functionalities for listing, updating,
+ * and checking project details.
+ * <p>
+ * This class contains methods to manage projects, check their status, and print relevant information.
+ * </p>
+ * 
+ * 
+ * @see I_ProjectManager
+ * @see I_ListOutProjects
+ */
 // Contains all logic from interface
 public abstract class BaseProjectManager implements I_ProjectManager, I_ListOutProjects{
-	
-	protected General general;
+	/**
+	 * List of projects managed by this manager.
+	 */
 	protected ArrayList<Project> managedProjects = new ArrayList<>(); 
 	
 	DateFormat formatter = new SimpleDateFormat("d/M/yyyy");
     Date currentDate = new Date();
-	
-	public BaseProjectManager(General general, ArrayList<Project> managedProjects)
+	/**
+	 * Default constructor that initializes the managed projects list.
+	 * @param managedProjects the list of projects to be managed (can be empty)
+	 */
+	public BaseProjectManager(ArrayList<Project> managedProjects)
 	{
-		this.general = general;
 		this.managedProjects = managedProjects;
 	}
 	
@@ -114,7 +128,6 @@ public abstract class BaseProjectManager implements I_ProjectManager, I_ListOutP
 	 * 
 	 * @param currentProjects the list of projects to display (must not be null, but can be empty)
 	 * 
-	 * @see #listRequiredProjects(ArrayList, int)
 	 * 
 	 * The output format is as follows:
 	 * <pre>
@@ -169,7 +182,6 @@ public abstract class BaseProjectManager implements I_ProjectManager, I_ListOutP
 	 * @param currentProjects the list of projects to filter through (must not be null, but can be empty)
 	 * @param username the name of the HDB manager to filter by (case-sensitive, must not be null or empty)
 	 * 
-	 * @see #listRequiredProjects(ArrayList, int)
 	 * 
 	 * The output includes:
 	 * <pre>

@@ -5,7 +5,6 @@ import java.util.List;
  * Represents an applicant user in the system.
  * Extends the base {@link User} class and manages housing applications, projects, and enquiries.
  * @see FlatType
- * @see ApplicantApp
  */
 public class Applicant extends User{
     private Application currentApplication; 
@@ -109,11 +108,14 @@ public class Applicant extends User{
         currentApplication.setApplicationStatus(ApplicationStatus.PENDINGWITHDRAWAL);
     }
     
-    /*
-    * @param allow the user to book flat
-    * @return void
-    * @description - This function will send a booking request to a managing HDB Officer. Only valid if the applicant's application is successful (checked at ApplicantOfficerApp)   */
-
+    /**
+     * Books a flat for the applicant.
+     * <p>
+     * This method sets the booking status of the application to true and notifies the HDB officer.
+     * </p>
+     * 
+     * @param officer the HDBOfficer object responsible for processing the booking
+     */
     public void bookFlat(HDBOfficer officer) {
     	ApplicationService.bookFlat(currentApplication, officer);
     }

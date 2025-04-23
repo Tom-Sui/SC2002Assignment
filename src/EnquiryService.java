@@ -2,13 +2,28 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.stream.Collectors;
+/**
+ * EnquiryService.java
+ * 
+ * This class manages the enquiries related to housing projects.
+ * It provides methods to add, delete, update, and view enquiries.
+ * It also handles the reading and writing of enquiries to a text file.
+ * 
+ * @see Enquiry
+ * @see EnquiryCreator
+ * @see EnquiryService
+ */
 
 public class EnquiryService {
     private ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>();
     private HashMap<String, ArrayList<Enquiry>> enquiriesByProject = new HashMap<String, ArrayList<Enquiry>>();
     private HashMap<String, ArrayList<Enquiry>> enquiriesByApplicant = new HashMap<String, ArrayList<Enquiry>>();
     private static final String ENQUIRIES_FILE = "Data/enquiries.txt";
-
+    /**
+     * Default constructor for the EnquiryService class.
+     * Initializes the enquiries list and reads enquiries from a file.
+     */
+    // ========== CONSTRUCTOR ==========
     public EnquiryService() {
         try {
             readEnquiriesFromFile();
@@ -16,7 +31,14 @@ public class EnquiryService {
             System.err.println("Error reading enquiries from file: " + e.getMessage());
         }
     }
-
+    /**
+     * Refreshes the enquiries list by reading from the file again.
+     * <p>
+     * This method clears the current enquiries list and reads the enquiries from the file.
+     * </p>
+     * 
+     * @param userNric the NRIC of the applicant
+     */
     public void refreshEnquiriesByApplicant(String userNric) {
         enquiriesByApplicant.clear();
         ArrayList<Enquiry> userEnquiries = viewEnquiriesByApplicant(userNric);
@@ -25,6 +47,15 @@ public class EnquiryService {
         }
     }
 
+    /**
+     * Refreshes the enquiries list by reading from the file again.
+     * <p>
+     * This method clears the current enquiries list and reads the enquiries from the file.
+     * </p>
+     * 
+     * @param projectName the name of the project
+     */
+
     public void refreshEnquiriesByProject(String projectName) {
         enquiriesByProject.clear();
         ArrayList<Enquiry> projectEnquiries = viewEnquiriesByProject(projectName);
@@ -32,42 +63,112 @@ public class EnquiryService {
             enquiriesByProject.put(projectName, projectEnquiries);
         }
     }
-    
+    /**
+     * Returns a list of all enquiries made by applicants for a specific project.
+     * <p>
+     * This method filters the enquiries based on the provided project name.
+     * </p>
+     * 
+     * @param projectName the name of the project
+     * @return ArrayList of all enquiries for the specified project
+     */
     public ArrayList<Enquiry> viewEnquiriesByProject(String projectName) {
         return new ArrayList<>(enquiries.stream()
             .filter(enquiry -> enquiry.getProjectName().equals(projectName))
             .collect(Collectors.toList()));
     }
-
+    /**
+     * Returns a list of all enquiries made by applicants for specific projects.
+     * <p>
+     * This method filters the enquiries based on the provided project names.
+     * </p>
+     * 
+     * @param projectNames the names of the projects
+     * @return ArrayList of all enquiries for the specified projects
+     */
     public ArrayList<Enquiry> viewEnquiriesByProjects(ArrayList<String> projectNames) {
         return new ArrayList<>(enquiries.stream()
             .filter(enquiry -> projectNames.contains(enquiry.getProjectName()))
             .collect(Collectors.toList()));
     }
-
+    /**
+     * Returns a list of all enquiries made by applicants.
+     * <p>
+     * This method returns the complete list of enquiries without any filtering.
+     * </p>
+     * 
+     * @param userNric the NRIC of the applicant
+     * @return ArrayList of all enquiries
+     */
     public ArrayList<Enquiry> viewEnquiriesByApplicant(String userNric) {
         return new ArrayList<>(enquiries.stream()
             .filter(enquiry -> enquiry.getUserNric().equals(userNric))
             .collect(Collectors.toList()));
     }
-
+    /**
+     * Returns a list of all enquiries.
+     * <p>
+     * This method returns the complete list of enquiries without any filtering.
+     * </p>
+     * 
+     * @return ArrayList of all enquiries
+     */
     public ArrayList<Enquiry> viewAllEnquiries() {
         return enquiries;
     } 
 
+    /**
+     * Returns a list of all enquiries by projects.
+     * <p>
+     * This method returns the complete list of enquiries by projects.
+     * </p>
+     * 
+     * @param projectName the name of the project
+     * @return ArrayList of all enquiries by projects
+     */
     public ArrayList<Enquiry> getEnquiriesByProject(String projectName) {
         refreshEnquiriesByProject(projectName);
         return enquiriesByProject.getOrDefault(projectName, new ArrayList<>());
     }
+
+    /**
+     * Returns a list of all enquiries by applicants.
+     * <p>
+     * This method returns the complete list of enquiries by applicants.
+     * </p>
+     * 
+     * @param userNric the NRIC of the applicant
+     * @return ArrayList of all enquiries by applicants
+     */
 
     public ArrayList<Enquiry> getEnquiriesByApplicant(String userNric) {
         refreshEnquiriesByApplicant(userNric);
         return enquiriesByApplicant.getOrDefault(userNric, new ArrayList<>());
     }
     
+    /**
+     * Returns a list of all enquiries by projects.
+     * <p>
+     * This method returns the complete list of enquiries by projects.
+     * </p>
+     * 
+     * @param projectNames the names of the projects
+     * @return ArrayList of all enquiries by projects
+     */
+
     public ArrayList<Enquiry> getEnquiriesByProjects(ArrayList<String> projectNames) {
         return viewEnquiriesByProjects(projectNames);
     }
+
+    /**
+     * Adds a new enquiry to the list.
+     * <p>
+     * This method checks if the enquiry is null before adding it to the list.
+     * </p>
+     * 
+     * @param enquiry the Enquiry object to add
+     * @return true if the addition was successful, false otherwise
+     */
 
     public boolean addEnquiry(Enquiry enquiry) {
         if (enquiry == null) {
@@ -78,6 +179,16 @@ public class EnquiryService {
         return true;
     }
 
+    /**
+     * Deletes an enquiry from the list.
+     * <p>
+     * This method removes the specified enquiry from the enquiries list.
+     * </p>
+     * 
+     * @param enquiry the Enquiry object to be deleted
+     * @return true if the deletion was successful, false otherwise
+     */
+
     public boolean deleteEnquiry(Enquiry enquiry) {
         if (enquiry == null) {
             System.out.println("Enquiry cannot be null");
@@ -87,12 +198,32 @@ public class EnquiryService {
         return true;
     }
 
+    /**
+     * Retrieves an enquiry by its ID.
+     * <p>
+     * This method searches the enquiries list for an enquiry with the specified ID.
+     * </p>
+     * 
+     * @param enquiryId the ID of the enquiry to retrieve
+     * @return the Enquiry object if found, null otherwise
+     */
+
     public Enquiry getEnquiryById(int enquiryId) {
         return enquiries.stream()
             .filter(enquiry -> enquiry.getEnquiryID() == enquiryId)
             .findFirst()
             .orElse(null);
     }
+
+    /**
+     * Updates an existing enquiry with new details.
+     * <p>
+     * This method replaces the existing enquiry in the list with the updated one.
+     * </p>
+     * 
+     * @param enquiry the updated Enquiry object
+     * @return true if the update was successful, false otherwise
+     */
 
     public boolean updateEnquiry(Enquiry enquiry) {
         if (enquiry == null) {
@@ -110,6 +241,16 @@ public class EnquiryService {
         return false;
     }
 
+    /**
+     * Reads enquiries from a text file named "enquiries.txt".
+     * <p>
+     * Each line in the file should be in the format:
+     * enquiryID,projectName,userNric,message,replyID
+     * where replyID is 0 if there is no reply, otherwise it's the actual reply ID.
+     * </p>
+     * 
+     * @throws IOException if an error occurs while reading the file
+     */
     public void readEnquiriesFromFile() throws IOException {
         try (BufferedReader reader = new BufferedReader(new FileReader(ENQUIRIES_FILE))) {
             String line;

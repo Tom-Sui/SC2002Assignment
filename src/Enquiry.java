@@ -1,12 +1,11 @@
 /**
- * Represents an enquiry made by an applicant about a specific housing project.
- * <p>
- * This class stores all details related to a housing enquiry including the applicant information,
- * project being enquired about, the enquiry message, and any official reply.
- * </p>
+ * Enquiry.java
  * 
- * @see Applicant
- * @see Project
+ * This class represents an enquiry made by an applicant regarding a housing project.
+ * It contains details such as the applicant's NRIC, project name, message content, and a reply ID.
+ * 
+ * The class provides methods to set and get these details, as well as to check if the enquiry has a reply.
+ * 
  */
 public class Enquiry {
     private static int enquiryID = 1;
@@ -15,6 +14,10 @@ public class Enquiry {
     private String message;
     private int replyID;
 
+    /**
+     * Default constructor for the Enquiry class.
+     * Initializes the enquiry ID, user NRIC, project name, message, and reply ID.
+     */
     // ========== CONSTRUCTOR ==========
     public Enquiry() {
         enquiryID = enquiryID++;
@@ -114,11 +117,20 @@ public class Enquiry {
     public int getReplyID(){
         return this.replyID;
     }
-
+    /**
+     * Gets the applicant's ID from the NRIC.
+     * 
+     * @return the applicant ID
+     */
     public int getApplicant() {
         return Integer.parseInt(this.userNric.substring(1));
     }
 
+    /**
+     * Collect details about the enquiry into string.
+     * 
+     * @return a string representation of the enquiry details
+     */
     public String toString() {
         return "Enquiry ID: " + enquiryID + "\n" +
                "User Nric: " + userNric + "\n" +

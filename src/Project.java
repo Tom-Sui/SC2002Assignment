@@ -32,7 +32,14 @@ public class Project {
      * Default constructor for Project.
      */
     public Project() {};
-    
+    /**
+     * Copy constructor for Project.
+     * <p>
+     * This constructor creates a new Project object by copying the properties of another Project object.
+     * </p>
+     *
+     * @param other The Project object to copy from
+     */
     public Project(Project other) {
         this.projectName = other.projectName;
         this.neighborhood = other.neighborhood;
@@ -71,7 +78,7 @@ public class Project {
      * @param visiblity Visibility of the project
      * @param hdbOfficers List of assigned officers
      * @param enquiries List of project enquiries
-     * @param maritalStatus Marital status restriction
+     * @param allowedGroups List of allowed marital status groups
      */
 
     public Project(String projectName, String neighborhood, ArrayList<FlatType> flatTypes, Date applicationOpeningDate, Date applicationClosingDate,
@@ -159,7 +166,7 @@ public class Project {
     }
     /**
      * Sets the marital status of the project
-     * @param set MaritalStatus condition
+     * @param allowedGroups The new allowed marital status groups.
      */
     public void setAllowedGroups(ArrayList<MaritalStatus> allowedGroups){
     	this.allowedGroups = allowedGroups;
@@ -353,7 +360,10 @@ public class Project {
     public ArrayList<Application> getApplications(){
         return applications;
     }
-    
+    /**
+     * Get enquiries in the project
+     * @return List of enquiries
+    */
     public ArrayList<Enquiry> getEnquiries(){
         return enquiries;
     }

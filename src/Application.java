@@ -34,6 +34,10 @@ public class Application {
     private FlatType flatType;
 
     //Constructor
+    /**
+     * Default constructor for the Application class.
+     * Initializes the application ID and sets default values for other fields.
+     */
     public Application() {
     	Application.applicationId = applicationId++;
     };
@@ -93,7 +97,10 @@ public class Application {
     public boolean getIsBooked() {
         return isBooked;
     }
-    
+    /**
+     * set the prokect associated with this application.
+     * @param project the new Project object
+     */
     public void setProject(Project project) {
     	this.project = project;
     }

@@ -1,11 +1,21 @@
 import java.util.ArrayList;
 import java.util.Date;
-
+/**
+ * This class implements the I_ManagerApplicantRegistration interface and provides methods for managing applicant registrations.
+ * <p>
+ * It includes functionality to approve or reject applications, process withdrawal requests, and generate reports of applicants based on various criteria.
+ * </p>
+ * 
+ * @see I_ManagerApplicantRegistration
+ * @see Project
+ * @see Applicant
+ */
 public class ManagerApplicantRegistration implements I_ManagerApplicantRegistration{
     /**
 	 * To approve or reject application to certain project
-	 * @param applicant Application to be approved or rejected
-	 * @param project Target project
+	 * @param currentProjects List of all current projects (must not be null, used to verify project references)
+	 * @param applicants List of all applicants to process (must not be null)
+	 * @param username NRIC of the HDB Manager or Project Officer managing the project
 	 */
 	
 	String DataFilePath = "./Data";   // TO ADD ./src FOR ECLIPSE	

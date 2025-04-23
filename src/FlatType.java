@@ -30,8 +30,6 @@ public abstract class FlatType {
      * @param units the number of available units (must be positive)
      * @param price the price per unit (must be positive)
      * @param allowedGroup the marital status allowed to apply
-     * @param flatTypeName the classification name (e.g., "2-Room", "3-Room")
-     * @throws IllegalArgumentException if units or price are non-positive
      */
     public FlatType(int units, double price, MaritalStatus allowedGroup) {
         this.units = units;
@@ -45,8 +43,6 @@ public abstract class FlatType {
      * @param units the number of available units (must be positive)
      * @param price the price per unit (must be positive)
      * @param allowedGroups list of permitted marital statuses
-     * @param flatTypeName the classification name (e.g., "2-Room", "3-Room")
-     * @throws IllegalArgumentException if units or price are non-positive
      */
     public FlatType(int units, double price, ArrayList<MaritalStatus> allowedGroups) {
         this.units = units;
@@ -67,8 +63,8 @@ public abstract class FlatType {
     public void setPrice(double price) { this.price = price; }
     
     /**
-     * Sets the marital status of the project
-     * @param set MaritalStatus condition
+     * Sets the list of allowed marital status groups.
+     * @param allowedGroups list of permitted marital statuses
      */
     public void setAllowedGroups(ArrayList<MaritalStatus> allowedGroups){ this.allowedGroups = allowedGroups; }
     
@@ -95,7 +91,11 @@ public abstract class FlatType {
      * @return the flat type name
      */
     public abstract String getFlatTypeName();
-    
+    /**
+     * Gets the flat type name in a flat format (e.g., "2-Room", "3-Room").
+     * @param name the flat type name to check against
+     * @return the flat type name in a flat format
+     */
     public boolean matchesTypeName(String name) {
         return getFlatTypeName().equalsIgnoreCase(name);
     }

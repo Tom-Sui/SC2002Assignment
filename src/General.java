@@ -99,6 +99,7 @@ public class General {
      * Updates project information in the ProjectList.txt file.
      * Specific used when updating the project name
      * @param project the Project object containing updated information
+     * @param projectName the new project name
      */
     public static void editProjectFile(Project project,String projectName) {
         String buffeString;
@@ -199,6 +200,19 @@ public class General {
         }
     }
     
+    /**
+     * Edits a file by replacing specific content in a target row.
+     * <p>
+     * Note: After modifying any text files, the initialization function should be
+     * run again to load the new contents.
+     * </p>
+     * 
+     * @param filePath path to the file to edit
+     * @param fileType type of the file (e.g., "ProjectList.txt")
+     * @param newContent new content to insert
+     * @param target text to be replaced
+     * @param targetRow row containing the target text
+     */
     public static void editOtherFile(String filePath, String fileType, String newContent, String target, String targetRow) {
         String buffeString;
         String fileContent = "";

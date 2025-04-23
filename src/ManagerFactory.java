@@ -10,6 +10,6 @@ public class ManagerFactory {
 
 		return new HDBManager(projectManager, projectManager, 
 				  			  new InputValidator(), new ManagerOfficerRegistration(), 
-				  			  new ManagerApplicantRegistration(), new ReplyEnquiry());
+				  			  new ManagerApplicantRegistration());
 	}
 }

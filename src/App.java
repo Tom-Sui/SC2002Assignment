@@ -215,6 +215,7 @@ public class App{
                     System.out.println("\n!!!Wrong input!!!\n");
                     break;
             }
+            helpInfo();
             System.out.print("Enter cmd: ");
             userInput = scanner.nextLine();
         }
@@ -268,7 +269,7 @@ public class App{
                 return true;
             case "2":
                 System.out.println("Opening Enquiry Application...");
-                EnquiryApp.start(user);
+                EnquiryApp.start(user);                
                 return false;
             case "3":
                 logedIn = false;
@@ -305,10 +306,11 @@ public class App{
                     userPos = i;
                     currentUserId = userName;
                     logedIn = true;
-                    
+
                     // Show post-login menu
-                    if (showPostLoginMenu(hdbOfficers.get(i))) {
-                        ApplicantOfficerApp.start(hdbOfficers.get(i), projectList);
+                    if (showPostLoginMenu(hdbManagers.get(i))) {
+                        ManagerInput manager = new ManagerInput();
+                        manager.switchFunction(hdbManagers.get(i), hdbManagers.get(i).getNRIC(), projects, hdbManagers, hdbOfficers, applicant);
                     }
                     return true;
                 }

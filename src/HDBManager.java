@@ -13,19 +13,17 @@ public class HDBManager extends User{
 	private final I_InputValidator inputValidator;
 	private final I_ManagerOfficerRegistration managerOfficerRegistration;
 	private final I_ManagerApplicantRegistration managerApplicantRegistration;
-	private final I_Enquiry enquiry;
 	private ArrayList<Project> managedProjects;
 
     public HDBManager(I_ProjectManager projectManager, I_ListOutProjects listOutProjects, 
     				  I_InputValidator inputValidator, I_ManagerOfficerRegistration managerOfficerRegistration,
-    				  I_ManagerApplicantRegistration managerApplicantRegistration, I_Enquiry enquiry)
+    				  I_ManagerApplicantRegistration managerApplicantRegistration)
     {
     	this.projectManager = projectManager;
     	this.listOutProjects = listOutProjects;
     	this.inputValidator = inputValidator;
     	this.managerOfficerRegistration = managerOfficerRegistration;
     	this.managerApplicantRegistration = managerApplicantRegistration;
-    	this.enquiry = enquiry;
         this.managedProjects = new ArrayList<>();
     }
     
@@ -200,24 +198,6 @@ public class HDBManager extends User{
     
     public void viewEnquiries(ArrayList<Project> currentProjects) {
     	
-    	for(Project project: currentProjects) {
-    		System.out.printf("Enquiries for Project %s\n", project.getProjectName());
-    		ArrayList<Enquiry> enquiries = project.getEnquiries();
-    		for(Enquiry enquiry: enquiries) {
-
-    			System.out.printf("Applicant ID: %s\n", enquiry.getUserNric());
-    			System.out.printf("Message: %s\n", enquiry.getMessage());
-    			if(enquiry.getReplyID() == 0) {
-    			System.out.printf("There is no reply yet");
-    			} else {
-    				System.out.printf("Reply: %s\n", enquiry.getReplyID());
-    			}
-    		}
-    	}
-    }
-    
-    public void replyToEnquiry(ArrayList<Project> currentProjects, String NRIC, Scanner scanner)
-    {
-    	enquiry.replyToEnquiry(currentProjects, NRIC, scanner);
-    }    
+    	managerOfficerRegistration.viewEnquiries(currentProjects);
+    } 
 }

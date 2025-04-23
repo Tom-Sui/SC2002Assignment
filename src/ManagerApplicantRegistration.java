@@ -7,6 +7,10 @@ public class ManagerApplicantRegistration implements I_ManagerApplicantRegistrat
 	 * @param applicant Application to be approved or rejected
 	 * @param project Target project
 	 */
+	
+	String DataFilePath = "./Data";   // TO ADD ./src FOR ECLIPSE	
+	String filePath = DataFilePath + "/ApplicationList.txt";
+	
     public void approveOrRejectApplication(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, String username){
     	
     	Date currentTime = new Date();
@@ -36,10 +40,12 @@ public class ManagerApplicantRegistration implements I_ManagerApplicantRegistrat
                             if (availableUnits == 0) {
                                 //No units available
                                 application.setApplicationStatus(ApplicationStatus.UNSUCCESSFUL);
+                                General.editOtherFile(filePath, "/ApplicationList.txt", "UNSUCCESSFUL" ,"PENDING", application.getApplicant().getNRIC());
                                 System.out.printf("ApplicationID %d for project %s was UNSUCCESSFUL", application.getApplicationId(),application.getProject().getProjectName());
                             } else if (unitCount > 0){
                                 // Approves x number of applications with x being the number of available units
                                 application.setApplicationStatus(ApplicationStatus.SUCCESSFUL);
+                                General.editOtherFile(filePath, "/ApplicationList.txt", "SUCCESSFUL" ,"PENDING", application.getApplicant().getNRIC());
                                 System.out.printf("ApplicationID %d for project %s was SUCCESSFUL", application.getApplicationId(),application.getProject().getProjectName());
                                 unitCount -=1;
                             }
@@ -101,7 +107,7 @@ public class ManagerApplicantRegistration implements I_ManagerApplicantRegistrat
     			
     			//Set application status to withdrawn
     			application.setApplicationStatus(ApplicationStatus.WITHDRAWN);
-    			
+    			General.editOtherFile(filePath, "/ApplicationList.txt","WITHDRAWN", "PENDINGWITHDRAWAL", application.getApplicant().getNRIC());
     			//Remove from project's application list
     			project.getApplications().remove(application);
     			
@@ -115,6 +121,7 @@ public class ManagerApplicantRegistration implements I_ManagerApplicantRegistrat
     			//Check if a flat was booked
     			if(application.getIsBooked()) {
     				FlatTypeLogic.updateIncreaseFilteredFlatTypeUnits(flatTypes, flatType);
+    				General.editProjectFile(project, project.getProjectName());
     			}
     			
     			System.out.printf("Withdrawn application for applicant %s (NRIC: %s)\\n", 

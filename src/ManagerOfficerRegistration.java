@@ -253,15 +253,17 @@ public class ManagerOfficerRegistration extends BaseManagerOfficerRegistration{
         EnquiryService enquiryService = new EnquiryService();
         for(Project project: currentProjects) {
             System.out.printf("Enquiries for Project %s\n", project.getProjectName());
+            
             ArrayList<Enquiry> enquiries = enquiryService.getEnquiriesByProject(project.getProjectName());
+            
             for(Enquiry enquiry: enquiries) {
                 System.out.printf("Applicant ID: %s\n", enquiry.getUserNric());
-                System.out.printf("Message: %s\n", enquiry.getMessage());
-                if(enquiry.getReplyID() == 0) {
-                    System.out.printf("There is no reply yet\n");
-                } else {
-                    System.out.printf("Reply ID: %d\n", enquiry.getReplyID());
+                System.out.println("Project: " + enquiry.getProjectName());
+                System.out.println("Message: " + enquiry.getMessage());
+                if (enquiry.getReplyID() != 0) {
+                    System.out.println("Reply: " + enquiry.getReplyID());
                 }
+                System.out.println("------------------------");
             }
         }
     }

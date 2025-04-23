@@ -227,7 +227,11 @@ public class App{
                     System.out.println("\n!!!Wrong input!!!\n");
                     break;
             }
-            helpInfo();
+            if(logedIn){
+                postLoginMenu();
+            }else{
+                helpInfo();
+            }
             System.out.print("Enter cmd: ");
             userInput = scanner.nextLine();
         }
@@ -266,7 +270,13 @@ public class App{
         System.out.println("Incorrect password or incorrect ID");
         System.out.println("====================================");
     }
-    
+    public static void postLoginMenu(){
+        System.out.println("\n======Post-Login Menu======");
+        System.out.println("1. Continue with regular tasks");
+        System.out.println("2. Open Enquiry Application");
+        System.out.println("3. Logout");
+        System.out.println("===========================");
+    }
     /**
      * Shows the post-login menu with options for the user
      * 
@@ -275,11 +285,12 @@ public class App{
      */
     public static boolean showPostLoginMenu(User user) {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("\n======Post-Login Menu======");
-        System.out.println("1. Continue with regular tasks");
-        System.out.println("2. Open Enquiry Application");
-        System.out.println("3. Logout");
-        System.out.println("===========================");
+        // System.out.println("\n======Post-Login Menu======");
+        // System.out.println("1. Continue with regular tasks");
+        // System.out.println("2. Open Enquiry Application");
+        // System.out.println("3. Logout");
+        // System.out.println("===========================");
+        postLoginMenu();
         System.out.print("Enter your choice: ");
         
         String choice = scanner.nextLine();

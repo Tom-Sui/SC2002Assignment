@@ -115,7 +115,7 @@ public interface I_ProjectManager {
      * @param i The index of the project to be updated
      * @return true if the project was successfully edited, false otherwise
      */
-    boolean editProject(String updateContent, String target, ArrayList<Project> currentProjects, int i);
+    boolean editProject(String projectName, String updateContent, String target, ArrayList<Project> currentProjects, int i);
 
     /**
      * Method to delete a specific project from the system.

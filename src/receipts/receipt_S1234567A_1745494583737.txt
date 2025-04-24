@@ -1,0 +1,25 @@
+
+=== FLAT SELECTION RECEIPT ===
+Date: Thu Apr 24 19:36:23 GMT+08:00 2025
+
+Applicant Details:
+------------------
+Name: John
+NRIC: S1234567A
+Age: 35
+Marital Status: SINGLE
+
+Flat Details:
+-------------
+Flat Type: 2-Room
+Price: $599220.00
+
+Project Details:
+----------------
+Project Name: Dragon
+Neighborhood: Queenstown
+Application Period: Tue Apr 01 00:00:00 GMT+08:00 2025 to Fri Jul 03 00:00:00 GMT+08:00 2026
+
+Booking Status: BOOKED
+=========================
+

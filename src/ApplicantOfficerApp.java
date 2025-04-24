@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
 
 public class ApplicantOfficerApp {
@@ -140,6 +141,15 @@ public class ApplicantOfficerApp {
 							HDBOfficer chosenOfficer = projectOfficers.get(officerNumber-1);
 							applicant.bookFlat(chosenOfficer);
 							System.out.println(chosenOfficer.toString());
+							
+		
+							Application application = applicant.getCurrentApplication();
+		
+							//Updating booking datafile
+							Booking booking = new Booking(application.getApplicationId(), chosenOfficer.getNRIC());
+							String bookingDetails = String.format("%d,%d,%s",booking.getBookingId(), application.getApplicationId(),chosenOfficer.getNRIC());
+							General.editFile("./Data/BookingList.txt", bookingDetails);
+							
 						}
 						catch (IndexOutOfBoundsException e) {
 						System.out.println("Invalid officer ID. Please enter a valid officer ID.");
@@ -163,7 +173,6 @@ public class ApplicantOfficerApp {
 						officer.viewOfficerRegistrationStatus();
 					}
 					else if (choice == 7) {
-						//TODO
 				    	System.out.println("\nRegister for project");
 						System.out.println("============================");
 						ArrayList<Project> filteredProjects = ProjectLogic.filterProjectsForOfficer(projectList, officer);
@@ -172,8 +181,12 @@ public class ApplicantOfficerApp {
 						try{
 							int projectNumber = sc.nextInt();
 							Project project = filteredProjects.get(projectNumber-1);
-							if (officer.registerForProject(project)) {
-								String officerRegistration = String.format("%s,%s,%s", officer.getNRIC(), project.getProjectName(), OfficerRegistrationStatus.APPROVED);
+							Map<Project, OfficerRegistrationStatus> registrationStatusMap = officer.getRegistrationStatusMap();
+							if (registrationStatusMap.containsKey(project)) {
+								System.out.println("You already registed for project: "+ project.getProjectName());
+							}
+							else if (officer.registerForProject(project)) {
+								String officerRegistration = String.format("%s,%s,%s", officer.getNRIC(), project.getProjectName(), OfficerRegistrationStatus.PENDING.toString());
 								General.editFile("./Data/OfficerRegistrationList.txt", officerRegistration);
 								System.out.println("Registered for project: " + project.getProjectName());
 							}
@@ -200,7 +213,13 @@ public class ApplicantOfficerApp {
 							System.out.print("Enter the application number to help book their flat: ");
 							try{
 								int chosenApplication = sc.nextInt();
-								officer.helpBookFlat(filteredApplications.get(chosenApplication-1));
+								Application app = filteredApplications.get(chosenApplication-1);
+								
+								if (officer.helpBookFlat(app)) {
+									//Updating application datafile
+									General.editFile("./Data/ApplicationList.txt", ApplicationStatus.BOOKED.toString(), app.getApplicationStatus().toString(), String.valueOf(app.getApplicationId()));
+								}	
+								
 							} catch (IndexOutOfBoundsException e) {
 							System.out.println("Invalid application ID. Please enter a valid application ID.");
 							continue;

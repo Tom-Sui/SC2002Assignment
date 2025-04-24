@@ -13,7 +13,7 @@
 public class Application {
 
     /** Static counter for generating unique application IDs */
-    private static int applicationId = 0;
+    private static int applicationId = 1;
     
     /** The applicant who submitted this application */
     private Applicant applicant;
@@ -35,7 +35,7 @@ public class Application {
 
     //Constructor
     public Application() {
-    	Application.applicationId = applicationId++;
+    	Application.applicationId++;
     };
     /**
      * Constructs a new Application with the specified details.

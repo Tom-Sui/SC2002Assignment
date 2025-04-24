@@ -168,8 +168,8 @@ public class Init {
                 application.setApplicant(ApplicationLogic.getApplicant(applicants, data[1]));
                 application.setProject(ApplicationLogic.getProject(projects, data[2]));
                 application.setApplicationStatus(ApplicationStatus.valueOf(data[3]));
-                application.setIsBooked(Boolean.parseBoolean(data[4]));
-                application.setBookingRequested(Boolean.parseBoolean(data[5]));
+                application.setBookingRequested(Boolean.parseBoolean(data[4]));
+                application.setIsBooked(Boolean.parseBoolean(data[5]));
                 application.setFlatType(ApplicationLogic.getFlatType(application.getProject(), data[6]));
                 applications.add(application);
                 
@@ -188,6 +188,37 @@ public class Init {
         return applications;
     }
 
+    public void loadBookingInfo(ArrayList<Application> applications, ArrayList<HDBOfficer> officers){
+        File applicationFile = new File(DataFilePath + "/BookingList.txt");
+        try {
+            Scanner scanner = new Scanner(applicationFile);
+
+            while (scanner.hasNextLine()) {
+                Booking booking = new Booking();
+                String[] data = scanner.nextLine().split(",");
+                booking.setApplicationId(Integer.parseInt(data[1]));
+                booking.setOfficerNRIC((data[2]));
+                
+                
+                for (Application application : applications) {
+                    if (application.getApplicationId() == booking.getApplicationId()) {
+                        for (HDBOfficer hdbOfficer : officers) {
+                            if (hdbOfficer.getNRIC().equals(booking.getOfficerNRIC())) {
+                            	hdbOfficer.addManagedApplications(application);
+                                break; 
+                            }
+                        }
+                    }
+                }          		
+
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Error occured while reading BookingList.txt");
+            e.printStackTrace();
+        }
+    }
+    
     /**
      * Creates and configures a Project object from raw data.
      * 
@@ -285,7 +316,24 @@ public class Init {
         }
         return hdbManagers;
     }
-     
+    
+    public void setOfficerManagedProjects(ArrayList<HDBOfficer> officers, ArrayList<Project> projects) {
+        for (Project project : projects) {
+            ArrayList<HDBOfficer> managingOfficers = project.getHDBOfficer();
+
+            for (HDBOfficer managingOfficer : managingOfficers) {
+                for (HDBOfficer officer : officers) {
+                    if (officer.equals(managingOfficer)) {
+                        officer.setManagedProject(project); 
+                        officer.setManagingOfficer(true);
+                        break; 
+                    }
+                }
+            }
+        }
+    }
+
+    
     public ArrayList<Enquiry> loadEnquiryInfo(ArrayList<Applicant> applicants, ArrayList<Project> projects){
         File enquiryFile = new File("./Data/EnquiryList.txt");
         ArrayList<Enquiry> enquiries = new ArrayList<Enquiry>();

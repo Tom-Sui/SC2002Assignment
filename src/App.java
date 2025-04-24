@@ -54,11 +54,13 @@ public class App{
         // System.exit(0);
         //Initialize manager managed projects
         hdbManagers = init.setManagerManagedProjects(hdbManagers,projectList);
-
+        
+        init.setOfficerManagedProjects(hdbOfficers, projectList);
+        
         //Initialize Application info
         ArrayList<Application> applications = init.loadApplicationInfo(applicant, projectList);
         
-        
+       init.loadBookingInfo(applications, hdbOfficers);
         
         // General general = new General();
         // General.editProjectFile(projects.get(1),"New Name");
@@ -354,6 +356,10 @@ public class App{
                 userType = "HDB Officer";
                 currentUserId = userName;
                 logedIn = true;
+                // Show post-login menu
+                if (showPostLoginMenu(hdbOfficers.get(i))) {
+                    ApplicantOfficerApp.start(hdbOfficers.get(i), projectList);
+                }
                 return true;
             }
         }

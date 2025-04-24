@@ -15,7 +15,6 @@ public class ApplicationService {
 	        Application app = iterator.next();
 	        ApplicationStatus appStatus = app.getApplicationStatus();
 
-	        // Use AND instead of OR here
 	        if (appStatus != ApplicationStatus.WITHDRAWN || appStatus != ApplicationStatus.UNSUCCESSFUL) {
 	            applicant.setCurrentApplication(app);
 	            iterator.remove(); 

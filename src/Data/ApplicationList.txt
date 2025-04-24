@@ -2,4 +2,5 @@
 2,T7654321B,LEGOLAND,BOOKED,true,true,3-Room
 3,S9876543C,LEGOLAND,PENDING,true,false,3-Room
 4,T2345678D,Dragon,PENDING,true,false,2-Room
-5,T2109876H,BROTHER LA,PENDING,true,false,2-Room
+6,S3456789E,Dragon,PENDING,true,false,2-Room
+7,T2109876H,Sky View,PENDING,true,false,2-Room

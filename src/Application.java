@@ -13,7 +13,7 @@
 public class Application {
 
     /** Static counter for generating unique application IDs */
-    private static int applicationId = 1;
+    private static int applicationId = 0;
     
     /** The applicant who submitted this application */
     private Applicant applicant;

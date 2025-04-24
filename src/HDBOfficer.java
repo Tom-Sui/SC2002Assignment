@@ -87,41 +87,35 @@ public class HDBOfficer extends Applicant {
      * @return true if the officer is registered for the project, false otherwise
      */
     public boolean registerForProject(Project project) {
-//        ArrayList<Project> pastAppliedProjects = new ArrayList<Project>();
-//        pastAppliedProjects = ApplicationLogic.filterByPastAppliedProjects(managedApplications);
-//        if (pastAppliedProjects != null && pastAppliedProjects.contains(project))  {
-//            return false;
-//        }
-//
-//        if (registrationStatusMap.size() > 0) {
-//        	
-//            final boolean[] canApply = {true};
-//            registrationStatusMap.forEach((Project mappedProject, OfficerRegistrationStatus status) -> {
-//                // check if the application period of the project is the same as the current project
-//                boolean dateFallsWithinApplication = project.getApplicationOpeningDate().after(mappedProject.getApplicationOpeningDate()) && project.getApplicationClosingDate().before(mappedProject.getApplicationClosingDate());
-//                boolean dateEquals = project.getApplicationOpeningDate().equals(mappedProject.getApplicationOpeningDate()) 
-//                    && project.getApplicationClosingDate().equals(mappedProject.getApplicationClosingDate()) 
-//                    && project.getApplicationClosingDate().equals(mappedProject.getApplicationOpeningDate()) 
-//                    && project.getApplicationOpeningDate().equals(mappedProject.getApplicationClosingDate());
-//                if((dateFallsWithinApplication || dateEquals )&& status == OfficerRegistrationStatus.APPROVED) {
-//                    canApply[0] = false;
-//
-//                }
-//            });
-//
-//            if (!canApply[0]) {
-//                return false;
-//            }
-//        }
-//
-    
-    	if (managedProject != project)
-    	{
-    		registrationStatusMap.put(project, OfficerRegistrationStatus.PENDING);
-    		return true;
-    	}
-    		
-    	return false;
+        ArrayList<Project> pastAppliedProjects = new ArrayList<Project>();
+        pastAppliedProjects = ApplicationLogic.filterByPastAppliedProjects(managedApplications);
+        if (pastAppliedProjects != null && pastAppliedProjects.contains(project))  {
+            return false;
+        }
+
+        if (registrationStatusMap.size() > 0) {
+        	
+            final boolean[] canApply = {true};
+            registrationStatusMap.forEach((Project mappedProject, OfficerRegistrationStatus status) -> {
+                // check if the application period of the project is the same as the current project
+                boolean dateFallsWithinApplication = project.getApplicationOpeningDate().after(mappedProject.getApplicationOpeningDate()) && project.getApplicationClosingDate().before(mappedProject.getApplicationClosingDate());
+                boolean dateEquals = project.getApplicationOpeningDate().equals(mappedProject.getApplicationOpeningDate()) 
+                    && project.getApplicationClosingDate().equals(mappedProject.getApplicationClosingDate()) 
+                    && project.getApplicationClosingDate().equals(mappedProject.getApplicationOpeningDate()) 
+                    && project.getApplicationOpeningDate().equals(mappedProject.getApplicationClosingDate());
+                if((dateFallsWithinApplication || dateEquals )&& status == OfficerRegistrationStatus.APPROVED) {
+                    canApply[0] = false;
+
+                }
+            });
+
+            if (!canApply[0]) {
+                return false;
+            }
+        }
+		registrationStatusMap.put(project, OfficerRegistrationStatus.PENDING);
+		return true;
+   
     }
     
     /**
@@ -174,6 +168,10 @@ public class HDBOfficer extends Applicant {
      */
     
     public void viewOfficerRegistrationStatus() {
+    	if (managedProject != null) {
+    		System.out.printf("Current Project: %s",managedProject.getProjectName());
+    		System.out.println();
+    	}
     	registrationStatusMap.forEach((project, status) -> {
     		System.out.printf("Project: %s, Status: %s", project.getProjectName(), status);   	
     	});

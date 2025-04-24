@@ -52,7 +52,7 @@ public class ApplicationService {
 	}
 
 	public static void withdrawApplication(Application application) {
-		application.setApplicationStatus(ApplicationStatus.WITHDRAWN);
+		application.setApplicationStatus(ApplicationStatus.PENDINGWITHDRAWAL);
 	}
 
 	/**

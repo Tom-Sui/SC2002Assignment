@@ -76,8 +76,8 @@ public class ApplicantOfficerApp {
 					Application currentApplication = applicant.getCurrentApplication();
 					if (currentApplication != null) {
 						System.out.println("Applied Project: " + currentApplication.getProject().getProjectName());
-						System.out.println("Application Status: " + applicant.viewApplicationStatus());
-						if (currentApplication.getBookingRequested() == true) {
+						System.out.println("Application Status: " + currentApplication.getApplicationStatus());
+						if (currentApplication.getApplicationStatus() == ApplicationStatus.BOOKED && currentApplication.getBookingRequested() == true) {
 							System.out.println("Flat booking request is sent.");
 							System.out.println();
 						}
@@ -112,6 +112,7 @@ public class ApplicantOfficerApp {
 						System.out.printf("Enter the flat type number to apply for: ");
 						int flatTypeNumber = sc.nextInt();
 						FlatType flatType = filteredFlatTypes.get(flatTypeNumber-1);
+						
 						applicant.applyForProject(project, flatType);
 						System.out.println(flatType);
 						System.out.println("Project application has been sent.");
@@ -159,12 +160,15 @@ public class ApplicantOfficerApp {
 				}
 				else if (choice == 5){ 
 					Application currentApplication = applicant.getCurrentApplication();
-					if (currentApplication == null) { 
-						System.out.println("No application found.");
-						continue;
+					if (currentApplication != null) { 
+						General.editFile("./Data/ApplicationList.txt", ApplicationStatus.PENDINGWITHDRAWAL.toString(), currentApplication.getApplicationStatus().toString(), String.valueOf(currentApplication.getApplicationId()));
+						ApplicationService.withdrawApplication(currentApplication);
+						System.out.println("Withdrawal request is sent.");
 					} 
-					ApplicationService.withdrawApplication(currentApplication);
-					System.out.println("Withdrawal request is sent.");
+					else
+						System.out.println("No application found.");
+					
+					
 				}
 				if (officer != null) {
 					if (choice == 6) {

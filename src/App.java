@@ -53,10 +53,7 @@ public class App{
 
         //Initialize manager managed projects
         hdbManagers = init.setManagerManagedProjects(hdbManagers,projectList);
-
-        //Initialize Application info
-        ArrayList<Application> applications = init.loadApplicationInfo(applicant, projectList);
-
+        
         //return helpinfo (cmds)
         helpInfo();
         System.out.print("Enter cmd: ");
@@ -104,26 +101,38 @@ public class App{
                     //Will update this method later on
 
                     switch (userType.toLowerCase()){
-                        case "hdb manager","1":
-                            if(handleManagerLogin(userName, userPassword, hdbManagers, projectList, hdbOfficers, applicant)){
-                                break;
-                            }
-                            loginFailed();
+                    case "hdb manager","1":
+                        if(handleManagerLogin(userName, userPassword, hdbManagers, projectList, hdbOfficers, applicant)){
+                            userType = "NULL";
+                            userName = "NULL";
+                            userPos = -1;
+                            logedIn = false;
                             break;
-                        case "hdb officer","2":
-                            if(handleOfficerLogin(userName, userPassword, hdbOfficers)){
-                                break;
-                            }
-                            loginFailed();
+                        }
+                        loginFailed();
+                        break;
+                    case "hdb officer","2":
+                        if(handleOfficerLogin(userName, userPassword, hdbOfficers)){
+                            userType = "NULL";
+                            userName = "NULL";
+                            userPos = -1;
+                            logedIn = false;
                             break;
-                        case "applicant","3":
-                            if(handleApplicantLogin(userName, userPassword, applicant)){
-                                break;
-                            }
-                            loginFailed();
+                        }
+                        loginFailed();
+                        break;
+                    case "applicant","3":
+                        if(handleApplicantLogin(userName, userPassword, applicant)){
+                            userType = "NULL";
+                            userName = "NULL";
+                            userPos = -1;
+                            logedIn = false;
                             break;
-                        default:
-                            break;
+                        }
+                        loginFailed();
+                        break;
+                    default:
+                        break;
                     }
                     break;
                 case "edit profile","3":
@@ -269,7 +278,11 @@ public class App{
                 return true;
             case "2":
                 System.out.println("Opening Enquiry Application...");
-                EnquiryApp.start(user);                
+                EnquiryApp.start(user);
+                logedIn = false;
+                userType = "NULL";
+                currentUserId = "NULL";
+                userPos = -1;
                 return false;
             case "3":
                 logedIn = false;
@@ -306,11 +319,15 @@ public class App{
                     userPos = i;
                     currentUserId = userName;
                     logedIn = true;
+                    
+                    Init init = new Init();
+                    //Initialize Application info
+                    ArrayList<Application> applications = init.loadApplicationInfo(applicant, projectList);
 
                     // Show post-login menu
                     if (showPostLoginMenu(hdbManagers.get(i))) {
                         ManagerInput manager = new ManagerInput();
-                        manager.switchFunction(hdbManagers.get(i), hdbManagers.get(i).getNRIC(), projects, hdbManagers, hdbOfficers, applicant);
+                        manager.switchFunction(hdbManagers.get(i), hdbManagers.get(i).getNRIC(), projects, hdbManagers, hdbOfficers, applicant, applications);
                     }
                     return true;
                 }

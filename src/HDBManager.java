@@ -351,9 +351,9 @@ public class HDBManager extends User{
      * @param applicants The list of applicants
      * @param username The username of the applicant
      */
-    public void approveOrRejectApplication(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, String username)
+    public void approveOrRejectApplication(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, String username, ArrayList<Application> applicationsList)
     {
-    	managerApplicantRegistration.approveOrRejectApplication(currentProjects, applicants, username);
+    	managerApplicantRegistration.approveOrRejectApplication(currentProjects, applicants, username, applicationsList);
     }
     
     /**
@@ -362,9 +362,9 @@ public class HDBManager extends User{
      * @param currentProjects The list of current projects
      * @param applicants arraylist of applicants
      */
-    public void approveWithdrawal(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants)
+    public void approveWithdrawal(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, String username, ArrayList<Application> applicationList)
     {
-    	managerApplicantRegistration.approveWithdrawal(currentProjects, applicants);
+    	managerApplicantRegistration.approveWithdrawal(currentProjects, applicants, username, applicationList);
     }
     
     /**
@@ -375,9 +375,9 @@ public class HDBManager extends User{
      * @param minAge The minimum age filter
      * @param maxAge The maximum age filter
      */
-    public void generateApplicantReport(ArrayList<Applicant> applicants, String maritalStatusFilter, Integer minAge, Integer maxAge)
+    public void generateApplicantReport(ArrayList<Applicant> applicants, String maritalStatusFilter, Integer minAge, Integer maxAge, ArrayList<Application> applicationsList)
     {
-    	managerApplicantRegistration.generateApplicantReport(applicants, maritalStatusFilter, minAge, maxAge);
+    	managerApplicantRegistration.generateApplicantReport(applicants, maritalStatusFilter, minAge, maxAge, applicationsList);
     }
     /**
      * View enquiries related to a project.

@@ -240,6 +240,42 @@ public class General {
         }
     }
     
+    public static Application findApplication(ArrayList<Application> applicationList, String NRIC) {
+        for(Application i : applicationList) {
+            if(NRIC.equals(i.getApplicant().getNRIC())) {
+                return i;
+            }
+        }
+        return null;
+    }
+    
+    public static void editFile(String filePath, String content, boolean index) {
+        String fileContent = "";
+        File projectFile = new File(filePath);
+        int count = 1;
+
+        try {
+            Scanner scanner = new Scanner(projectFile);
+
+            while(scanner.hasNextLine()) {
+                count++;
+                fileContent = fileContent + scanner.nextLine() + "\n";
+            }
+            fileContent = fileContent + String.valueOf(count) + "," +content + "\n";
+            FileWriter writer = new FileWriter(filePath);
+            writer.write(fileContent);
+
+            writer.close();
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Error occurred while reading " + filePath);
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Error occurred when writing " + filePath);
+            e.printStackTrace();
+        }
+    }
+    
     // ========== SEARCH METHODS ==========
     /**
      * Finds an HDBManager by name.

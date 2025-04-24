@@ -51,7 +51,9 @@ public class ApplicationService {
 		Application application = new Application(applicant, project, flatType);
 		project.addApplication(application);
 		applicant.setCurrentApplication(application);
-	}
+		String BTOApplication = String.format("%s,%s,%s,%s,%s,%s", applicant.getNRIC(), project.getProjectName(), ApplicationStatus.PENDING, "false", "false", flatType.getFlatTypeName());
+		General.editFile("./src/Data/ApplicationList.txt",BTOApplication, true);
+		}
 	/**
 	 * Books a flat for the applicant.
 	 * <p>

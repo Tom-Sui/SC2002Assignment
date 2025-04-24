@@ -19,7 +19,7 @@ public interface I_ManagerApplicantRegistration {
 	 * @param username The NRIC of the HDB Manager or Project Officer managing the project
 	 */
 	// Allows the manager to approve or reject an applicant's registration
-	void approveOrRejectApplication(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, String username);
+	void approveOrRejectApplication(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, String username, ArrayList<Application> applicationsList);
 	/**
 	 * Processes an applicant's withdrawal request and updates the relevant records.
 	 * <p>
@@ -32,7 +32,7 @@ public interface I_ManagerApplicantRegistration {
 	 */
 
 	 // Approves an applicant's withdrawal request
-	void approveWithdrawal(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants);
+	void approveWithdrawal(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, String username, ArrayList<Application> applicationsList);
 	/**
 	 * Generates a report of applicants based on specified filters.
 	 * <p>
@@ -45,6 +45,6 @@ public interface I_ManagerApplicantRegistration {
 	 * @param maxAge The maximum age filter for the report
 	 */
 	// Generates a report of applicants filtered accordingly
-	void generateApplicantReport(ArrayList<Applicant> applicants, String maritalStatusFilter, Integer minAge, Integer maxAge);
+	void generateApplicantReport(ArrayList<Applicant> applicants, String maritalStatusFilter, Integer minAge, Integer maxAge, ArrayList<Application> applicationsList);
 		
 }

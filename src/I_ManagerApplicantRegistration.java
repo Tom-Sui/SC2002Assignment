@@ -17,6 +17,7 @@ public interface I_ManagerApplicantRegistration {
 	 * @param currentProjects The list of current projects in the system
 	 * @param applicants The list of applicants in the system
 	 * @param username The NRIC of the HDB Manager or Project Officer managing the project
+	 * @param applicationsList The list of applications in the system
 	 */
 	// Allows the manager to approve or reject an applicant's registration
 	void approveOrRejectApplication(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, String username, ArrayList<Application> applicationsList);
@@ -28,6 +29,8 @@ public interface I_ManagerApplicantRegistration {
 	 * 
 	 * @param currentProjects The list of current projects in the system
 	 * @param applicants The list of applicants in the system
+	 * @param username The NRIC of the HDB Manager or Project Officer managing the project
+	 * @param applicationsList The list of applications in the system
 	 * 
 	 */
 
@@ -43,6 +46,7 @@ public interface I_ManagerApplicantRegistration {
 	 * @param maritalStatusFilter The marital status filter for the report
 	 * @param minAge The minimum age filter for the report
 	 * @param maxAge The maximum age filter for the report
+	 * @param applicationsList The list of applications in the system
 	 */
 	// Generates a report of applicants filtered accordingly
 	void generateApplicantReport(ArrayList<Applicant> applicants, String maritalStatusFilter, Integer minAge, Integer maxAge, ArrayList<Application> applicationsList);

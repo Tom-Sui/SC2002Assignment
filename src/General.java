@@ -240,6 +240,13 @@ public class General {
         }
     }
     
+    /**
+     * Finds an Application by NRIC.
+     * 
+     * @param applicationList list of Applications to search
+     * @param NRIC NRIC to search for
+     * @return the matching Application or null if not found
+     */
     public static Application findApplication(ArrayList<Application> applicationList, String NRIC) {
         for(Application i : applicationList) {
             if(NRIC.equals(i.getApplicant().getNRIC())) {
@@ -248,7 +255,17 @@ public class General {
         }
         return null;
     }
-    
+    /**
+     * Edits a file by appending content to it.
+     * <p>
+     * Note: After modifying any text files, the initialization function should be
+     * run again to load the new contents.
+     * </p>
+     * 
+     * @param filePath path to the file to edit
+     * @param content new content to insert
+     * @param index whether to include an index in the content
+     */
     public static void editFile(String filePath, String content, boolean index) {
         String fileContent = "";
         File projectFile = new File(filePath);

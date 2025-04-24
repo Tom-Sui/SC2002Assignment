@@ -33,13 +33,8 @@ public class EnquiryService {
     }
 
     /**
-     * Returns a list of all enquiries made by applicants for a specific project.
-     * <p>
-     * This method filters the enquiries based on the provided project name.
-     * </p>
-     * 
+     * refreshes the enquiries by project
      * @param projectName the name of the project
-     * @return ArrayList of all enquiries for the specified project
      */
 
     public void refreshEnquiriesByProject(String projectName) {
@@ -50,6 +45,13 @@ public class EnquiryService {
         }
     }
 
+    
+    /**
+     * return equiries by applicant
+     * 
+     * 
+     * @param userNric the NRIC of the applicant
+     */
     public void refreshEnquiriesByApplicant(String userNric) {
         enquiriesByApplicant.clear();
         ArrayList<Enquiry> applicantEnquiries = viewEnquiriesByApplicant(userNric);
@@ -58,6 +60,15 @@ public class EnquiryService {
         }
     }
     
+    /**
+     * Returns a list of all enquiries made by applicants for a specific project.
+     * <p>
+     * This method filters the enquiries based on the provided project name.
+     * </p>
+     * 
+     * @param projectName the name of the project
+     * @return ArrayList of all enquiries for the specified project
+     */
     public ArrayList<Enquiry> viewEnquiriesByProject(String projectName) {
         return new ArrayList<>(enquiries.stream()
             .filter(enquiry -> enquiry.getProjectName().equals(projectName))
@@ -91,6 +102,15 @@ public class EnquiryService {
             .filter(enquiry -> enquiry.getUserNric().equals(userNric))
             .collect(Collectors.toList()));
     }
+    /**
+     * Returns a list of all enquiries managed by a specific officer.
+     * <p>
+     * This method filters the enquiries based on the projects managed by the officer.
+     * </p>
+     * 
+     * @param officer the HDB officer managing the enquiries
+     * @return ArrayList of all enquiries managed by the specified officer
+     */
 
     public ArrayList<Enquiry> viewEnquiriesManagedByOfficer( HDBOfficer officer) {
         ArrayList<Enquiry> enquiriesForOfficer = new ArrayList<>();
@@ -166,6 +186,19 @@ public class EnquiryService {
     }
 
     /**
+     * Returns a list of all enquiries managed by a specific officer.
+     * <p>
+     * This method filters the enquiries based on the projects managed by the officer.
+     * </p>
+     * 
+     * @param officer the HDB officer managing the enquiries
+     * @return ArrayList of all enquiries managed by the specified officer
+     */
+    public ArrayList<Enquiry> getEnquiriesByOfficer(HDBOfficer officer) {
+        return viewEnquiriesManagedByOfficer(officer);
+    }
+
+    /**
      * Adds a new enquiry to the list.
      * <p>
      * This method checks if the enquiry is null before adding it to the list.
@@ -174,10 +207,6 @@ public class EnquiryService {
      * @param enquiry the Enquiry object to add
      * @return true if the addition was successful, false otherwise
      */
-    public ArrayList<Enquiry> getEnquiriesByOfficer(HDBOfficer officer) {
-        return viewEnquiriesManagedByOfficer(officer);
-    }
-
     public boolean addEnquiry(Enquiry enquiry) {
         if (enquiry == null) {
             System.out.println("Enquiry cannot be null");

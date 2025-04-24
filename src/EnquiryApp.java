@@ -35,16 +35,14 @@ public class EnquiryApp {
     private static final String ENQUIRIES_FILE = "Data/enquiries.txt";
 
 
-
     /**
-     * Starts the enquiry application for a given user.
+     * Main method to start the enquiry application.
      * <p>
-     * Displays a menu of available features based on the user type and processes
-     * the selected operations. HDB staff members get additional reply functionality.
+     * This method initializes the application and starts the main menu loop.
      * </p>
      *
-     * @param user The user starting the application (must not be null)
-     * @throws NullPointerException if user parameter is null
+     * @param user The user currently logged in
+     * @param projectList List of all projects available in the system
      */
     public static void start(User user, ArrayList<Project> projectList) {
         int choice;

@@ -31,6 +31,7 @@ public class ManagerInput {
      * @param hdbManagers List of all HDB managers
      * @param hdbOfficers List of all HDB officers
      * @param applicants List of all applicants
+	 * @param applicationsList List of all applications
      *
      * The system provides these functions:
      * <ol start="0">

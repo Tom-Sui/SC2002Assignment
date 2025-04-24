@@ -112,7 +112,9 @@ public interface I_ProjectManager {
      * @param updateContent The new content to update the project with
      * @param target The target project to be updated
      * @param currentProjects The list of current projects in the system
+     * @param projectName The name of the project to be updated
      * @param i The index of the project to be updated
+     * 
      * @return true if the project was successfully edited, false otherwise
      */
     boolean editProject(String projectName, String updateContent, String target, ArrayList<Project> currentProjects, int i);

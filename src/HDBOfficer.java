@@ -66,6 +66,14 @@ public class HDBOfficer extends Applicant {
         }
     }
 
+    /**
+     * Checks if there are any new projects that the officer is managing.
+     * <p>
+     * If the current date matches the application opening date of any upcoming project,
+     * the officer is set as the managing officer for that project.
+     * </p>
+     */
+
     public void checkNewProject() {
         LocalDate currentDate = LocalDate.now();
 
@@ -83,7 +91,11 @@ public class HDBOfficer extends Applicant {
         }
     }
 
-
+    /**
+     * Gets the list of upcoming projects.
+     *
+     * @return list of upcoming projects
+     */
     public Map<Project, OfficerRegistrationStatus> getRegistrationStatusMap(){
     	return registrationStatusMap;
     }
@@ -145,8 +157,7 @@ public class HDBOfficer extends Applicant {
             }
         }
 		registrationStatusMap.put(project, OfficerRegistrationStatus.PENDING);
-		return true;
-   
+		return true;   
     }
 
     /**
@@ -157,7 +168,11 @@ public class HDBOfficer extends Applicant {
     public void setManagedProject(Project project) {
         managedProject = project;
     }
-    
+    /**
+     * add managed applications to the list of managed applications.
+     * @param application the application to be added
+     *
+     */
     public void addManagedApplications(Application application) {
     	managedApplications.add(application);
     }
@@ -227,6 +242,7 @@ public class HDBOfficer extends Applicant {
      * </p>
      *
      * @param application the application to be processed
+     * @return true if booking is successful, false otherwise
      */
     public boolean helpBookFlat(Application application) {
         if (ApplicationService.processBooking(application, managedProject)) {

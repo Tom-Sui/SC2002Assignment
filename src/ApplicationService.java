@@ -17,7 +17,14 @@ import java.io.IOException;
  */
 public class ApplicationService {
 
-
+	/**
+	 * Updates the applications for an applicant.
+	 * <p>
+	 * This method checks the status of past applications and updates the current application accordingly.
+	 * </p>
+	 * 
+	 * @param applicant the Applicant object representing the person applying
+	 */
 	public static void updateApplications(Applicant applicant) {
 	    ArrayList<Application> applications = applicant.getPastApplications();
 	    Iterator<Application> iterator = applications.iterator();
@@ -91,7 +98,14 @@ public class ApplicationService {
 		application.setBookingRequested(true);
         officer.receiveBookFlatRequest(application);
 	}
-
+	/**
+	 * Withdraws an application from the system.
+	 * <p>
+	 * This method updates the application status to PENDINGWITHDRAWAL and notifies the applicant.
+	 * </p>
+	 * 
+	 * @param application the Application object representing the applicant's request
+	 */
 	public static void withdrawApplication(Application application) {
 		application.setApplicationStatus(ApplicationStatus.PENDINGWITHDRAWAL);
 	}

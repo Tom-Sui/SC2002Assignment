@@ -350,6 +350,7 @@ public class HDBManager extends User{
      * @param currentProjects The list of current projects
      * @param applicants The list of applicants
      * @param username The username of the applicant
+     * @param applicationsList The list of applications
      */
     public void approveOrRejectApplication(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, String username, ArrayList<Application> applicationsList)
     {
@@ -361,6 +362,9 @@ public class HDBManager extends User{
      * 
      * @param currentProjects The list of current projects
      * @param applicants arraylist of applicants
+     * @param username The username of the applicant
+     * @param applicationList The list of applications
+     * 
      */
     public void approveWithdrawal(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, String username, ArrayList<Application> applicationList)
     {
@@ -373,6 +377,7 @@ public class HDBManager extends User{
      * @param applicants The list of applicants
      * @param maritalStatusFilter The marital status filter
      * @param minAge The minimum age filter
+     * @param applicationsList The list of applications
      * @param maxAge The maximum age filter
      */
     public void generateApplicantReport(ArrayList<Applicant> applicants, String maritalStatusFilter, Integer minAge, Integer maxAge, ArrayList<Application> applicationsList)

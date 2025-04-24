@@ -195,6 +195,13 @@ public class Init {
         return applications;
     }
 
+    /**
+     * Loads booking information from the BookingList.txt file and associates
+     * applications and officers with each booking.
+     * 
+     * @param applications List of applications to associate with bookings
+     * @param officers List of HDB officers to associate with bookings
+     */
     public void loadBookingInfo(ArrayList<Application> applications, ArrayList<HDBOfficer> officers){
         File applicationFile = new File(DataFilePath + "/BookingList.txt");
         try {
@@ -323,6 +330,13 @@ public class Init {
         }
         return hdbManagers;
     }
+    /**
+     * Associates projects with their respective officers by setting the managed projects
+     * field for each officer.
+     * 
+     * @param officers List of HDB officers to update
+     * @param projects List of projects to associate
+     */
     public void setOfficerManagedProjects(ArrayList<HDBOfficer> officers, ArrayList<Project> projects) {
         for (Project project : projects) {
             ArrayList<HDBOfficer> managingOfficers = project.getHDBOfficer();

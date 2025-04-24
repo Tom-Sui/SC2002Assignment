@@ -42,8 +42,6 @@ public class App{
         //Initialize Applicant info into Applicant class
         applicant = init.LoadUserInfo();
 
-        // System.out.println(applicant.get(0).login(userPassword));
-        // System.exit(0);
         //Initialize HDB officier info into HDBOfficier class
         hdbManagers = init.LoadManagerInfo();
 
@@ -52,46 +50,17 @@ public class App{
 
         //Initialize projects info into Project class
         projectList = init.LoadProjectInfo(hdbManagers, hdbOfficers);
-        // hdbInterface.interface(project,hdbManagers,hdbOfficers)
-        // Return null if there is maching manager found
-        // projects = hdbManagers.get(1).createProject("aNOTHER NAME,TESTING TESTING name,2-Room,2,350000,3-Room,3,450000,2/2/2343,12/12/2343,Jessica,3,Daniel&Emily,true",projects,hdbManagers,hdbOfficers);
-        // hdbManagers.get(1).editProject("Acacia Breeze",
-        //                                      "12/12/1212", 
-        //                                      "5",
-        //                                      projects,
-        //                                      0, 
-        //                                      hdbManagers,
-        //                                      hdbOfficers);
-        // projects = init.LoadProjectInfo(hdbManagers, hdbOfficers);
-        // System.exit(0);
+
         //Initialize manager managed projects
         hdbManagers = init.setManagerManagedProjects(hdbManagers,projectList);
 
         //Initialize Application info
         ArrayList<Application> applications = init.loadApplicationInfo(applicant, projectList);
-        
-        
-        
-        // General general = new General();
-        // General.editProjectFile(projects.get(1),"New Name");
-        // System.exit(0);
-        //projects.get(1).setProjectName("New Name");
-        // System.exit(0);
-        
-        // System.out.println(hdbManagers.get(0).getName());
-        // hdbManagers.get(0).deletProject(projects.get(0));
-
-        // System.exit(0);
-        //Example of how to edit project
-
 
         //return helpinfo (cmds)
         helpInfo();
         System.out.print("Enter cmd: ");
         userInput = scanner.nextLine();
-
-        //Porbably more ideal login function are module
-        //Will update later on
 
         while(!userInput.equals("quit") && !userInput.equals("9")){
             switch (userInput) {

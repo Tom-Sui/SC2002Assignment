@@ -31,38 +31,7 @@ public class EnquiryService {
             System.err.println("Error reading enquiries from file: " + e.getMessage());
         }
     }
-    /**
-     * Refreshes the enquiries list by reading from the file again.
-     * <p>
-     * This method clears the current enquiries list and reads the enquiries from the file.
-     * </p>
-     * 
-     * @param userNric the NRIC of the applicant
-     */
-    public void refreshEnquiriesByApplicant(String userNric) {
-        enquiriesByApplicant.clear();
-        ArrayList<Enquiry> userEnquiries = viewEnquiriesByApplicant(userNric);
-        if (!userEnquiries.isEmpty()) {
-            enquiriesByApplicant.put(userNric, userEnquiries);
-        }
-    }
 
-    /**
-     * Refreshes the enquiries list by reading from the file again.
-     * <p>
-     * This method clears the current enquiries list and reads the enquiries from the file.
-     * </p>
-     * 
-     * @param projectName the name of the project
-     */
-
-    public void refreshEnquiriesByProject(String projectName) {
-        enquiriesByProject.clear();
-        ArrayList<Enquiry> projectEnquiries = viewEnquiriesByProject(projectName);
-        if (!projectEnquiries.isEmpty()) {
-            enquiriesByProject.put(projectName, projectEnquiries);
-        }
-    }
     /**
      * Returns a list of all enquiries made by applicants for a specific project.
      * <p>
@@ -72,6 +41,23 @@ public class EnquiryService {
      * @param projectName the name of the project
      * @return ArrayList of all enquiries for the specified project
      */
+
+    public void refreshEnquiriesByProject(String projectName) {
+        enquiriesByProject.clear();
+        ArrayList<Enquiry> projectEnquiries = viewEnquiriesByProject(projectName);
+        if (!projectEnquiries.isEmpty()) {
+            enquiriesByProject.put(projectName, projectEnquiries);
+        }
+    }
+
+    public void refreshEnquiriesByApplicant(String userNric) {
+        enquiriesByApplicant.clear();
+        ArrayList<Enquiry> applicantEnquiries = viewEnquiriesByApplicant(userNric);
+        if (!applicantEnquiries.isEmpty()) {
+            enquiriesByApplicant.put(userNric, applicantEnquiries);
+        }
+    }
+    
     public ArrayList<Enquiry> viewEnquiriesByProject(String projectName) {
         return new ArrayList<>(enquiries.stream()
             .filter(enquiry -> enquiry.getProjectName().equals(projectName))
@@ -105,6 +91,23 @@ public class EnquiryService {
             .filter(enquiry -> enquiry.getUserNric().equals(userNric))
             .collect(Collectors.toList()));
     }
+
+    public ArrayList<Enquiry> viewEnquiriesManagedByOfficer( HDBOfficer officer) {
+        ArrayList<Enquiry> enquiriesForOfficer = new ArrayList<>();
+        System.out.println("Officer Managed: " + officer.getRegistrationStatusMap());
+        ArrayList<String> projects = new ArrayList<>();
+        for (Project project : officer.getRegistrationStatusMap().keySet()) {
+            projects.add(project.getProjectName());
+        }
+        for (Enquiry enquiry : enquiries) {
+            if (projects.contains(enquiry.getProjectName())) {
+                enquiriesForOfficer.add(enquiry);
+            }
+        }
+        return enquiriesForOfficer;
+    }
+
+    
     /**
      * Returns a list of all enquiries.
      * <p>
@@ -113,6 +116,7 @@ public class EnquiryService {
      * 
      * @return ArrayList of all enquiries
      */
+
     public ArrayList<Enquiry> viewAllEnquiries() {
         return enquiries;
     } 
@@ -156,6 +160,7 @@ public class EnquiryService {
      * @return ArrayList of all enquiries by projects
      */
 
+
     public ArrayList<Enquiry> getEnquiriesByProjects(ArrayList<String> projectNames) {
         return viewEnquiriesByProjects(projectNames);
     }
@@ -169,6 +174,9 @@ public class EnquiryService {
      * @param enquiry the Enquiry object to add
      * @return true if the addition was successful, false otherwise
      */
+    public ArrayList<Enquiry> getEnquiriesByOfficer(HDBOfficer officer) {
+        return viewEnquiriesManagedByOfficer(officer);
+    }
 
     public boolean addEnquiry(Enquiry enquiry) {
         if (enquiry == null) {

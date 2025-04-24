@@ -47,13 +47,34 @@ public class App{
 
         //Initialize HDB manager info into HDBManager class
         hdbOfficers = init.LoadOfficerInfo();
-
+        	
         //Initialize projects info into Project class
         projectList = init.LoadProjectInfo(hdbManagers, hdbOfficers);
 
         //Initialize manager managed projects
         hdbManagers = init.setManagerManagedProjects(hdbManagers,projectList);
         
+        init.setOfficerManagedProjects(hdbOfficers, projectList);
+        
+        applicant.addAll(hdbOfficers);
+        //Initialize Application info
+        ArrayList<Application> applications = init.loadApplicationInfo(applicant, projectList);
+        
+       init.loadBookingInfo(applications, hdbOfficers);
+        
+        // General general = new General();
+        // General.editProjectFile(projects.get(1),"New Name");
+        // System.exit(0);
+        //projects.get(1).setProjectName("New Name");
+        // System.exit(0);
+        
+        // System.out.println(hdbManagers.get(0).getName());
+        // hdbManagers.get(0).deletProject(projects.get(0));
+
+        // System.exit(0);
+        //Example of how to edit project
+
+
         //return helpinfo (cmds)
         helpInfo();
         System.out.print("Enter cmd: ");
@@ -196,11 +217,6 @@ public class App{
                             System.out.println("Error: Could not determine user type");
                             break;
                     }
-                    
-                    if (currentUser != null) {
-                        EnquiryApp.start(currentUser);
-                    }
-                    break;
                 default:
                     System.out.println("\n!!!Wrong input!!!\n");
                     break;
@@ -278,7 +294,7 @@ public class App{
                 return true;
             case "2":
                 System.out.println("Opening Enquiry Application...");
-                EnquiryApp.start(user);
+                EnquiryApp.start(user, projectList);
                 logedIn = false;
                 userType = "NULL";
                 currentUserId = "NULL";
@@ -380,6 +396,10 @@ public class App{
                 userType = "HDB Officer";
                 currentUserId = userName;
                 logedIn = true;
+                // Show post-login menu
+                if (showPostLoginMenu(hdbOfficers.get(i))) {
+                    ApplicantOfficerApp.start(hdbOfficers.get(i), projectList);
+                }
                 return true;
             }
         }

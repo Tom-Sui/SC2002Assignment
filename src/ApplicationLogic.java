@@ -71,6 +71,7 @@ public class ApplicationLogic {
      */
     public static ArrayList<Project> filterByPastAppliedProjects(ArrayList<Application> applicationList) {
         ArrayList<Project> pastAppliedProjects = new ArrayList<>();
+        if (applicationList.size() == 0) return null;
         for (Application application : applicationList) {
             pastAppliedProjects.add(application.getProject());
         }

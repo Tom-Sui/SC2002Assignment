@@ -39,7 +39,7 @@ public class Application {
      * Initializes the application ID and sets default values for other fields.
      */
     public Application() {
-    	Application.applicationId = applicationId++;
+    	Application.applicationId++;
     };
     /**
      * Constructs a new Application with the specified details.
@@ -55,8 +55,8 @@ public class Application {
         this.applicant = applicant;
         this.project = project;
         this.isBooked = false;
-        this.bookingRequested = false;
-        this.applicationStatus = ApplicationStatus.SUCCESSFUL; //SHOULD BE PENDING. CHANGED TO SUCCESSFUL TO TEST OTHER FEATURES
+        this.bookingRequested = true;
+        this.applicationStatus = ApplicationStatus.PENDING; 
         this.flatType = flatType;
     }
 

@@ -666,7 +666,7 @@ public class ManagerInput {
 	            
 	            //  View and Reply to Enquiries for Your Projects
 	            case 13:        
-	            	EnquiryApp.start(name);
+	            	EnquiryApp.start(name, projects);
 	            	break;
 	            	
 	            case 14:

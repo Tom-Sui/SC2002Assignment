@@ -8,7 +8,7 @@ import java.util.List;
  */
 public class Applicant extends User{
     private Application currentApplication; 
-    private List<Application> pastApplications = new ArrayList<>();
+    private ArrayList<Application> pastApplications = new ArrayList<>();
     
     /**
      * Default constructor for Applicant.
@@ -29,7 +29,7 @@ public class Applicant extends User{
      */
     public Applicant(String name, String NRIC, int userID, String password, int age, 
                     MaritalStatus maritalStatus, Application currentApplication,  
-                    List<Application> pastApplications) {
+                    ArrayList<Application> pastApplications) {
         super(name, NRIC, userID, password, age, maritalStatus);
         this.currentApplication = currentApplication;
         this.pastApplications = pastApplications;
@@ -49,7 +49,7 @@ public class Applicant extends User{
                     int age, MaritalStatus maritalStatus) {
         super(name, NRIC, userID, password, age, maritalStatus);
     }
-
+    
     /**
      * Sets the preferred flat type for the applicant.
      * 
@@ -77,7 +77,7 @@ public class Applicant extends User{
      * @return list of past applied applications
      */
 
-    public List<Application> getPastApplications() {
+    public ArrayList<Application> getPastApplications() {
         return pastApplications;
     }
 
@@ -136,6 +136,15 @@ public class Applicant extends User{
      */
     public void setCurrentApplication(Application currentApplication) {
         this.currentApplication = currentApplication;
+    }
+
+    /**
+     * Appends a past application to the applicant's past applications list.
+     * 
+     * @param pastApplication the Application object to append as a past application
+     */
+    public void appendPastApplications(Application pastApplication) {
+        this.pastApplications.add(pastApplication);
     }
 
 }

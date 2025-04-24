@@ -47,38 +47,47 @@ public class HDBOfficer extends Applicant {
      * </p>
      */
     public void checkCurrentProject() {
-    	// Return if the officer is not managing any project.
-    	if (managedProject == null) {
-    		return;
-    	}
-    	LocalDate currentDate = LocalDate.now();
-    	//Convert date type to LocalDate so that we can compare
-        LocalDate applicationClosingDate = ((Date) managedProject.getApplicationClosingDate()).toLocalDate();
-    	if (currentDate.isAfter(applicationClosingDate)) {
-    		managedProject = null;
-    		isManagingOfficer = false;
-    		managedApplications.clear();
-    	}
+        if (managedProject == null) {
+            return;
+        }
+
+        LocalDate currentDate = LocalDate.now();
+
+        // Assuming getApplicationClosingDate() returns either java.util.Date or java.sql.Date
+        java.util.Date closingDate = managedProject.getApplicationClosingDate(); 
+        LocalDate applicationClosingDate = closingDate.toInstant()
+                                                      .atZone(ZoneId.systemDefault())
+                                                      .toLocalDate();
+
+        if (currentDate.isAfter(applicationClosingDate)) {
+            managedProject = null;
+            isManagingOfficer = false;
+            managedApplications.clear();
+        }
     }
-    /**
-     * Checks if there are any new projects that the officer can manage.
-     * <p>
-     * If the current date matches the application opening date of any upcoming project,
-     * the officer is assigned to manage that project.
-     * </p>
-     */
+
     public void checkNewProject() {
-    	LocalDate currentDate = LocalDate.now();
-    	for (Project project : upcomingProjects) {
-    		LocalDate applicationOpeningDate = ((Date) managedProject.getApplicationClosingDate()).toLocalDate();
-    		if (currentDate == applicationOpeningDate) {
-    			managedProject = project;
-    			isManagingOfficer = true;
-    			return;
-    		}
-    	}
+        LocalDate currentDate = LocalDate.now();
+
+        for (Project project : upcomingProjects) {
+            java.util.Date openingDate = project.getApplicationOpeningDate(); // Should return java.util.Date or java.sql.Date
+            LocalDate applicationOpeningDate = openingDate.toInstant()
+                                                           .atZone(ZoneId.systemDefault())
+                                                           .toLocalDate();
+
+            if (currentDate.equals(applicationOpeningDate)) {
+                managedProject = project;
+                isManagingOfficer = true;
+                return;
+            }
+        }
     }
- 
+
+
+    public Map<Project, OfficerRegistrationStatus> getRegistrationStatusMap(){
+    	return registrationStatusMap;
+    }
+    
     // TODO: method to check if there are any approved projects in registrationStatusMap. if there are, transfer them to upcomingProjects
     /**
      * Checks if there are any approved projects in the registration status map.
@@ -111,40 +120,33 @@ public class HDBOfficer extends Applicant {
     public boolean registerForProject(Project project) {
         ArrayList<Project> pastAppliedProjects = new ArrayList<Project>();
         pastAppliedProjects = ApplicationLogic.filterByPastAppliedProjects(managedApplications);
-        if (pastAppliedProjects.contains(project))  {
+        if (pastAppliedProjects != null && pastAppliedProjects.contains(project))  {
             return false;
         }
 
-        final boolean[] canApply = {true};
-        registrationStatusMap.forEach((Project mappedProject, OfficerRegistrationStatus status) -> {
-            // check if the application period of the project is the same as the current project
-            boolean dateFallsWithinApplication = project.getApplicationOpeningDate().after(mappedProject.getApplicationOpeningDate()) && project.getApplicationClosingDate().before(mappedProject.getApplicationClosingDate());
-            boolean dateEquals = project.getApplicationOpeningDate().equals(mappedProject.getApplicationOpeningDate()) 
-                && project.getApplicationClosingDate().equals(mappedProject.getApplicationClosingDate()) 
-                && project.getApplicationClosingDate().equals(mappedProject.getApplicationOpeningDate()) 
-                && project.getApplicationOpeningDate().equals(mappedProject.getApplicationClosingDate());
-            if((dateFallsWithinApplication || dateEquals )&& status == OfficerRegistrationStatus.APPROVED) {
-                canApply[0] = false;
+        if (registrationStatusMap.size() > 0) {
+        	
+            final boolean[] canApply = {true};
+            registrationStatusMap.forEach((Project mappedProject, OfficerRegistrationStatus status) -> {
+                // check if the application period of the project is the same as the current project
+                boolean dateFallsWithinApplication = project.getApplicationOpeningDate().after(mappedProject.getApplicationOpeningDate()) && project.getApplicationClosingDate().before(mappedProject.getApplicationClosingDate());
+                boolean dateEquals = project.getApplicationOpeningDate().equals(mappedProject.getApplicationOpeningDate()) 
+                    && project.getApplicationClosingDate().equals(mappedProject.getApplicationClosingDate()) 
+                    && project.getApplicationClosingDate().equals(mappedProject.getApplicationOpeningDate()) 
+                    && project.getApplicationOpeningDate().equals(mappedProject.getApplicationClosingDate());
+                if((dateFallsWithinApplication || dateEquals )&& status == OfficerRegistrationStatus.APPROVED) {
+                    canApply[0] = false;
 
+                }
+            });
+
+            if (!canApply[0]) {
+                return false;
             }
-        });
-
-        if (!canApply[0]) {
-            return false;
         }
-
-        registrationStatusMap.put(project, OfficerRegistrationStatus.PENDING);
-        return true;
-    }
-
-    /**
-     * Checks if the officer can apply for a project.
-     *
-     * @param project the project to check
-     * @return false (officers cannot apply for projects)
-     */
-    public boolean canApply(Project project) {
-        return false;
+		registrationStatusMap.put(project, OfficerRegistrationStatus.PENDING);
+		return true;
+   
     }
 
     /**
@@ -156,6 +158,9 @@ public class HDBOfficer extends Applicant {
         managedProject = project;
     }
     
+    public void addManagedApplications(Application application) {
+    	managedApplications.add(application);
+    }
     /**
      * Displays details of the managed project.
      */
@@ -171,6 +176,10 @@ public class HDBOfficer extends Applicant {
      */
     
     public void viewOfficerRegistrationStatus() {
+    	if (managedProject != null) {
+    		System.out.printf("Current Project: %s",managedProject.getProjectName());
+    		System.out.println();
+    	}
     	registrationStatusMap.forEach((project, status) -> {
     		System.out.printf("Project: %s, Status: %s", project.getProjectName(), status);   	
     	});
@@ -185,7 +194,9 @@ public class HDBOfficer extends Applicant {
     public void viewBookRequests() {
         if (managedApplications.size() > 0) {
             for (Application app : managedApplications) {
-                System.out.println(app.getApplicant().getName() + " " + app.getApplicationStatus());
+            	if (app != null) {
+            		System.out.println(app.getApplicant().getName() + " " + app.getApplicationStatus());
+            	}   
             }
         }
     }
@@ -217,21 +228,28 @@ public class HDBOfficer extends Applicant {
      *
      * @param application the application to be processed
      */
-    public void helpBookFlat(Application application) {
+    public boolean helpBookFlat(Application application) {
         if (ApplicationService.processBooking(application, managedProject)) {
         	System.out.println("Booking successful!");
-        	return;
+        	return true;
         }            
         System.out.println("Booking unsuccessful. Chosen flat type has no more units.");
+        return false;
     }
 
     /**
-     * Generates a receipt for a flat application.
+     * Generates a receipt for a flat booking.
+     * <p>
+     * Delegates to ApplicationService to generate a comprehensive receipt.
+     * </p>
      *
      * @param application the application to generate receipt for
      */
-    public void generateFlatReceipt(Application application) {
-        System.out.println(application.toString());
+    public void generateFlatSelectionReceipt(Application application) {
+        String receipt = ApplicationService.generateFlatSelectionReceipt(application);
+        if (receipt != null) {
+            System.out.println(receipt);
+        }
     }
 
     /**

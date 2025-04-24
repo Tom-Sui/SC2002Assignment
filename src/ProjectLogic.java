@@ -75,7 +75,26 @@ public class ProjectLogic {
         return filteredProjects;
     }
 
+    public static ArrayList<Project> filterProjectsManagedOfficer(ArrayList<Project> projects, HDBOfficer officer) {
+        ArrayList<Project> filteredProjects = new ArrayList<>();
+        for (Project project : projects) {
+            if (project.getHDBOfficer().contains(officer)) {
+                filteredProjects.add(project);
+            }
+        }
+        return filteredProjects;
+    }
 
+    public static ArrayList<Project> filterProjectsNamesForApplicant(ArrayList<Project> projects, Applicant applicant) {
+        ArrayList<Project> filteredProjects = new ArrayList<>();
+        List<Application> pastApplications = applicant.getPastApplications();
+        List<Project> pastAppliedProjects = pastApplications.stream()
+        	    .map(Application::getProject)  // extract the project from each application
+        	    .collect(Collectors.toCollection(ArrayList::new));
+        filteredProjects.addAll(pastAppliedProjects);
+        filteredProjects.add(applicant.getCurrentApplication().getProject());
+        return filteredProjects;
+    }
     
     /**
      * Displays all available projects that are visible to applicants.
@@ -105,6 +124,41 @@ public class ProjectLogic {
         }
         
         return idx;
+    }
+
+    /**
+     * Returns the first available project that the applicant has not applied to.
+     * 
+     * @param projects List of all projects
+     * @param applicant The applicant to check against
+     * @return List of available projects that the applicant has not applied to
+     */
+    public static ArrayList<Project> getApplicantProjects(ArrayList<Project> projects, Applicant applicant) {
+        List<Application> pastApplications = applicant.getPastApplications();
+        List<Project> pastAppliedProjects = pastApplications.stream()
+        	    .map(Application::getProject)  // extract the project from each application
+        	    .collect(Collectors.toCollection(ArrayList::new));
+
+        ArrayList<Project> applicantProjects = new ArrayList<>();
+        applicantProjects.addAll(pastAppliedProjects);
+        if (applicant.getCurrentApplication() != null) {
+            applicantProjects.add(applicant.getCurrentApplication().getProject());
+        }
+        return applicantProjects;
+    }
+
+    /**
+     * Returns a list of project names from a list of projects.
+     * 
+     * @param projects List of projects to extract names from
+     * @return List of project names
+     */
+    public static ArrayList<String> getProjectNames(ArrayList<Project> projects) {
+        ArrayList<String> projectNames = new ArrayList<>();
+        for (Project project : projects) {
+            projectNames.add(project.getProjectName());
+        }
+        return projectNames;
     }
     
     

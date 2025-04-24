@@ -17,19 +17,19 @@ public class EnquiryService {
         }
     }
 
-    public void refreshEnquiriesByApplicant(String userNric) {
-        enquiriesByApplicant.clear();
-        ArrayList<Enquiry> userEnquiries = viewEnquiriesByApplicant(userNric);
-        if (!userEnquiries.isEmpty()) {
-            enquiriesByApplicant.put(userNric, userEnquiries);
-        }
-    }
-
     public void refreshEnquiriesByProject(String projectName) {
         enquiriesByProject.clear();
         ArrayList<Enquiry> projectEnquiries = viewEnquiriesByProject(projectName);
         if (!projectEnquiries.isEmpty()) {
             enquiriesByProject.put(projectName, projectEnquiries);
+        }
+    }
+
+    public void refreshEnquiriesByApplicant(String userNric) {
+        enquiriesByApplicant.clear();
+        ArrayList<Enquiry> applicantEnquiries = viewEnquiriesByApplicant(userNric);
+        if (!applicantEnquiries.isEmpty()) {
+            enquiriesByApplicant.put(userNric, applicantEnquiries);
         }
     }
     
@@ -51,6 +51,23 @@ public class EnquiryService {
             .collect(Collectors.toList()));
     }
 
+    public ArrayList<Enquiry> viewEnquiriesManagedByOfficer( HDBOfficer officer) {
+        ArrayList<Enquiry> enquiriesForOfficer = new ArrayList<>();
+        ArrayList<String> projects = new ArrayList<>();
+        System.out.println(officer.getApplications());
+        for (Application application : officer.getApplications()) {
+            if (application.getProject().getHDBOfficer().contains(officer)) {
+                projects.add(application.getProject().getProjectName());
+            }
+        }
+        for (Enquiry enquiry : enquiries) {
+            if (projects.contains(enquiry.getProjectName())) {
+                enquiriesForOfficer.add(enquiry);
+            }
+        }
+        return enquiriesForOfficer;
+    }
+
     public ArrayList<Enquiry> viewAllEnquiries() {
         return enquiries;
     } 
@@ -67,6 +84,10 @@ public class EnquiryService {
     
     public ArrayList<Enquiry> getEnquiriesByProjects(ArrayList<String> projectNames) {
         return viewEnquiriesByProjects(projectNames);
+    }
+
+    public ArrayList<Enquiry> getEnquiriesByOfficer(HDBOfficer officer) {
+        return viewEnquiriesManagedByOfficer(officer);
     }
 
     public boolean addEnquiry(Enquiry enquiry) {

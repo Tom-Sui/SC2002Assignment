@@ -62,6 +62,15 @@ public class ProjectLogic {
         return filteredProjects;
     }
 
+    public static ArrayList<Project> filterProjectsManagedOfficer(ArrayList<Project> projects, HDBOfficer officer) {
+        ArrayList<Project> filteredProjects = new ArrayList<>();
+        for (Project project : projects) {
+            if (project.getHDBOfficer().contains(officer)) {
+                filteredProjects.add(project);
+            }
+        }
+        return filteredProjects;
+    }
 
     public static ArrayList<Project> filterProjectsNamesForApplicant(ArrayList<Project> projects, Applicant applicant) {
         ArrayList<Project> filteredProjects = new ArrayList<>();

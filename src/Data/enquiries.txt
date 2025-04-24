@@ -4,4 +4,8 @@
 1,A,S1234567A,1,0
 =======
 1,A,S1234567A,s,0
+<<<<<<< HEAD
 >>>>>>> 36f659e (chore: added comments)
+=======
+1,Dragon,S1234567A,hi,0
+>>>>>>> 3826d53 (feat: update feat)

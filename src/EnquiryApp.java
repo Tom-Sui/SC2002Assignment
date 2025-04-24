@@ -55,12 +55,14 @@ public class EnquiryApp {
             System.out.println("============================");
             System.out.println("List of Available Features:");
 
-            if (user instanceof Applicant) {
+            if (user instanceof Applicant && !(user instanceof HDBOfficer)) {
                 System.out.println("1. View all enquiries");
                 System.out.println("2. Create an enquiry");
                 System.out.println("3. Update an enquiry");
                 System.out.println("4. Delete an enquiry");
             }
+
+
 
             if (user instanceof HDBOfficer || user instanceof HDBManager) {
                 System.out.println("1. View all enquiries");
@@ -120,31 +122,75 @@ public class EnquiryApp {
      * Shows different sets of enquiries based on user type:
      * - Applicants see their own enquiries
      * - HDB Officers see enquiries they can reply to
+     * - HDB Managers see all projects enquiries
+     * </p>
+     *
+     * @param user The user viewing the enquiries
+     */
+    public static void viewEnquiries(User user) {
+        System.out.println("Viewing Enquiries:");
+        System.out.println("============================");
+        if (user instanceof Applicant && !(user instanceof HDBOfficer)) {
+            viewEnquiriesAsApplicant((Applicant) user);
+        } else if (user instanceof HDBOfficer) {
+            viewEnquiriesAsHDBOfficer((HDBOfficer) user);
+        } else if (user instanceof HDBManager) {
+            viewEnquiriesAsHDBManager((HDBManager) user);
+        } else {
+            System.out.println("Invalid user type.");
+        }
+    }
+    /**
+     * Displays all enquiries relevant to the user's role.
+     * <p>
+     * Shows different sets of enquiries based on user type:
+     * - Applicants see their own enquiries
+     * - HDB Officers see enquiries they can reply to
      * - HDB Managers see all enquiries
      * </p>
      *
      * @param user The user viewing the enquiries
      */
-    private static void viewEnquiries(User user) {
-        System.out.println("\nViewing Enquiries:");
-        System.out.println("============================");
-        
-        if (user instanceof Applicant applicant) {
+    private static boolean viewEnquiriesAsApplicant(Applicant applicant) {
+        if (applicant != null) {
             ArrayList<Enquiry> enquiries = enquiryService.getEnquiriesByApplicant(applicant.getNRIC());
-            displayEnquiries(enquiries);
-        } else if (user instanceof HDBOfficer officer) {
-            ArrayList<Enquiry> enquiries = enquiryService.getEnquiriesByApplicant(officer.getNRIC());
-            displayEnquiries(enquiries);
-        } else if (user instanceof HDBManager manager) {
-            ArrayList<String> projectNames = new ArrayList<>();
-            for (Project project : manager.getProject()) {
-                projectNames.add(project.getProjectName());
+            if (enquiries.isEmpty()) {
+                System.out.println("No enquiries found.");
+                return false;
             }
-            ArrayList<Enquiry> enquiries = enquiryService.getEnquiriesByProjects(projectNames);
             displayEnquiries(enquiries);
-        }
+            return true;
+        } 
+        return false;
     }
 
+    private static boolean viewEnquiriesAsHDBOfficer(HDBOfficer officer) {
+        if (officer != null) {
+            ArrayList<Enquiry> enquiries = enquiryService.getEnquiriesByOfficer(officer);
+            if (enquiries.isEmpty()) {
+                System.out.println("No enquiries found.");
+                return false;
+            }
+            displayEnquiries(enquiries);
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean viewEnquiriesAsHDBManager(HDBManager manager) {
+        
+        if (manager != null) {
+            ArrayList<Enquiry> enquiries = enquiryService.viewAllEnquiries();
+            if (enquiries.isEmpty()) {
+                System.out.println("No enquiries found.");
+                return false;
+            }
+            displayEnquiries(enquiries);
+            return true;
+        }
+        return false;
+    }
+    
 
     /**
      * Creates a new enquiry for a user.
@@ -172,19 +218,7 @@ public class EnquiryApp {
             for (Project project : applicantProjects) {
                 System.out.println(project.toString());
             }
-        } else if (user instanceof HDBOfficer officer) {
-            // Officers see projects they manage
-            ArrayList<Project> officerProjects = ProjectLogic.filterProjectsForOfficer(projectList, officer);
-            for (Project project : officerProjects) {
-                System.out.println(project.toString());
-            }
-        } else if (user instanceof HDBManager manager) {
-            // Managers see all projects
-            for (String projectName : projectNames) {
-                System.out.println(projectName);
-            }
-        }
-        
+        } 
         System.out.print("\nEnter project name: ");
         String projectName = sc.nextLine();
         
@@ -215,7 +249,9 @@ public class EnquiryApp {
         System.out.println("============================");
 
         if (user instanceof Applicant applicant) {
-            displayEnquiries(enquiryService.getEnquiriesByApplicant(applicant.getNRIC()));
+            if (!viewEnquiriesAsApplicant(applicant)) {
+                return;
+            }
         
             System.out.print("Enter enquiry ID to update: ");
             int enquiryId = sc.nextInt();
@@ -248,7 +284,9 @@ public class EnquiryApp {
         System.out.println("============================");
         
         if (user instanceof Applicant applicant) {
-            displayEnquiries(enquiryService.getEnquiriesByApplicant(applicant.getNRIC()));
+            if (!viewEnquiriesAsApplicant(applicant)) {
+                return;
+            }
 
             System.out.print("Enter enquiry ID to delete: ");
             int enquiryId = sc.nextInt();
@@ -275,9 +313,11 @@ public class EnquiryApp {
         System.out.println("\nReply to Enquiry:");
         System.out.println("============================");
         
-        if (user instanceof HDBOfficer officer || user instanceof HDBManager manager) {
-            viewEnquiries(user);
-
+        if (user instanceof HDBOfficer || user instanceof HDBManager) {
+            if (!viewEnquiriesAsHDBOfficer((HDBOfficer) user) || !viewEnquiriesAsHDBManager((HDBManager) user)) {
+                return;
+            }
+            
             System.out.print("Enter enquiry ID to reply to: ");
             int enquiryId = sc.nextInt();
             sc.nextLine(); // Consume newline
@@ -307,11 +347,6 @@ public class EnquiryApp {
      * @param enquiries The list of enquiries to display
      */
     private static void displayEnquiries(List<Enquiry> enquiries) {
-        if (enquiries.isEmpty()) {
-            System.out.println("No enquiries found.");
-            return;
-        }
-
         for (Enquiry enquiry : enquiries) {
             System.out.println("\nEnquiry ID: " + enquiry.getEnquiryID());
             System.out.println("Project: " + enquiry.getProjectName());

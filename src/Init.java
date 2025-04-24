@@ -171,9 +171,8 @@ public class Init {
                 application.setBookingRequested(Boolean.parseBoolean(data[4]));
                 application.setIsBooked(Boolean.parseBoolean(data[5]));
                 application.setFlatType(ApplicationLogic.getFlatType(application.getProject(), data[6]));
-                applications.add(application);
-                
-                /**
+                applications.add(application);     
+                /**	
                  * Insert all applications to the applicant's past application list temporarily for simplicity.
                  * We will check and update accordingly with another method.
                  */

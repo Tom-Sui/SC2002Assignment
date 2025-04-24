@@ -37,7 +37,7 @@ public class App{
 
         //Initialize HDB manager info into HDBManager class
         hdbOfficers = init.LoadOfficerInfo();
-
+        	
         //Initialize projects info into Project class
         projectList = init.LoadProjectInfo(hdbManagers, hdbOfficers);
         // hdbInterface.interface(project,hdbManagers,hdbOfficers)
@@ -57,6 +57,7 @@ public class App{
         
         init.setOfficerManagedProjects(hdbOfficers, projectList);
         
+        applicant.addAll(hdbOfficers);
         //Initialize Application info
         ArrayList<Application> applications = init.loadApplicationInfo(applicant, projectList);
         

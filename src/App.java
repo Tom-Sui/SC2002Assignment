@@ -209,11 +209,6 @@ public class App{
                             System.out.println("Error: Could not determine user type");
                             break;
                     }
-                    
-                    if (currentUser != null) {
-                        EnquiryApp.start(currentUser);
-                    }
-                    break;
                 default:
                     System.out.println("\n!!!Wrong input!!!\n");
                     break;
@@ -271,7 +266,7 @@ public class App{
                 return true;
             case "2":
                 System.out.println("Opening Enquiry Application...");
-                EnquiryApp.start(user);
+                EnquiryApp.start(user, projectList);
                 return false;
             case "3":
                 logedIn = false;

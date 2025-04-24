@@ -36,6 +36,8 @@ public class EnquiryApp {
     private static final EnquiryService enquiryService = new EnquiryService();
     private static final String ENQUIRIES_FILE = "Data/enquiries.txt";
 
+
+
     /**
      * Starts the enquiry application for a given user.
      * <p>
@@ -46,33 +48,25 @@ public class EnquiryApp {
      * @param user The user starting the application (must not be null)
      * @throws NullPointerException if user parameter is null
      */
-    public static void start(User user) {
-        ArrayList<String> features = new ArrayList<>(List.of(
-            "View all enquiries",
-            "Create an enquiry",
-            "Update an enquiry",
-            "Delete an enquiry"
-        ));
-
-        ArrayList<String> hdbStaffFeatures = new ArrayList<>(List.of(
-            "Reply to an enquiry"
-        ));
-
+    public static void start(User user, ArrayList<Project> projectList) {
         int choice;
         do {
             // Display the list of features available
             System.out.println("============================");
             System.out.println("List of Available Features:");
-            
-            // Add HDB staff features if applicable
+
+            if (user instanceof Applicant) {
+                System.out.println("1. View all enquiries");
+                System.out.println("2. Create an enquiry");
+                System.out.println("3. Update an enquiry");
+                System.out.println("4. Delete an enquiry");
+            }
+
             if (user instanceof HDBOfficer || user instanceof HDBManager) {
-                features.addAll(hdbStaffFeatures);
+                System.out.println("1. View all enquiries");
+                System.out.println("5. Reply to an enquiry");
             }
             
-            // Display menu options
-            for (int i = 0; i < features.size(); i++) {
-                System.out.printf("%d. %s\n", i + 1, features.get(i));
-            }
             System.out.printf("-1. Exit\n");
             System.out.println();
             System.out.printf("Enter your choice: ");
@@ -81,8 +75,8 @@ public class EnquiryApp {
             sc.nextLine(); // Consume newline
 
             // Handle user choice using polymorphism
-            if (choice > 0 && choice <= features.size()) {
-                handleEnquiryOperation(user, choice);
+            if (choice > 0 && choice <= 5) {
+                handleEnquiryOperation(user, choice, projectList);
             } else if (choice != -1) {
                 System.out.println("Invalid choice. Please try again.");
             }
@@ -98,13 +92,13 @@ public class EnquiryApp {
      * @param user The user performing the operation
      * @param choice The menu choice selected by the user
      */
-    private static void handleEnquiryOperation(User user, int choice) {
+    private static void handleEnquiryOperation(User user, int choice, ArrayList<Project> projectList) {
         switch (choice) {
             case 1: // View all enquiries
                 viewEnquiries(user);
                 break;
             case 2: // Create an enquiry
-                createEnquiry(user);
+                createEnquiry(user, projectList);
                 break;
             case 3: // Update an enquiry
                 updateEnquiry(user);
@@ -151,38 +145,59 @@ public class EnquiryApp {
         }
     }
 
+
     /**
-     * Creates a new enquiry for an applicant.
+     * Creates a new enquiry for a user.
      * <p>
-     * Prompts for project name and message, then creates an enquiry
-     * if the project exists and the user is an applicant.
+     * Shows available projects based on user type:
+     * - Applicants see all visible projects
+     * - HDB Officers see projects they manage
+     * - HDB Managers see all projects
      * </p>
      *
      * @param user The user creating the enquiry
+     * @param projectList List of all projects
      */
-    private static void createEnquiry(User user) {
+    private static void createEnquiry(User user, ArrayList<Project> projectList) {
         System.out.println("\nCreate New Enquiry:");
         System.out.println("============================");
 
+        ArrayList<String> projectNames = ProjectLogic.getProjectNames(projectList);
+
+        // Show available projects based on user type
         System.out.println("Available Projects:");
-        viewEnquiries(user);
+        if (user instanceof Applicant) {
+            // Applicants see all visible projects
+            ArrayList<Project> applicantProjects = ProjectLogic.getApplicantProjects(projectList, (Applicant) user);
+            for (Project project : applicantProjects) {
+                System.out.println(project.toString());
+            }
+        } else if (user instanceof HDBOfficer officer) {
+            // Officers see projects they manage
+            ArrayList<Project> officerProjects = ProjectLogic.filterProjectsForOfficer(projectList, officer);
+            for (Project project : officerProjects) {
+                System.out.println(project.toString());
+            }
+        } else if (user instanceof HDBManager manager) {
+            // Managers see all projects
+            for (String projectName : projectNames) {
+                System.out.println(projectName);
+            }
+        }
         
-        System.out.print("Enter project name: ");
+        System.out.print("\nEnter project name: ");
         String projectName = sc.nextLine();
         
         System.out.print("Enter your message: ");
         String message = sc.nextLine();
 
-        if (user instanceof Applicant applicant) {
-            // Project project = findProject(projectName);
-            if (projectName != null) {
-                Enquiry enquiry = new Enquiry(applicant.getNRIC(), projectName, message, 0);
-                enquiryService.addEnquiry(enquiry);
-                enquiryService.writeEnquiriesToFile();
-                System.out.println("Enquiry created successfully!");
-                return; // Exit the method after successful creation
-            }
-            System.out.println("Project not found.");
+        if (projectName != null && message != null && projectNames.contains(projectName)) {
+            Enquiry enquiry = new Enquiry(user.getNRIC(), projectName, message, 0);
+            enquiryService.addEnquiry(enquiry);
+            enquiryService.writeEnquiriesToFile();
+            System.out.println("Enquiry created successfully!");
+        } else {
+            System.out.println("Invalid project name or message.");
         }
     }
 
@@ -271,12 +286,14 @@ public class EnquiryApp {
             String reply = sc.nextLine();
 
             Enquiry enquiryToReply = enquiryService.getEnquiryById(enquiryId);
-            if (enquiryToReply != null) {
+            if (enquiryToReply != null && enquiryToReply.getReplyID() == 0) {
                 Enquiry replyEnquiry = new Enquiry(enquiryToReply.getUserNric(), enquiryToReply.getProjectName(), reply, 0);
                 enquiryService.addEnquiry(replyEnquiry);
                 enquiryToReply.setReplyID(replyEnquiry.getEnquiryID());
                 enquiryService.writeEnquiriesToFile();
                 System.out.println("Reply sent successfully!");
+            } else {
+                System.out.println("Enquiry already replied to.");
             }
         }
     }

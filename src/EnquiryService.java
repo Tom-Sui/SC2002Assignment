@@ -53,12 +53,10 @@ public class EnquiryService {
 
     public ArrayList<Enquiry> viewEnquiriesManagedByOfficer( HDBOfficer officer) {
         ArrayList<Enquiry> enquiriesForOfficer = new ArrayList<>();
+        System.out.println("Officer Managed: " + officer.getRegistrationStatusMap());
         ArrayList<String> projects = new ArrayList<>();
-        System.out.println(officer.getApplications());
-        for (Application application : officer.getApplications()) {
-            if (application.getProject().getHDBOfficer().contains(officer)) {
-                projects.add(application.getProject().getProjectName());
-            }
+        for (Project project : officer.getRegistrationStatusMap().keySet()) {
+            projects.add(project.getProjectName());
         }
         for (Enquiry enquiry : enquiries) {
             if (projects.contains(enquiry.getProjectName())) {

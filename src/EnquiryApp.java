@@ -228,10 +228,7 @@ public class EnquiryApp {
         System.out.println("Available Projects:");
         if (user instanceof Applicant) {
             // Applicants see all visible projects
-            ArrayList<Project> applicantProjects = ProjectLogic.getApplicantProjects(projectList, (Applicant) user);
-            for (Project project : applicantProjects) {
-                System.out.println(project.toString());
-            }
+            ProjectLogic.viewAvailableProjects(projectList, (Applicant) user);
         } 
         System.out.print("\nEnter project name: ");
         String projectName = sc.nextLine();

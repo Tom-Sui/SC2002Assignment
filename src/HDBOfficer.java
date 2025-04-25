@@ -295,9 +295,7 @@ public class HDBOfficer extends Applicant {
      * @param status the new registration status to be set for the project
      */
     public void setOfficerRegistrationStatus(Project project, OfficerRegistrationStatus status) {
-    	if(registrationStatusMap.containsKey(project)) {
-    		registrationStatusMap.put(project, status);
-    	}
+    	registrationStatusMap.put(project, status);
     }
 
     /**

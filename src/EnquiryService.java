@@ -114,11 +114,12 @@ public class EnquiryService {
 
     public ArrayList<Enquiry> viewEnquiriesManagedByOfficer( HDBOfficer officer) {
         ArrayList<Enquiry> enquiriesForOfficer = new ArrayList<>();
-        System.out.println("Officer Managed: " + officer.getRegistrationStatusMap());
         ArrayList<String> projects = new ArrayList<>();
+        System.out.println("Project Managed By Officer: " );
         for (Project project : officer.getRegistrationStatusMap().keySet()) {
             if (officer.getRegistrationStatusMap().get(project) == OfficerRegistrationStatus.APPROVED) {
                 projects.add(project.getProjectName());
+                System.out.println(project.getProjectName());
             }
         }
         for (Enquiry enquiry : enquiries) {

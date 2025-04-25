@@ -51,16 +51,17 @@ public class EnquiryApp {
             // Display the list of features available
             System.out.println("List of Available Features:");
 
-            if (user instanceof Applicant && !(user instanceof HDBOfficer)) {
+            if (user instanceof Applicant || (user instanceof HDBOfficer)) {
                 System.out.println("1. View all enquiries");
                 System.out.println("2. Create an enquiry");
                 System.out.println("3. Update an enquiry");
                 System.out.println("4. Delete an enquiry");
+                System.out.println("5. Reply to an enquiry");
             }
 
 
 
-            if (user instanceof HDBOfficer || user instanceof HDBManager) {
+            if ( user instanceof HDBManager) {
                 System.out.println("1. View all enquiries");
                 System.out.println("5. Reply to an enquiry");
             }
@@ -96,13 +97,25 @@ public class EnquiryApp {
                 viewEnquiries(user);
                 break;
             case 2: // Create an enquiry
-                createEnquiry(user, projectList);
+                if( user instanceof Applicant) {
+                    createEnquiry(user, projectList);
+                } else {
+                    System.out.println("You do not have permission to create an enquiry.");
+                }
                 break;
             case 3:
-                updateEnquiry(user);
+                if (user instanceof Applicant) {
+                    updateEnquiry(user);
+                } else {
+                    System.out.println("You do not have permission to update an enquiry.");
+                }
                 break;
             case 4:
-                deleteEnquiry(user);
+                if( user instanceof Applicant) {
+                    deleteEnquiry(user);
+                } else {
+                    System.out.println("You do not have permission to delete an enquiry.");
+                }
                 break;
             case 5: // Reply to an enquiry
                 if (user instanceof HDBOfficer || user instanceof HDBManager) {

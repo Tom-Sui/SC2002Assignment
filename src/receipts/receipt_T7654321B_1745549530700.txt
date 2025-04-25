@@ -1,0 +1,25 @@
+
+=== FLAT SELECTION RECEIPT ===
+Date: Fri Apr 25 10:52:10 GMT+08:00 2025
+
+Applicant Details:
+------------------
+Name: Sarah
+NRIC: T7654321B
+Age: 40
+Marital Status: MARRIED
+
+Flat Details:
+-------------
+Flat Type: 2-Room
+Price: $599220.00
+
+Project Details:
+----------------
+Project Name: Dragon
+Neighborhood: Queenstown
+Application Period: Tue Apr 01 00:00:00 GMT+08:00 2025 to Fri Jul 03 00:00:00 GMT+08:00 2026
+
+Booking Status: BOOKED
+=========================
+

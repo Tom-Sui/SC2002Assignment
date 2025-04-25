@@ -165,6 +165,39 @@ public class General {
             e.printStackTrace();
         }
     }
+    
+    public static void editApplicationFile(String filePath, String newContent, int targetIndex, String targetRow) {
+        String fileContent = "";
+        File projectFile = new File(filePath);
+
+        try {
+            Scanner scanner = new Scanner(projectFile);
+            while (scanner.hasNextLine()) {
+                String bufferString = scanner.nextLine();
+                String[] parts = bufferString.split(",");
+
+                if (parts.length > targetIndex && parts[0].equals(targetRow)) {
+                    parts[targetIndex] = newContent;
+                    bufferString = String.join(",", parts);
+                }
+
+                fileContent += bufferString + "\n";
+            }
+            scanner.close();
+
+            FileWriter writer = new FileWriter(filePath);
+            writer.write(fileContent);
+            writer.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Error occurred while reading " + filePath);
+            e.printStackTrace();
+        } catch (IOException e) {
+            System.out.println("Error occurred when writing " + filePath);
+            e.printStackTrace();
+        }
+    }
+
+
 
     /**
      * Generic file editing method for various file types.

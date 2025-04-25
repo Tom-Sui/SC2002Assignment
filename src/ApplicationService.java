@@ -58,7 +58,6 @@ public class ApplicationService {
         int remainingUnits = FlatTypeLogic.returnFilteredFlatTypeUnits(flatTypes, chosenFlatType);
         if (remainingUnits >= 1) {
 	        application.setIsBooked(true);
-	        application.setBookingRequested(false);
 	        application.getApplicant().setFlatType(chosenFlatType);
 	        application.setApplicationStatus(ApplicationStatus.BOOKED);
 	    

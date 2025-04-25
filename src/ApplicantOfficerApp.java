@@ -157,14 +157,12 @@ public class ApplicantOfficerApp {
 							int officerNumber = sc.nextInt();
 							HDBOfficer chosenOfficer = projectOfficers.get(officerNumber-1);
 							applicant.bookFlat(chosenOfficer);
+							General.editApplicationFile("./Data/ApplicationList.txt", String.valueOf(currentApplication.getBookingRequested()), 4, String.valueOf(currentApplication.getApplicationId()));
 							System.out.println(chosenOfficer.toString());
 							
-		
-							Application application = applicant.getCurrentApplication();
-		
 							//Updating booking datafile
-							Booking booking = new Booking(application.getApplicationId(), chosenOfficer.getNRIC());
-							String bookingDetails = String.format("%d,%d,%s",booking.getBookingId(), application.getApplicationId(),chosenOfficer.getNRIC());
+							Booking booking = new Booking(currentApplication.getApplicationId(), chosenOfficer.getNRIC());
+							String bookingDetails = String.format("%d,%d,%s",booking.getBookingId(), currentApplication.getApplicationId(),chosenOfficer.getNRIC());
 							General.editFile("./Data/BookingList.txt", bookingDetails);
 							
 						}
@@ -177,7 +175,7 @@ public class ApplicantOfficerApp {
 				else if (choice == 5){ 
 					Application currentApplication = applicant.getCurrentApplication();
 					if (currentApplication != null) { 
-						General.editFile("./Data/ApplicationList.txt", ApplicationStatus.PENDINGWITHDRAWAL.toString(), currentApplication.getApplicationStatus().toString(), String.valueOf(currentApplication.getApplicationId()));
+						General.editApplicationFile("./Data/ApplicationList.txt", ApplicationStatus.PENDINGWITHDRAWAL.toString(), 3, String.valueOf(currentApplication.getApplicationId()));
 						ApplicationService.withdrawApplication(currentApplication);
 						System.out.println("Withdrawal request is sent.");
 					} 
@@ -237,7 +235,8 @@ public class ApplicantOfficerApp {
 								
 								if (officer.helpBookFlat(app)) {
 									//Updating application datafile
-									General.editFile("./Data/ApplicationList.txt", ApplicationStatus.BOOKED.toString(), app.getApplicationStatus().toString(), String.valueOf(app.getApplicationId()));
+									General.editApplicationFile("./Data/ApplicationList.txt", app.getApplicationStatus().toString(), 3, String.valueOf(app.getApplicationId()));								
+									General.editApplicationFile("./Data/ApplicationList.txt", String.valueOf(app.getIsBooked()), 5, String.valueOf(app.getApplicationId()));
 								}	
 								
 							} catch (IndexOutOfBoundsException e) {

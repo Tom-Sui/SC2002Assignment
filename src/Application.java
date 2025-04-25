@@ -12,8 +12,9 @@
  */
 public class Application {
 
+	private static int applications=0;
     /** Static counter for generating unique application IDs */
-    private static int applicationId = 0;
+    private int applicationId = 0;
     
     /** The applicant who submitted this application */
     private Applicant applicant;
@@ -39,7 +40,8 @@ public class Application {
      * Initializes the application ID and sets default values for other fields.
      */
     public Application() {
-    	Application.applicationId++;
+    	Application.applications++;
+    	applicationId = applications;
     };
     /**
      * Constructs a new Application with the specified details.
@@ -51,7 +53,8 @@ public class Application {
      * but should normally be PENDING in production
      */
     public Application(Applicant applicant, Project project, FlatType flatType) {
-        Application.applicationId = applicationId++;
+    	Application.applications++;
+    	applicationId = applications;
         this.applicant = applicant;
         this.project = project;
         this.isBooked = false;

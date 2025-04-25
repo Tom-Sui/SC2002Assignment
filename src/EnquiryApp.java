@@ -339,19 +339,24 @@ public class EnquiryApp {
         int enquiryId = sc.nextInt();
         sc.nextLine(); // Consume newline
         
+        Enquiry enquiryToReply = enquiryService.getEnquiryById(enquiryId);
+        if (enquiryToReply == null) {
+            System.out.println("Enquiry not found.");
+            return;
+        }
+        if (enquiryToReply.hasReply()) {
+            System.out.println("Enquiry already has a reply.");
+            return;
+        }
+
         System.out.print("Enter your reply: ");
         String reply = sc.nextLine();
 
-        Enquiry enquiryToReply = enquiryService.getEnquiryById(enquiryId);
-        if (enquiryToReply != null && enquiryToReply.getReplyID() == 0) {
-            Enquiry replyEnquiry = new Enquiry(enquiryToReply.getUserNric(), enquiryToReply.getProjectName(), reply, 0);
-            enquiryService.addEnquiry(replyEnquiry);
-            enquiryToReply.setReplyID(replyEnquiry.getEnquiryID());
-            enquiryService.writeEnquiriesToFile();
-            System.out.println("Reply sent successfully!");
-        } else {
-            System.out.println("Enquiry already replied to.");
-        }
+        Enquiry replyEnquiry = new Enquiry(enquiryToReply.getUserNric(), enquiryToReply.getProjectName(), reply, 0);
+        enquiryService.addEnquiry(replyEnquiry);
+        enquiryToReply.setReplyID(replyEnquiry.getEnquiryID());
+        enquiryService.writeEnquiriesToFile();
+        System.out.println("Reply sent successfully!");
     }
 
     /**

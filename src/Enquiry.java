@@ -8,7 +8,8 @@
  * 
  */
 public class Enquiry {
-    private static int enquiryID = 1;
+	private static int enquiries = 0;
+    private int enquiryID;
     private String userNric; 
     private String projectName;
     private String message;
@@ -20,7 +21,8 @@ public class Enquiry {
      */
     // ========== CONSTRUCTOR ==========
     public Enquiry() {
-        enquiryID = enquiryID++;
+        Enquiry.enquiries++;
+        enquiryID = enquiries;
         this.userNric = "";
         this.projectName = "";
         this.message = "";
@@ -35,7 +37,8 @@ public class Enquiry {
      * @param message the enquiry message content
      */
     public Enquiry(String userNric, String projectName, String message) {
-        enquiryID = enquiryID++;
+    	Enquiry.enquiries++;
+    	enquiryID = enquiries;
         this.userNric = userNric;
         this.projectName = projectName;
         this.message = message;
@@ -51,7 +54,8 @@ public class Enquiry {
      * @param replyID the ID of the reply to this enquiry
      */
     public Enquiry(String userNric, String projectName, String message, int replyID) {
-        enquiryID = enquiryID++;
+      	Enquiry.enquiries++;
+    	enquiryID = enquiries;
         this.userNric = userNric;
         this.projectName = projectName;
         this.message = message;

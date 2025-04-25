@@ -293,7 +293,6 @@ public class EnquiryService {
             String line;
             while ((line = reader.readLine()) != null) {
                 String[] data = line.split(",");
-                int enquiryID = Integer.parseInt(data[0]);
                 String projectName = data[1];
                 String userNric = data[2];
                 String message = data[3];

@@ -111,7 +111,7 @@ public class ManagerOfficerRegistration extends BaseManagerOfficerRegistration{
 	 * Officer Jane Smith has been approved for Project Riverfront
 	 * </pre>
 	 */    
-    public void approveOrRejectOfficerRegistration(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, ArrayList<HDBOfficer> HDBOfficers, String userName){
+    public void approveOrRejectOfficerRegistration(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, ArrayList<HDBOfficer> HDBOfficers, String userName, ArrayList<Application> applicationList){
 
     	OfficerRegistrationStatus status;
     	boolean hasOutput = false;
@@ -164,11 +164,11 @@ public class ManagerOfficerRegistration extends BaseManagerOfficerRegistration{
                     		 //Check if officer NRIC is in application list for the project                     		 
                     		 boolean officerApplied = false;
                     		 
-                    		 for (Application application : index.getApplications()) {
-                    		        if (application.getApplicant().getNRIC().equalsIgnoreCase(officerNRIC)) {
-                    		            officerApplied = true; // Applicant found
-                    		        }
-                    		    }                    		    
+                    		 for(Application application : applicationList) {
+                    			 if ( application.getApplicant().getNRIC().equalsIgnoreCase(officerNRIC) && application.getProject().getProjectName().equals(projectName)) {
+                    				 officerApplied = true;
+                    			 }
+                    		 }                    		    
 
                     		 //Officer is in application
                     		 if(officerApplied) {

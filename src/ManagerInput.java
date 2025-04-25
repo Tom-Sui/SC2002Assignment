@@ -571,7 +571,7 @@ public class ManagerInput {
 	            	
 	            // Approve or Reject HDB Officer Registrations
 	            case 8:           
-	            	manager.approveOrRejectOfficerRegistration(projects, applicants, hdbOfficers, managerID);
+	            	manager.approveOrRejectOfficerRegistration(projects, applicants, hdbOfficers, managerID, applicationsList);
 	            	break;
 	            	
 	            // Approve or Reject Applicant’s BTO Application

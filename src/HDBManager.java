@@ -338,9 +338,9 @@ public class HDBManager extends User{
      * @param HDBOfficers The list of HDB officers
      * @param userName The username of the officer
      */
-    public void approveOrRejectOfficerRegistration(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, ArrayList<HDBOfficer> HDBOfficers, String userName)
+    public void approveOrRejectOfficerRegistration(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, ArrayList<HDBOfficer> HDBOfficers, String userName, ArrayList<Application> applicationList)
     {
-    	managerOfficerRegistration.approveOrRejectOfficerRegistration(currentProjects, applicants, HDBOfficers, userName);
+    	managerOfficerRegistration.approveOrRejectOfficerRegistration(currentProjects, applicants, HDBOfficers, userName, applicationList);
     }
     
     // Manager Applicant Registration

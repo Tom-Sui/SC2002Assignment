@@ -60,7 +60,7 @@ public interface I_ManagerOfficerRegistration {
 	 * @param HDBOfficers The list of HDB officers in the system
 	 * @param userName The NRIC of the HDB Manager or Project Officer managing the project
 	 */
-	void approveOrRejectOfficerRegistration(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, ArrayList<HDBOfficer> HDBOfficers, String userName);
+	void approveOrRejectOfficerRegistration(ArrayList<Project> currentProjects, ArrayList<Applicant> applicants, ArrayList<HDBOfficer> HDBOfficers, String userName, ArrayList<Application> applicationList);
 	// Displays enquiries related to all projects for review by the manager
 	/**
 	 * Displays enquiries related to all projects for review by the manager.

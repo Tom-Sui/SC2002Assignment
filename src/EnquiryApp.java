@@ -312,28 +312,35 @@ public class EnquiryApp {
      */
     private static void replyToEnquiry(User user) {
         
-        if (user instanceof HDBOfficer || user instanceof HDBManager) {
-            if (!viewEnquiriesAsHDBOfficer((HDBOfficer) user) || !viewEnquiriesAsHDBManager((HDBManager) user)) {
+        if (user instanceof HDBOfficer officer) {
+            if (!viewEnquiriesAsHDBOfficer(officer)) {
                 return;
             }
-            
-            System.out.print("Enter enquiry ID to reply to: ");
-            int enquiryId = sc.nextInt();
-            sc.nextLine(); // Consume newline
-            
-            System.out.print("Enter your reply: ");
-            String reply = sc.nextLine();
-
-            Enquiry enquiryToReply = enquiryService.getEnquiryById(enquiryId);
-            if (enquiryToReply != null && enquiryToReply.getReplyID() == 0) {
-                Enquiry replyEnquiry = new Enquiry(enquiryToReply.getUserNric(), enquiryToReply.getProjectName(), reply, 0);
-                enquiryService.addEnquiry(replyEnquiry);
-                enquiryToReply.setReplyID(replyEnquiry.getEnquiryID());
-                enquiryService.writeEnquiriesToFile();
-                System.out.println("Reply sent successfully!");
-            } else {
-                System.out.println("Enquiry already replied to.");
+        } else if (user instanceof HDBManager manager) {
+            if (!viewEnquiriesAsHDBManager(manager)) {
+                return;
             }
+        } else {
+            System.out.println("You do not have permission to reply to enquiries.");
+            return;
+        }
+                    
+        System.out.print("Enter enquiry ID to reply to: ");
+        int enquiryId = sc.nextInt();
+        sc.nextLine(); // Consume newline
+        
+        System.out.print("Enter your reply: ");
+        String reply = sc.nextLine();
+
+        Enquiry enquiryToReply = enquiryService.getEnquiryById(enquiryId);
+        if (enquiryToReply != null && enquiryToReply.getReplyID() == 0) {
+            Enquiry replyEnquiry = new Enquiry(enquiryToReply.getUserNric(), enquiryToReply.getProjectName(), reply, 0);
+            enquiryService.addEnquiry(replyEnquiry);
+            enquiryToReply.setReplyID(replyEnquiry.getEnquiryID());
+            enquiryService.writeEnquiriesToFile();
+            System.out.println("Reply sent successfully!");
+        } else {
+            System.out.println("Enquiry already replied to.");
         }
     }
 

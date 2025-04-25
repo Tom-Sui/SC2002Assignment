@@ -117,7 +117,9 @@ public class EnquiryService {
         System.out.println("Officer Managed: " + officer.getRegistrationStatusMap());
         ArrayList<String> projects = new ArrayList<>();
         for (Project project : officer.getRegistrationStatusMap().keySet()) {
-            projects.add(project.getProjectName());
+            if (officer.getRegistrationStatusMap().get(project) == OfficerRegistrationStatus.APPROVED) {
+                projects.add(project.getProjectName());
+            }
         }
         for (Enquiry enquiry : enquiries) {
             if (projects.contains(enquiry.getProjectName())) {

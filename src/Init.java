@@ -97,12 +97,13 @@ public class Init {
     public ArrayList<HDBOfficer> LoadOfficerInfo() {
         File officerFile = new File(DataFilePath + "/OfficerList.txt");
         ArrayList<HDBOfficer> hdbOfficers = new ArrayList<HDBOfficer>();
-        HDBOfficer hdbOfficer;
+        HDBOfficer hdbOfficer; // Declare the variable here
+
         try {
             Scanner scanner = new Scanner(officerFile);
 
             while (scanner.hasNextLine()) {
-                hdbOfficer = new HDBOfficer();
+                hdbOfficer = new HDBOfficer(); // Initialize the variable
                 String[] data = scanner.nextLine().split(",");
                 hdbOfficer.setUserID(Integer.parseInt(data[0]));
                 hdbOfficer.setName(data[1]);
@@ -118,7 +119,7 @@ public class Init {
             }
             scanner.close();
         } catch (FileNotFoundException e) {
-            System.out.println("Error occured while reading OfficerList.txt");
+            System.out.println("Error occurred while reading OfficerList.txt");
             e.printStackTrace();
         }
         return hdbOfficers;
@@ -231,6 +232,35 @@ public class Init {
             System.out.println("Error occured while reading BookingList.txt");
             e.printStackTrace();
         }
+    }
+
+    public ArrayList<HDBOfficer> loadOfficerRegistrationInfo(ArrayList<HDBOfficer> hdbOfficers, ArrayList<Project> projects) {
+        File officerFile = new File(DataFilePath + "/OfficerRegistrationList.txt");
+        try {
+            Scanner scanner = new Scanner(officerFile);
+
+            while (scanner.hasNextLine()) {
+                String[] parts = scanner.nextLine().split(","); // Parse the line into parts
+                String officerNRIC = parts[0].trim();
+                String projectName = parts[1].trim();
+                String registrationStatus = parts[2].trim();
+                OfficerRegistrationStatus status = OfficerRegistrationStatus.valueOf(registrationStatus.toUpperCase());
+                Project project = General.findProject(projects, projectName);
+                HDBOfficer hdbOfficer = General.findOfficer(hdbOfficers, officerNRIC);
+
+                if (hdbOfficer != null && project != null) {
+                    hdbOfficer.setOfficerRegistrationStatus(project, status);
+                } 
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Error occurred while reading OfficerRegistrationList.txt");
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            System.out.println("Invalid registration status found in file.");
+            e.printStackTrace();
+        }
+        return hdbOfficers;
     }
     
     /**

@@ -55,6 +55,8 @@ public class App{
         hdbManagers = init.setManagerManagedProjects(hdbManagers,projectList);
         
         init.setOfficerManagedProjects(hdbOfficers, projectList);
+
+        hdbOfficers = init.loadOfficerRegistrationInfo(hdbOfficers, projectList);
         
         applicant.addAll(hdbOfficers);
         //Initialize Application info
